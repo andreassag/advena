@@ -8,11 +8,12 @@
 process GB_TO_FAA {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(genbank)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}.faa"), emit: faa
@@ -22,9 +23,9 @@ process GB_TO_FAA {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
     """
-    python3 ${params.icescreen_root}/icescreen_detection_SP/src/gb_to_faa.py \\
+    gb_to_faa \\
         -i ${genbank} \\
         -o ${meta.id}.faa \\
         -c ${mode_file}

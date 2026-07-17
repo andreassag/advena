@@ -8,11 +8,12 @@
 process FP_SCREENING {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(merged_sp), path(faa)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_detected_SP_hmm_cleaned.tsv"), emit: sp_clean
@@ -27,8 +28,8 @@ process FP_SCREENING {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
-    def fp_profiles_dir = params.icescreen_db ? "${params.icescreen_db}/hmmdb/FP_profiles" : "${params.icescreen_root}/icescreen_detection_SP/database/hmmdb/FP_profiles"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
+    def fp_profiles_dir = "${db}/hmmdb/FP_profiles"
     """
     HEADER="target_name\\taccession\\ttlen\\tquery_name\\tseq_accession\\tqlen\\tseq_E-value\\tseq_score\\tseq_bias\\t#_domain\\tof_domain\\tdomain_c-Evalue\\tdomain_i-Evalue\\tdomain_score\\tdomain_bias\\thmm_coord_from\\thmm_coord_to\\tali_coord_from\\tali_coord_to\\tenv_coord_from\\tenv_coord_to\\tenv_coord_acc\\tdescription_of_target"
 
@@ -97,7 +98,7 @@ PYEOF
     fi
 
     # Filter false positives
-    python3 ${params.icescreen_root}/icescreen_detection_SP/src/process_hmmscan_fp.py \\
+    process_hmmscan_fp \\
         --insp ${merged_sp} \\
         --infp ${meta.id}_fp_all.tsv \\
         -c ${mode_file} \\

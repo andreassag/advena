@@ -8,11 +8,12 @@
 process PROCESS_BLASTP {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), val(db_names), path(blast_results)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_blast_SP.tsv"), emit: best_hits
@@ -26,14 +27,14 @@ process PROCESS_BLASTP {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
-    def ice_finder_db = params.icescreen_db ? "${params.icescreen_db}/blastdb/ICE_Finder.db" : "${params.icescreen_root}/icescreen_detection_SP/database/blastdb/ICE_Finder.db"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
+    def ice_finder_db = "${db}/blastdb/ICE_Finder.db"
     """
     # Process each BLAST result file through filtering
     for blast_file in ${blast_results}; do
         db_name=\$(basename "\$blast_file" .tsv | sed "s/^${meta.id}_//")
 
-        python3 ${params.icescreen_root}/icescreen_detection_SP/src/process_blastp_results.py \\
+        process_blastp_results \\
             -i "\$blast_file" \\
             -c ${mode_file} \\
             -d ${ice_finder_db} \\
@@ -61,7 +62,7 @@ process PROCESS_BLASTP {
     # Sort by CDS number and retain only the best hit per locus
     if [ -f all_best_combined.tsv ]; then
         tail -n+2 all_best_combined.tsv | sort -t\$'\\t' -k2n | cat <(head -1 all_best_combined.tsv) - > all_best_sorted.tsv
-        python3 ${params.icescreen_root}/icescreen_detection_SP/src/retain_only_best_blast_hit_for_each_locus_tag.py \\
+        retain_only_best_blast_hit_for_each_locus_tag \\
             -i all_best_sorted.tsv \\
             -o ${meta.id}_blast_SP.tsv
     else

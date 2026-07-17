@@ -8,8 +8,8 @@
 process CREATE_ANNOTATIONS {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(final_sp), path(detected_me), path(genbank)
@@ -28,13 +28,13 @@ process CREATE_ANNOTATIONS {
     script:
     """
     # Extract genome sequence from GenBank into FASTA and GFF3
-    python3 ${params.icescreen_root}/icescreen_formatting/genbank_to_gff3_and_fasta.py \\
+    genbank_to_gff3_and_fasta \\
         -i ${genbank} \\
         --gff ${meta.id}_source.gff \\
         --fasta ${meta.id}_source.fa
 
     # Generate annotated output files (GFF3, EMBL, GenBank)
-    python3 ${params.icescreen_root}/icescreen_formatting/generate_annotation_files.py \\
+    generate_annotation_files \\
         -s ${final_sp} \\
         -m ${detected_me} \\
         -g ${genbank} \\

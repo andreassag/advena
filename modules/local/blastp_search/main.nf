@@ -8,11 +8,12 @@
 process BLASTP_SEARCH {
     tag "${meta.id}_${db_name}"
     label "process_medium"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(faa), val(db_name)
+    path db
 
     output:
     tuple val(meta), val(db_name), path("${meta.id}_${db_name}.tsv"), emit: results
@@ -22,7 +23,7 @@ process BLASTP_SEARCH {
     task.ext.when == null || task.ext.when
 
     script:
-    def db_path = params.icescreen_db ? "${params.icescreen_db}/blastdb/${db_name}" : "${params.icescreen_root}/icescreen_detection_SP/database/blastdb/${db_name}"
+    def db_path = "${db}/blastdb/${db_name}"
     """
     # Run BLASTP
     blastp \\

@@ -8,8 +8,8 @@
 process MERGE_SP {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(blast_best), path(hmm_best)
@@ -23,7 +23,7 @@ process MERGE_SP {
 
     script:
     """
-    python3 ${params.icescreen_root}/icescreen_detection_SP/src/merge_SP_results.py \\
+    merge_SP_results \\
         --blastres ${blast_best} \\
         --hmmres ${hmm_best} \\
         -o ${meta.id}_detected_SP_source.tsv

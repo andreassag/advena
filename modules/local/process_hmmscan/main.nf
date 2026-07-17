@@ -8,11 +8,12 @@
 process PROCESS_HMMSCAN {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(hmmscan_results)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_hmm_SP.tsv"), emit: best_hits
@@ -24,9 +25,9 @@ process PROCESS_HMMSCAN {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
     """
-    python3 ${params.icescreen_root}/icescreen_detection_SP/src/process_hmmscan_results.py \\
+    process_hmmscan_results \\
         -i ${hmmscan_results} \\
         -c ${mode_file} \\
         --outall ${meta.id}_unfiltered.tsv \\

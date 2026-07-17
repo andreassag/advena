@@ -8,11 +8,12 @@
 process REANNOT_SP {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(sp_clean), path(intyr_hits)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_detected_SP.tsv"), emit: final_sp
@@ -23,9 +24,9 @@ process REANNOT_SP {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
     """
-    python3 ${params.icescreen_root}/icescreen_detection_SP/src/reannot_SP.py \\
+    reannot_SP \\
         -a ${sp_clean} \\
         -b ${intyr_hits} \\
         -c ${mode_file} \\

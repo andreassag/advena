@@ -1,0 +1,13 @@
+name: icescreen_env_1-3-3
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pip
+  - bash
+  - git
+  - blast=2.16
+  - hmmer=3.4
+  - pip:
+    - git+https://github.com/exTerEX/icescreen.git@v1.3.3

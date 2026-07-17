@@ -8,8 +8,8 @@
 process PACKAGE_RESULTS {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml" // TODO: Might not need the conda and container environment anymore for this process
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta),
@@ -35,6 +35,7 @@ process PACKAGE_RESULTS {
         path(sp_reannotated),
         path(final_sp),
         path(me_log)
+    path db
 
     output:
     tuple val(meta), path("tmp_intermediate_files.tar.gz"), emit: archive
@@ -45,7 +46,7 @@ process PACKAGE_RESULTS {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
     def S = "${meta.id}"
     def R = "results/${meta.id}"
     """

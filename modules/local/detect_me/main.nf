@@ -8,11 +8,12 @@
 process DETECT_ME {
     tag "${meta.id}"
     label "process_low"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml"
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(final_sp), path(genbank)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_detected_ME.tsv"), emit: detected_me
@@ -25,10 +26,10 @@ process DETECT_ME {
     task.ext.when == null || task.ext.when
 
     script:
-    def mode_file = "${params.icescreen_root}/icescreen_pipelines/mode/${params.phylum}.yml"
-    def me_conf = "${params.icescreen_root}/icescreen_detection_ME/icescreen.conf"
+    def mode_file = "${db}/mode/${params.phylum}.yml"
+    def me_conf = "${db}/icescreen.conf"
     """
-    python3 ${params.icescreen_root}/icescreen_detection_ME/src/icescreen_OO.py \\
+    icescreen_OO \\
         -i ${final_sp} \\
         -c ${me_conf} \\
         -o ${meta.id}_detected_ME.tsv \\

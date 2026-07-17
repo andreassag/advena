@@ -1,7 +1,0 @@
-name: icescreen-advena
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - icescreen=1.3.3

@@ -8,11 +8,12 @@
 process HMMSCAN_SP {
     tag "${meta.id}"
     label "process_medium"
-    conda "${projectDir}/env/environment.yml"
-    container "ghcr.io/exterex/icescreen-advena:1.3.3"
+    conda "${moduleDir}/../environment.yml" // TODO: Might not need the conda and container environment anymore for this process
+    container "ghcr.io/exterex/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(faa)
+    path db
 
     output:
     tuple val(meta), path("${meta.id}_hmmscan_all.tsv"), emit: results
@@ -24,7 +25,7 @@ process HMMSCAN_SP {
     task.ext.when == null || task.ext.when
 
     script:
-    def sp_profiles_dir = params.icescreen_db ? "${params.icescreen_db}/hmmdb/SP_profiles" : "${params.icescreen_root}/icescreen_detection_SP/database/hmmdb/SP_profiles"
+    def sp_profiles_dir = "${db}/hmmdb/SP_profiles"
     """
     HEADER="target_name\\taccession\\ttlen\\tquery_name\\tseq_accession\\tqlen\\tseq_E-value\\tseq_score\\tseq_bias\\t#_domain\\tof_domain\\tdomain_c-Evalue\\tdomain_i-Evalue\\tdomain_score\\tdomain_bias\\thmm_coord_from\\thmm_coord_to\\tali_coord_from\\tali_coord_to\\tenv_coord_from\\tenv_coord_to\\tenv_coord_acc\\tdescription_of_target"
 
