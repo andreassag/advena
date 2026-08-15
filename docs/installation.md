@@ -32,13 +32,13 @@ pre-built container.
 
     ```bash
     # Install Docker: https://docs.docker.com/engine/install/
-    docker pull exterex/icescreen-nf:latest
+    docker pull andreassag/icescreen-nf:latest
     ```
 
 === "Singularity / Apptainer"
 
     ```bash
-    singularity pull icescreen-nf.sif docker://exterex/icescreen-nf:latest
+    singularity pull icescreen-nf.sif docker://andreassag/icescreen-nf:latest
     ```
 
 === "Conda"
@@ -71,7 +71,7 @@ stored separately, override the database path with `--icescreen_db`.
 ## 4. Run advena
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     -profile docker
@@ -80,7 +80,7 @@ nextflow run exterex/advena \
 To pin a specific version:
 
 ```bash
-NXF_VER=23.10.0 nextflow run exterex/advena -r 1.0.0 \
+NXF_VER=23.10.0 nextflow run andreassag/advena -r 1.0.0 \
     --input samplesheet.csv \
     --outdir results \
     -profile docker

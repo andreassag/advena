@@ -21,13 +21,13 @@ Snakemake pipeline, orchestrating the ICEscreen Python scripts and databases via
 ## Quick Start
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     -profile docker
 ```
 
-See the [documentation](https://exterex.github.io/advena) for full details.
+See the [documentation](https://andreassag.github.io/advena) for full details.
 
 ## Input
 

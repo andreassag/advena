@@ -9,7 +9,7 @@ process MERGE_SP {
     tag "${meta.id}"
     label "process_low"
     conda "${moduleDir}/../environment.yml"
-    container "ghcr.io/exterex/icescreen:v1.3.3"
+    container "ghcr.io/andreassag/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(blast_best), path(hmm_best)
