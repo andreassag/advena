@@ -9,7 +9,7 @@ process BLASTP_SEARCH {
     tag "${meta.id}_${db_name}"
     label "process_medium"
     conda "${moduleDir}/../environment.yml"
-    container "ghcr.io/exterex/icescreen:v1.3.3"
+    container "ghcr.io/andreassag/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(faa), val(db_name)

@@ -41,7 +41,7 @@ graph LR
 ## Quick start
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     -profile docker

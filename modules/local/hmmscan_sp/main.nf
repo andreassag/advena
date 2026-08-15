@@ -9,7 +9,7 @@ process HMMSCAN_SP {
     tag "${meta.id}"
     label "process_medium"
     conda "${moduleDir}/../environment.yml" // TODO: Might not need the conda and container environment anymore for this process
-    container "ghcr.io/exterex/icescreen:v1.3.3"
+    container "ghcr.io/andreassag/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(faa)

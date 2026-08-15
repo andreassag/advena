@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/exterex/nextflow-icescreen/main/nextflow_schema.json",
+  "$id": "https://raw.githubusercontent.com/andreassag/nextflow-icescreen/main/nextflow_schema.json",
   "title": "nextflow-icescreen pipeline parameters",
   "description": "Nextflow pipeline for ICEscreen: detection and annotation of ICEs and IMEs in Bacillota genomes",
   "type": "object",

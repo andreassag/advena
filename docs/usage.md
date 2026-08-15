@@ -16,14 +16,14 @@ GCF_003176835,/data/GCF_003176835.gbff
 | `genbank` | Path to a GenBank file (`.gb` or `.gbff`)             |
 
 An example samplesheet is provided in
-[`assets/samplesheet.csv`](https://github.com/exterex/advena/blob/main/assets/samplesheet.csv).
+[`assets/samplesheet.csv`](https://github.com/andreassag/advena/blob/main/assets/samplesheet.csv).
 
 ---
 
 ## Basic usage
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     -profile docker
@@ -62,13 +62,13 @@ advena reads the ICEscreen Python scripts and databases at runtime. There are th
 
 ```bash
 export ICESCREEN_ROOT=/opt/icescreen
-nextflow run exterex/advena --input samplesheet.csv --outdir results -profile docker
+nextflow run andreassag/advena --input samplesheet.csv --outdir results -profile docker
 ```
 
 2. **Pipeline parameter**: Pass `--icescreen_root` directly.
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
   --input samplesheet.csv \
   --outdir results \
   --icescreen_root /opt/icescreen \
@@ -78,7 +78,7 @@ nextflow run exterex/advena \
 3. **Override database path**: Use `--icescreen_db` to override database path.
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
   --input samplesheet.csv \
   --outdir results \
   --icescreen_db /data/icescreen_databases \
@@ -92,7 +92,7 @@ nextflow run exterex/advena \
 Nextflow caches completed tasks. If a run is interrupted, resume from where it left off:
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     -profile docker \
@@ -106,7 +106,7 @@ nextflow run exterex/advena \
 The BLASTP search sensitivity can be tuned with `--blastp_evalue` and `--blastp_max_target_seqs`:
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     --blastp_evalue 1e-5 \
@@ -121,7 +121,7 @@ nextflow run exterex/advena \
 Mobile element segmentation thresholds can be adjusted for non-standard genomes:
 
 ```bash
-nextflow run exterex/advena \
+nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
     --min_cds_between_segments 50 \

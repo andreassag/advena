@@ -1,8 +1,8 @@
 site_name: advena
 site_description: Nextflow pipeline for ICEscreen — detection and annotation of ICEs and IMEs in Bacillota genomes
-site_author: exTerEX
-repo_name: exterex/advena
-repo_url: https://github.com/exterex/advena
+site_author: andreassag
+repo_name: andreassag/advena
+repo_url: https://github.com/andreassag/advena
 edit_uri: edit/main/docs/
 
 theme:
