@@ -26,11 +26,11 @@ process PACKAGE_RESULTS {
         path(hmm_per_profile_tsv, stageAs: "in_hmm_tsv/*"),
         path(hmm_per_profile_txt, stageAs: "in_hmm_txt/*"),
         path(hmm_best),
-        path(hmm_unfiltered),
-        path(hmm_filtered),
+        path(hmm_unfiltered, stageAs: "in_hmm_unfiltered/*"),
+        path(hmm_filtered, stageAs: "in_hmm_filtered/*"),
         path(merged_sp),
         path(sp_no_fp),
-        path(sp_faa),
+        path(sp_faa, stageAs: "in_sp_faa/*"),
         path(fp_all, stageAs: "in_fp_compiled.tsv"),
         path(fp_hits),
         path(fp_per_profile_tsv, stageAs: "in_fp_tsv/*"),
@@ -78,12 +78,12 @@ process PACKAGE_RESULTS {
     cp in_hmm_compiled.tsv ${R}/icescreen_detection_SP/HMM_mode/hmmscan_output/${S}.tsv
     cp in_hmm_tsv/* ${R}/icescreen_detection_SP/HMM_mode/hmmscan_output/
     cp in_hmm_txt/* ${R}/icescreen_detection_SP/HMM_mode/hmmscan_output/
-    cp ${hmm_unfiltered} ${R}/icescreen_detection_SP/HMM_mode/unfiltered_results/
-    cp ${hmm_filtered} ${R}/icescreen_detection_SP/HMM_mode/filtered_results/
+    cp in_hmm_unfiltered/* ${R}/icescreen_detection_SP/HMM_mode/unfiltered_results/
+    cp in_hmm_filtered/* ${R}/icescreen_detection_SP/HMM_mode/filtered_results/
 
     # hits_cleaning/
     cp ${merged_sp} ${R}/icescreen_detection_SP/hits_cleaning/
-    cp ${sp_faa} ${R}/icescreen_detection_SP/hits_cleaning/
+    cp in_sp_faa/* ${R}/icescreen_detection_SP/hits_cleaning/
     cp ${sp_no_fp} ${R}/icescreen_detection_SP/hits_cleaning/
     cp ${sp_reannotated} ${R}/icescreen_detection_SP/hits_cleaning/
     cp ${fp_hits} ${R}/icescreen_detection_SP/hits_cleaning/proteins_to_remove/
