@@ -25,7 +25,7 @@ pre-commit install
 
 ### Nextflow (`.nf`, `.config`)
 
-Nextflow files are validated and checked using `nextflow lint .` (Nextflow >= 25.10.0).
+Nextflow files are validated and checked using `nextflow lint .` (Nextflow >= 26.04.0).
 
 ### JSON, YAML, Markdown, and JS
 
@@ -68,7 +68,7 @@ nf-test test --tag stub --verbose
 ### Full local Docker tests
 
 ```bash
-# Requires Nextflow >= 25.10.0, nf-test, and Docker
+# Requires Nextflow >= 26.04.0, nf-test, and Docker
 nf-test test --profile docker --verbose
 ```
 

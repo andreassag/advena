@@ -4,7 +4,7 @@
 
 | Dependency       | Minimum version | Notes                                                   |
 | ---------------- | --------------- | ------------------------------------------------------- |
-| Nextflow         | 25.10.0         | `NXF_VER` env var can pin the version                   |
+| Nextflow         | 26.04.0         | `NXF_VER` env var can pin the version                   |
 | Java             | 17              | Required by Nextflow and `nf-schema`                    |
 | Container engine | —               | One of Docker, Singularity, Apptainer, Podman, or Conda |
 
@@ -70,7 +70,7 @@ nextflow run andreassag/advena \
 To pin a specific pipeline version:
 
 ```bash
-NXF_VER=25.10.0 nextflow run andreassag/advena -r 1.0.0 \
+NXF_VER=26.04.0 nextflow run andreassag/advena -r 1.0.0 \
     --input samplesheet.csv \
     --outdir results \
     -profile docker

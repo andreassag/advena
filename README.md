@@ -18,7 +18,7 @@ BLAST+, and HMMER with containerized ICEscreen Python tools (`ghcr.io/andreassag
 
 ## Requirements
 
-- [Nextflow](https://www.nextflow.io/) >= 25.10.0 (Java >= 17)
+- [Nextflow](https://www.nextflow.io/) >= 26.04.0 (Java >= 17)
 - One of: Docker, Singularity, Apptainer, Podman, or Conda
 
 ## Quick Start
