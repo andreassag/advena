@@ -5,6 +5,7 @@
 .nextflow.pid
 .nextflow.log.*.bak
 *.log
+!tests/fixtures/*.log
 
 # Pipeline work and output directories
 work/

@@ -1,0 +1,17 @@
+# ICEscreen log line 1
+# ICEscreen log line 2
+# ICEscreen log line 3
+# ICEscreen log line 4
+# ICEscreen log line 5
+# ICEscreen log line 6
+# ICEscreen log line 7
+** Parameters:
+maxNumberCDSForSplitSPsByColocalizion: "100"
+maxNumberCDSForFilterIMESize: "14"
+groupListSPintoICEsIMEsUsingFamilyInfo: "LOOSE"
+useFamilyInfoToTryToResolveSPModuleConjConflict: "YES"
+useDistanceCDSInfoToTryToResolveSPModuleConjConflict: "NO"
+moveSingleSPToCheck: "YES"
+allowAdjacentIntegraseOnlyForSer: "NO"
+useCDSDistanceToChooseBetweenUpstreamAndDownstreamIntegrase_lowCutoffCDSDistance: "20"
+useCDSDistanceToChooseBetweenUpstreamAndDownstreamIntegrase_highCutoffCDSDistance: "40"
