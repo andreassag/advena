@@ -25,7 +25,12 @@ pre-commit install
 
 ### Nextflow (`.nf`, `.config`)
 
-Nextflow files are formatted with [Prettier](https://prettier.io/) via `prettier-plugin-groovy`.
+Nextflow files are validated and checked using `nextflow lint .` (Nextflow >= 25.10.0).
+
+### JSON, YAML, Markdown, and JS
+
+Formatted with [Prettier](https://prettier.io/) (`.nf`, `.config`, `.nf.test`, `.diff`, and `modules/nf-core/` are
+excluded via `.prettierignore`).
 
 ---
 
@@ -33,52 +38,42 @@ Nextflow files are formatted with [Prettier](https://prettier.io/) via `prettier
 
 The following hooks run automatically on `git commit`:
 
-| Hook                  | Purpose                                       |
-| --------------------- | --------------------------------------------- |
-| `prettier`            | Formatting for Nextflow, JSON, YAML, Markdown |
-| `trailing-whitespace` | Strip trailing whitespace                     |
-| `end-of-file-fixer`   | Ensure files end with a newline               |
-| `check-yaml`          | Validate YAML syntax                          |
-| `check-json`          | Validate JSON syntax                          |
-| `mixed-line-ending`   | Enforce LF line endings                       |
+| Hook                  | Purpose                                     |
+| --------------------- | ------------------------------------------- |
+| `prettier`            | Formatting for JSON, YAML, Markdown, and JS |
+| `trailing-whitespace` | Strip trailing whitespace                   |
+| `end-of-file-fixer`   | Ensure files end with a newline             |
+| `check-yaml`          | Validate YAML syntax                        |
+| `check-json`          | Validate JSON syntax                        |
+| `mixed-line-ending`   | Enforce LF line endings                     |
 
 Run all hooks manually:
 
 ```bash
 pre-commit run --all-files
+nextflow lint .
 ```
 
 ---
 
 ## Testing
 
-### Stub run (fast, no software required)
+### Stub run (fast, no containers required)
 
 ```bash
-nextflow run . -profile conda,test -stub-run
+nextflow run . -profile test -stub-run
+nf-test test --tag stub --verbose
 ```
 
-All 34 processes should complete successfully. This validates the channel topology without executing any real tools.
-
-### Full pipeline test
+### Full local Docker tests
 
 ```bash
-nextflow run . \
-    --input assets/samplesheet.csv \
-    --outdir results \
-    -profile test,docker
-```
-
-Requires Docker and an accessible ICEscreen installation (`ICESCREEN_ROOT`).
-
-### nf-test
-
-```bash
-# requires Nextflow and Docker
+# Requires Nextflow >= 25.10.0, nf-test, and Docker
 nf-test test --profile docker --verbose
 ```
 
-Tests live in `tests/`.
+Module tests live under `modules/local/*/tests/`, subworkflow tests under `subworkflows/local/*/tests/`, and pipeline
+regression tests under `tests/`.
 
 ---
 

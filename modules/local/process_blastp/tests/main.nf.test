@@ -1,0 +1,88 @@
+nextflow_process {
+
+    name "Test Process PROCESS_BLASTP"
+    script "../main.nf"
+    process "PROCESS_BLASTP"
+    tag "modules"
+    tag "modules_local"
+    tag "process_blastp"
+
+    test("Should process 7 BLASTP outputs - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    [
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Relaxase.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Couplingprot.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Couplingprot2.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_VirB4.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_IntTyr.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_IntSer.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_DDE.tsv", checkIfExists: true)
+                    ]
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                input[2] = file("${projectDir}/tests/fixtures/ICE_Finder.db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.best_hits[0][1]).exists() },
+                { assert path(process.out.intyr_hits[0][1]).exists() },
+                { assert process.out.blast_raw[0][1].size() == 7 },
+                { assert process.out.blast_unfiltered[0][1].size() == 7 },
+                { assert process.out.blast_filtered[0][1].size() == 7 },
+                { assert process.out.blast_filtered_best[0][1].size() == 7 }
+            )
+        }
+    }
+
+    test("Should prepend headers, filter BLASTP hits, and retain best hit per locus") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    [
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Relaxase.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Couplingprot.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_Couplingprot2.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_VirB4.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_IntTyr.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_IntSer.tsv", checkIfExists: true),
+                        file("${projectDir}/tests/fixtures/blast_raw/test_DDE.tsv", checkIfExists: true)
+                    ]
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                input[2] = file("${projectDir}/tests/fixtures/ICE_Finder.db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def bestHits = path(process.out.best_hits[0][1]).text
+            def intTyr = path(process.out.intyr_hits[0][1]).text
+            def rawFiles = process.out.blast_raw[0][1]
+            assertAll(
+                { assert process.success },
+                { assert bestHits.contains("BSU_04800") },
+                { assert bestHits.contains("BSU_04860") },
+                { assert bestHits.contains("BSU_04870") },
+                { assert bestHits.contains("BSU_04940") },
+                { assert intTyr.contains("BSU_04800") },
+                { assert rawFiles.size() == 7 },
+                { assert rawFiles.every { f -> path(f).readLines()[0].startsWith("qseqid\tsseqid") } }
+            )
+        }
+    }
+}

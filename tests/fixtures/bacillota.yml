@@ -1,0 +1,214 @@
+---
+mode: bacillota
+SP_detection:
+    cds_extraction:
+        # codon table must be one of the following -> https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+        codon_table: 11
+    blastp:
+        params_SP_type: &SP_types
+            Relaxase: Relaxase
+            Couplingprot: Coupling protein
+            Couplingprot2: Coupling protein
+            VirB4: VirB4
+            IntTyr: Tyrosine integrase
+            IntSer: Serine integrase
+            DDE: DDE transposase
+        params_usage:
+            Relaxase: relaxase
+            Couplingprot: coupling_protein_short
+            Couplingprot2: coupling_protein_long
+            VirB4: virb4
+            IntTyr: tyrosine_integrase
+            IntSer: serine_integrase
+            DDE: DDE_transposase
+        params_filtering:
+            relaxase:
+                min_query_length: 180
+                min_percentage_identity: 25
+                # minimum length of the alignment must be 40% of the length of the query sequence
+                min_alignment_coverage_to_query: 40
+                # minimum length of the alignment must be 40% of the length of the subject sequence
+                min_alignment_coverage_to_subject: 40
+                max_evalue: 0.0001
+            coupling_protein_short:
+                min_query_length: 180
+                max_query_length: 700
+                min_percentage_identity: 25
+                min_alignment_coverage_to_query: 40
+                min_alignment_coverage_to_subject: 40
+                max_evalue: 0.00001
+            coupling_protein_long:
+                min_query_length: 1000
+                max_query_length: 1200
+                min_percentage_identity: 25
+                min_alignment_coverage_to_query: 40
+                min_alignment_coverage_to_subject: 40
+                max_evalue: 0.00001
+            virb4:
+                min_query_length: 500
+                min_percentage_identity: 25
+                min_alignment_coverage_to_query: 40
+                min_alignment_coverage_to_subject: 40
+                max_evalue: 0.00001
+            tyrosine_integrase: &blast_integrase_filtering
+                min_query_length: 320
+                min_percentage_identity: 25
+                min_alignment_coverage_to_query: 40
+                min_alignment_coverage_to_subject: 40
+                max_evalue: 0.0001
+            serine_integrase: *blast_integrase_filtering
+            DDE_transposase: *blast_integrase_filtering
+        params_validation:
+            relaxase:
+                validated:
+                    ge_length_ratio: 0.8
+                possible_pseudogene:
+                    lt_length_ratio: 0.8
+                    gt_length_ratio: 0.5
+                possible_new_protein:
+                    le_length_ratio: 0.5
+                    lt_percentage_identity: 40
+                manual_check_needed:
+                    le_length_ratio: 0.5
+                    ge_percentage_identity: 40
+            coupling_protein_short:
+                validated:
+                    ge_length_ratio: 0.75
+                possible_pseudogene:
+                    lt_length_ratio: 0.75
+                    gt_length_ratio: 0.6
+                possible_new_protein:
+                    le_length_ratio: 0.6
+                    lt_percentage_identity: 50
+                manual_check_needed:
+                    le_length_ratio: 0.6
+                    ge_percentage_identity: 50
+            coupling_protein_long:
+                validated:
+                    ge_length_ratio: 0.75
+                possible_pseudogene:
+                    lt_length_ratio: 0.75
+                    gt_length_ratio: 0.6
+                possible_new_protein:
+                    le_length_ratio: 0.6
+                    lt_percentage_identity: 50
+                manual_check_needed:
+                    le_length_ratio: 0.6
+                    ge_percentage_identity: 50
+            virb4:
+                validated:
+                    ge_length_ratio: 0.85
+                possible_pseudogene:
+                    lt_length_ratio: 0.85
+                    gt_length_ratio: 0.6
+                possible_new_protein:
+                    le_length_ratio: 0.6
+                    lt_percentage_identity: 50
+                manual_check_needed:
+                    le_length_ratio: 0.6
+                    ge_percentage_identity: 50
+            tyrosine_integrase:
+                validated:
+                    ge_length_ratio: 0.85
+                possible_pseudogene:
+                    lt_length_ratio: 0.85
+                    gt_length_ratio: 0.6
+                possible_new_protein:
+                    le_length_ratio: 0.6
+                    lt_percentage_identity: 40
+                manual_check_needed:
+                    le_length_ratio: 0.6
+                    ge_percentage_identity: 40
+            serine_integrase:
+                validated:
+                    ge_length_ratio: 0.8
+                possible_pseudogene:
+                    lt_length_ratio: 0.8
+                    gt_length_ratio: 0.6
+                possible_new_protein:
+                    le_length_ratio: 0.6
+                    lt_percentage_identity: 40
+                manual_check_needed:
+                    le_length_ratio: 0.6
+                    ge_percentage_identity: 40
+            DDE_transposase:
+                validated:
+                    ge_length_ratio: 0.85
+                possible_pseudogene:
+                    lt_length_ratio: 0.85
+                    gt_length_ratio: 0.6
+                manual_check_needed:
+                    le_length_ratio: 0.6
+    hmmscan:
+        params_SP_type: *SP_types
+        params_profiles:
+        # Relaxase
+            PHA_IME_A1: default
+            PHA_IME_B: default
+            profile_MOBT: default
+            T4SS_MOBP1: default
+            T4SS_MOBP2: default
+            T4SS_MOBP3: default
+            T4SS_MOBQ: default
+            T4SS_MOBT: default
+            T4SS_MOBV: default
+            T4SS_MOBC: default
+            firmi_MOBL: default
+            firmi_Viral_Rep_A: default
+            firmi_Viral_Rep_B1: default
+            firmi_Viral_Rep_B2: default
+            firmi_Rep_2: high_confidence_domain
+        # Coupling protein
+            t4cp1: default
+            t4cp2: default
+            tcpA: CP_TcpA
+        # Integrase
+            UPF0236: default
+            Recombinase: default
+            Phage_integrase: default
+        # VirB4
+            T4SS_virb4: default
+        # False positives
+            COG1126: FP_ABC_transporter
+            COG4586: FP_ABC_transporter
+            DUF853: FP_DUF853
+        params_usage:
+            Relaxase: relaxase
+            Couplingprot: coupling
+            VirB4: virb4
+            IntTyr: tyrosine_integrase
+            IntSer: serine_integrase
+            DDE: DDE_transposase
+        params_filtering:
+            default: &default_filtering
+                max_ievalue: 0.00001
+                min_cds_coverage: 0
+                min_profile_coverage: 40
+            high_confidence_domain:
+                max_ievalue: 0.00001
+                min_cds_coverage: 0
+                min_profile_coverage: 80
+            CP_TcpA:
+                max_ievalue: 0.00001
+                min_cds_coverage: 40
+                min_profile_coverage: 40
+            FP_ABC_transporter:
+                max_ievalue: 0.00001
+                min_cds_coverage: 80
+                min_profile_coverage: 40
+            FP_DUF853: *default_filtering
+            relaxase:
+                min_query_length: 180
+            coupling:
+                min_query_length: 180
+            virb4:
+                min_query_length: 500
+            tyrosine_integrase: &hmm_integrase_filtering
+                min_query_length: 320
+            serine_integrase: *hmm_integrase_filtering
+            DDE_transposase: *hmm_integrase_filtering
+ME_detection:
+    params:
+        min_number_of_CDS_between_segments: 100
+        max_number_of_CDS_for_IME_size: 10
+...

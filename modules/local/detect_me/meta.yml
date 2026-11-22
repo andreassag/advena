@@ -1,0 +1,87 @@
+name: detect_me
+description: Assemble ICE and IME mobile element structures from detected signature proteins
+keywords:
+  - icescreen
+  - mobile elements
+  - ice
+  - ime
+tools:
+  - icescreen:
+      description: Detection and annotation of ICEs and IMEs in Bacillota genomes
+      homepage: https://github.com/andreassag/icescreen
+      licence: ["AGPL-3.0-or-later"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - final_sp:
+        type: file
+        description: Final detected signature proteins TSV (*_detected_SP.tsv)
+        pattern: "*.tsv"
+    - genbank:
+        type: file
+        description: Input annotated genome in GenBank format
+        pattern: "*.{gb,gbk,gbff}"
+  - mode_file:
+      type: file
+      description: Taxonomic phylum mode YAML file
+      pattern: "*.yml"
+  - me_conf:
+      type: file
+      description: ICEscreen mobile element detection configuration file (icescreen.conf)
+      pattern: "*.conf"
+output:
+  detected_me:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_ME.tsv":
+          type: file
+          description: Detected ICE and IME structures TSV
+          pattern: "*_detected_ME.tsv"
+  sp_with_me_ids:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_SP_withMEIds.tsv":
+          type: file
+          description: Signature protein table annotated with mobile element IDs
+          pattern: "*_detected_SP_withMEIds.tsv"
+  summary:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_ME.summary":
+          type: file
+          description: Human-readable summary of detected mobile elements
+          pattern: "*_detected_ME.summary"
+  log:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_ME.log":
+          type: file
+          description: Detailed execution and parameter log from icescreen_OO
+          pattern: "*_detected_ME.log"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - icescreen:
+          type: string
+          description: The name of the tool
+      - 'python3 -c ''import importlib.metadata; print(importlib.metadata.version("icescreen"))'' 2>/dev/null || echo ''1.3.3''':
+          type: eval
+          description: The expression to obtain the version of icescreen
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - "python3 --version 2>&1 | sed 's/Python //'":
+          type: eval
+          description: The expression to obtain the version of Python
+authors:
+  - "@andreassag"

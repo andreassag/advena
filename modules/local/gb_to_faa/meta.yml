@@ -1,0 +1,55 @@
+name: gb_to_faa
+description: Extract translated CDS protein sequences with ICEscreen metadata headers from GenBank files
+keywords:
+  - genbank
+  - fasta
+  - cds
+  - icescreen
+tools:
+  - icescreen:
+      description: Detection and annotation of ICEs and IMEs in Bacillota genomes
+      homepage: https://github.com/andreassag/icescreen
+      licence: ["AGPL-3.0-or-later"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - genbank:
+        type: file
+        description: Input annotated genome in GenBank format
+        pattern: "*.{gb,gbk,gbff}"
+  - mode_file:
+      type: file
+      description: Taxonomic phylum mode YAML file
+      pattern: "*.yml"
+output:
+  faa:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}.faa":
+          type: file
+          description: Extracted CDS amino acid sequences in ICEscreen FASTA format
+          pattern: "*.faa"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - icescreen:
+          type: string
+          description: The name of the tool
+      - 'python3 -c ''import importlib.metadata; print(importlib.metadata.version("icescreen"))'' 2>/dev/null || echo ''1.3.3''':
+          type: eval
+          description: The expression to obtain the version of icescreen
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - biopython:
+          type: string
+          description: The name of the tool
+      - "python3 -c 'import Bio; print(Bio.__version__)'":
+          type: eval
+          description: The expression to obtain the version of Biopython
+authors:
+  - "@andreassag"

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/andreassag/nextflow-icescreen/main/nextflow_schema.json",
-  "title": "nextflow-icescreen pipeline parameters",
+  "$id": "https://raw.githubusercontent.com/andreassag/advena/main/nextflow_schema.json",
+  "title": "andreassag/advena pipeline parameters",
   "description": "Nextflow pipeline for ICEscreen: detection and annotation of ICEs and IMEs in Bacillota genomes",
   "type": "object",
   "$defs": {
@@ -12,8 +12,10 @@
       "properties": {
         "input": {
           "type": "string",
-          "description": "Path to comma-separated file containing information about the samples in the experiment.",
+          "description": "Path to comma-separated samplesheet CSV containing sample IDs and GenBank paths.",
           "format": "file-path",
+          "schema": "assets/schema_input.json",
+          "mimetype": "text/csv",
           "pattern": "^\\S+\\.csv$"
         },
         "outdir": {
@@ -36,14 +38,14 @@
           "default": "bacillota",
           "enum": ["bacillota"]
         },
-        "codon_table": {
-          "type": "integer",
-          "description": "Genetic code table for CDS translation.",
-          "default": 11
-        },
-        "icescreen_db": {
+        "db_url": {
           "type": "string",
-          "description": "Path to pre-indexed ICEscreen databases. If null, uses databases bundled in the container.",
+          "description": "URL or path to the ICEscreen database archive (.tar.gz).",
+          "default": "https://github.com/andreassag/icescreen/releases/download/v1.3.3/icescreen_database.tar.gz"
+        },
+        "db_dir": {
+          "type": "string",
+          "description": "Path to a directory containing a pre-extracted ICEscreen database, or where the downloaded database should be cached.",
           "format": "directory-path"
         }
       }
@@ -56,29 +58,14 @@
         "blastp_evalue": {
           "type": "number",
           "description": "E-value threshold for BLASTP searches.",
-          "default": 0.001
+          "default": 0.001,
+          "minimum": 0
         },
         "blastp_max_target_seqs": {
           "type": "integer",
           "description": "Maximum number of target sequences per BLASTP query.",
-          "default": 10
-        }
-      }
-    },
-    "me_detection_options": {
-      "title": "Mobile element detection options",
-      "type": "object",
-      "description": "Parameters for ICE/IME structure detection.",
-      "properties": {
-        "min_cds_between_segments": {
-          "type": "integer",
-          "description": "Minimum number of CDS between mobile element segments.",
-          "default": 100
-        },
-        "max_cds_for_ime_size": {
-          "type": "integer",
-          "description": "Maximum number of CDS for IME size classification.",
-          "default": 10
+          "default": 10,
+          "minimum": 1
         }
       }
     },
@@ -91,24 +78,47 @@
           "type": "string",
           "description": "Method used to save pipeline results to output directory.",
           "default": "copy",
-          "enum": ["copy", "symlink", "move", "rellink", "link"]
+          "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
+          "hidden": true
         },
         "monochrome_logs": {
           "type": "boolean",
           "description": "Do not use coloured log outputs.",
-          "default": false
+          "default": false,
+          "hidden": true
         },
         "help": {
-          "type": "boolean",
+          "type": ["boolean", "string"],
           "description": "Display help text.",
-          "default": false
+          "default": false,
+          "hidden": true
         },
         "version": {
           "type": "boolean",
           "description": "Display version.",
-          "default": false
+          "default": false,
+          "hidden": true
+        },
+        "trace_report_suffix": {
+          "type": "string",
+          "description": "Suffix added to Nextflow execution report filenames.",
+          "hidden": true
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/input_output_options"
+    },
+    {
+      "$ref": "#/$defs/icescreen_options"
+    },
+    {
+      "$ref": "#/$defs/blast_options"
+    },
+    {
+      "$ref": "#/$defs/generic_options"
+    }
+  ]
 }

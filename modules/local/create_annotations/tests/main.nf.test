@@ -1,0 +1,75 @@
+nextflow_process {
+
+    name "Test Process CREATE_ANNOTATIONS"
+    script "../main.nf"
+    process "CREATE_ANNOTATIONS"
+    tag "modules"
+    tag "modules_local"
+    tag "create_annotations"
+
+    test("Should generate gzipped annotations - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    file("${projectDir}/assets/genomes/GCF_000009045.1.gbff", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.source_fasta[0][1]).exists() },
+                { assert path(process.out.source_gff[0][1]).exists() },
+                { assert path(process.out.annotated_gff[0][1]).exists() },
+                { assert path(process.out.annotated_embl[0][1]).exists() },
+                { assert path(process.out.annotated_gb[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should create valid gzipped GFF3, EMBL, GenBank, and FASTA annotations") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    file("${projectDir}/assets/genomes/GCF_000009045.1.gbff", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            def readGz = { p ->
+                new java.util.zip.GZIPInputStream(new java.io.FileInputStream(path(p).toFile())).getText("UTF-8")
+            }
+            def gff = readGz(process.out.annotated_gff[0][1])
+            def embl = readGz(process.out.annotated_embl[0][1])
+            def gb = readGz(process.out.annotated_gb[0][1])
+            def srcFa = readGz(process.out.source_fasta[0][1])
+            def srcGff = readGz(process.out.source_gff[0][1])
+            assertAll(
+                { assert process.success },
+                { assert gff.contains("##gff-version") },
+                { assert gff.contains("ICEBs1") || gff.contains("ICE") },
+                { assert embl.contains("ID   NC_000964") },
+                { assert gb.contains("LOCUS       NC_000964") },
+                { assert srcFa.startsWith(">NC_000964") },
+                { assert srcGff.contains("##gff-version") }
+            )
+        }
+    }
+}

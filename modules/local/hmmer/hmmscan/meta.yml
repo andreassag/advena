@@ -1,0 +1,63 @@
+name: hmmer_hmmscan
+description: Run hmmscan against one or more pressed HMM profile databases and emit compiled 23-column TSV and per-profile results
+keywords:
+  - hmmer
+  - hmmscan
+  - hmm
+  - domain
+tools:
+  - hmmer:
+      description: Biosequence analysis using profile hidden Markov models
+      homepage: http://hmmer.org
+      documentation: http://hmmer.org/documentation.html
+      doi: 10.1371/journal.pcbi.1002195
+      licence: ["BSD"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information (e.g. [ id:'sample' ])
+    - faa:
+        type: file
+        description: Protein sequences in FASTA format (may be empty)
+        pattern: "*.{fa,faa,fasta}"
+  - hmm_files:
+      type: list
+      description: Pressed HMM profile files (*.hmm and *.h3{f,i,m,p})
+output:
+  results:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_hmmscan_all.tsv":
+          type: file
+          description: Combined 23-column tabular hmmscan domain output across all profiles
+          pattern: "*_hmmscan_all.tsv"
+  per_profile_tsv:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "per_profile/${prefix}_*.tsv":
+          type: list
+          description: Per-profile 23-column TSV outputs
+          pattern: "per_profile/*.tsv"
+  per_profile_txt:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "per_profile/${prefix}_*.txt":
+          type: list
+          description: Raw per-profile hmmscan domtblout files
+          pattern: "per_profile/*.txt"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - hmmer:
+          type: string
+          description: The name of the tool
+      - "hmmscan -h | sed '2!d;s/^# HMMER *//;s/ .*//'":
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@andreassag"

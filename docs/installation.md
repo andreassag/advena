@@ -4,10 +4,9 @@
 
 | Dependency       | Minimum version | Notes                                                   |
 | ---------------- | --------------- | ------------------------------------------------------- |
-| Nextflow         | 23.04.0         | `NXF_VER` env var can pin the version                   |
-| Java             | 11              | Required by Nextflow                                    |
+| Nextflow         | 25.10.0         | `NXF_VER` env var can pin the version                   |
+| Java             | 17              | Required by Nextflow and `nf-schema`                    |
 | Container engine | —               | One of Docker, Singularity, Apptainer, Podman, or Conda |
-| ICEscreen        | —               | Must be installed and accessible via `ICESCREEN_ROOT`   |
 
 ---
 
@@ -25,20 +24,20 @@ Add the `nextflow` binary to your `PATH`, or move it to a location already on it
 
 ## 2. Install a container engine
 
-advena requires access to the ICEscreen software environment. The recommended approach is Docker or Singularity with the
-pre-built container.
+advena uses containerized software environments for ICEscreen, BLAST+, HMMER, and GNU coreutils. No separate local
+ICEscreen installation is required; databases are automatically fetched from `--db_url` (or reused from `--db_dir`).
 
 === "Docker"
 
     ```bash
     # Install Docker: https://docs.docker.com/engine/install/
-    docker pull andreassag/icescreen-nf:latest
+    docker pull ghcr.io/andreassag/icescreen:v1.3.3
     ```
 
 === "Singularity / Apptainer"
 
     ```bash
-    singularity pull icescreen-nf.sif docker://andreassag/icescreen-nf:latest
+    singularity pull icescreen-v1.3.3.sif docker://ghcr.io/andreassag/icescreen:v1.3.3
     ```
 
 === "Conda"
@@ -50,25 +49,16 @@ pre-built container.
 
 ---
 
-## 3. Install ICEscreen
+## 3. Run advena
 
-advena calls ICEscreen Python scripts and databases at runtime. Point the pipeline to an ICEscreen installation by
-setting the `ICESCREEN_ROOT` environment variable or the `--icescreen_root` parameter.
+Verify your installation using the bundled test dataset:
 
 ```bash
-# Clone the ICEscreen repository
-git clone https://github.com/ICEscreen/ICEscreen.git /opt/icescreen
-
-# Export the root path
-export ICESCREEN_ROOT=/opt/icescreen
+nextflow run andreassag/advena \
+    -profile test,docker
 ```
 
-If `ICESCREEN_ROOT` is not set, advena falls back to `~/repo/icescreen` then `/opt/icescreen`. If the databases are
-stored separately, override the database path with `--icescreen_db`.
-
----
-
-## 4. Run advena
+Run on your own data:
 
 ```bash
 nextflow run andreassag/advena \
@@ -77,10 +67,10 @@ nextflow run andreassag/advena \
     -profile docker
 ```
 
-To pin a specific version:
+To pin a specific pipeline version:
 
 ```bash
-NXF_VER=23.10.0 nextflow run andreassag/advena -r 1.0.0 \
+NXF_VER=25.10.0 nextflow run andreassag/advena -r 1.0.0 \
     --input samplesheet.csv \
     --outdir results \
     -profile docker

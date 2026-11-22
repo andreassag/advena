@@ -1,0 +1,56 @@
+nextflow_process {
+
+    name "Test Process GB_TO_FAA"
+    script "../main.nf"
+    process "GB_TO_FAA"
+    tag "modules"
+    tag "modules_local"
+    tag "gb_to_faa"
+
+    test("Should extract CDS protein sequences from GenBank - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'mini'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true) ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.faa[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should extract CDS protein sequences with ICEscreen headers") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'mini'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true) ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def faaFile = path(process.out.faa[0][1])
+            def text = faaFile.text
+            assertAll(
+                { assert process.success },
+                { assert faaFile.exists() },
+                { assert text.contains("locus_tag=BSU_04800") },
+                { assert text.contains("locus_tag=BSU_04860") },
+                { assert text.contains("locus_tag=BSU_04870") },
+                { assert text.contains("locus_tag=BSU_04940") }
+            )
+        }
+    }
+}

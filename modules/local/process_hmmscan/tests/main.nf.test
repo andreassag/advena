@@ -1,0 +1,56 @@
+nextflow_process {
+
+    name "Test Process PROCESS_HMMSCAN"
+    script "../main.nf"
+    process "PROCESS_HMMSCAN"
+    tag "modules"
+    tag "modules_local"
+    tag "process_hmmscan"
+
+    test("Should process hmmscan output - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'test'], file("${projectDir}/tests/fixtures/hmmscan_all.tsv", checkIfExists: true) ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.best_hits[0][1]).exists() },
+                { assert path(process.out.hmm_unfiltered[0][1]).exists() },
+                { assert path(process.out.hmm_filtered[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should filter hmmscan results and select best hits") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'test'], file("${projectDir}/tests/fixtures/hmmscan_all.tsv", checkIfExists: true) ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def best = path(process.out.best_hits[0][1]).text
+            assertAll(
+                { assert process.success },
+                { assert best.contains("BSU_04800") },
+                { assert best.contains("BSU_04860") },
+                { assert best.contains("BSU_04870") },
+                { assert best.contains("BSU_04940") }
+            )
+        }
+    }
+}

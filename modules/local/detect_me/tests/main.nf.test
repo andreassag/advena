@@ -1,0 +1,69 @@
+nextflow_process {
+
+    name "Test Process DETECT_ME"
+    script "../main.nf"
+    process "DETECT_ME"
+    tag "modules"
+    tag "modules_local"
+    tag "detect_me"
+
+    test("Should detect mobile elements - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/assets/genomes/GCF_000009045.1.gbff", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                input[2] = file("${projectDir}/tests/fixtures/icescreen.conf", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.detected_me[0][1]).exists() },
+                { assert path(process.out.sp_with_me_ids[0][1]).exists() },
+                { assert path(process.out.summary[0][1]).exists() },
+                { assert path(process.out.log[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should assemble ICEBs1 structure from signature proteins") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/assets/genomes/GCF_000009045.1.gbff", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                input[2] = file("${projectDir}/tests/fixtures/icescreen.conf", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def meText = path(process.out.detected_me[0][1]).text
+            def summaryText = path(process.out.summary[0][1]).text
+            assertAll(
+                { assert process.success },
+                { assert meText.contains("Complete ICE (I+C+R+V)") },
+                { assert meText.contains("ICEBs1") },
+                { assert summaryText.contains("Complete ICE (4 types of SP):\t1") },
+                { assert path(process.out.sp_with_me_ids[0][1]).text.contains("ID_1") },
+                { assert path(process.out.log[0][1]).text.contains("maxNumberCDSForSplitSPsByColocalizion") }
+            )
+        }
+    }
+}

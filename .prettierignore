@@ -1,0 +1,14 @@
+assets/
+modules/nf-core/
+modules.json
+tests/fixtures/
+.nf-test/
+package-lock.json
+results/
+work/
+site/
+*.nf
+*.config
+*.nf.test
+*.nf.test.snap
+*.diff

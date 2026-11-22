@@ -1,0 +1,28 @@
+Changes in component 'nf-core/blast/blastp'
+Changes in 'blast/blastp/main.nf':
+--- modules/nf-core/blast/blastp/main.nf
++++ modules/nf-core/blast/blastp/main.nf
+@@ -46,6 +46,7 @@
+ 
+     def out_ext_sans_gz = "$out_ext" - ~/\.gz$/
+     def compress_output = "$out_ext" ==~ /^\w+\.gz$/ ? "gzip ${prefix}.${out_ext_sans_gz}" : ''
++    def outfmt_arg = args.contains('-outfmt') ? '' : "-outfmt ${outfmt}"
+ 
+     """
+     $uncompress_input
+@@ -56,7 +57,7 @@
+         -out ${prefix}.${out_ext_sans_gz} \\
+         -db \$DB \\
+         -num_threads ${task.cpus} \\
+-        -outfmt ${outfmt} \\
++        ${outfmt_arg} \\
+         ${args}
+ 
+     $compress_output
+
+'modules/nf-core/blast/blastp/meta.yml' is unchanged
+'modules/nf-core/blast/blastp/environment.yml' is unchanged
+'modules/nf-core/blast/blastp/tests/nextflow.config' is unchanged
+'modules/nf-core/blast/blastp/tests/main.nf.test' is unchanged
+'modules/nf-core/blast/blastp/tests/main.nf.test.snap' is unchanged
+************************************************************

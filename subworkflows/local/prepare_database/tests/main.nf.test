@@ -1,0 +1,103 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_DATABASE"
+    script "../main.nf"
+    workflow "PREPARE_DATABASE"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "prepare_database"
+
+    test("Should unpack and index mini_db.tar.gz - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                db_dir = null
+            }
+            workflow {
+                """
+                input[0] = "${projectDir}/tests/fixtures/mini_db.tar.gz"
+                input[1] = null
+                input[2] = "bacillota"
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.blast_dbs.size() == 7 },
+                { assert workflow.out.sp_hmms.size() == 1 },
+                { assert workflow.out.fp_hmms.size() == 1 },
+                { assert path(workflow.out.mode_file[0]).exists() },
+                { assert path(workflow.out.ice_finder_db[0]).exists() },
+                { assert path(workflow.out.me_conf[0]).exists() }
+            )
+        }
+    }
+
+    test("Should extract archive and build protein BLAST and HMMER indices") {
+        tag "docker"
+
+        when {
+            params {
+                db_dir = null
+            }
+            workflow {
+                """
+                input[0] = "${projectDir}/tests/fixtures/mini_db.tar.gz"
+                input[1] = null
+                input[2] = "bacillota"
+                """
+            }
+        }
+
+        then {
+            def blastDirs = workflow.out.blast_dbs
+            def spFiles = workflow.out.sp_hmms[0]
+            def fpFiles = workflow.out.fp_hmms[0]
+            assertAll(
+                { assert workflow.success },
+                { assert blastDirs.size() == 7 },
+                { assert blastDirs.every { entry -> path(entry[1]).toFile().listFiles().any { it.name.endsWith(".phr") } } },
+                { assert spFiles.any { f -> path(f).toFile().name.endsWith(".hmm") } },
+                { assert spFiles.any { f -> path(f).toFile().name.endsWith(".h3f") } },
+                { assert fpFiles.any { f -> path(f).toFile().name.endsWith(".hmm") } },
+                { assert fpFiles.any { f -> path(f).toFile().name.endsWith(".h3f") } }
+            )
+        }
+    }
+
+    test("Should reuse pre-extracted db_dir and skip UNTAR") {
+        tag "docker"
+
+        when {
+            params {
+                db_dir = "${workDir}/cached_db"
+            }
+            workflow {
+                """
+                def cacheDir = new File("${workDir}/cached_db")
+                cacheDir.mkdirs()
+                def proc = ["tar", "-xzf", "${projectDir}/tests/fixtures/mini_db.tar.gz", "-C", cacheDir.absolutePath].execute()
+                proc.waitFor()
+                new File(cacheDir, "database").renameTo(new File(cacheDir, "icescreen_database"))
+                input[0] = "${projectDir}/tests/fixtures/mini_db.tar.gz"
+                input[1] = "${workDir}/cached_db"
+                input[2] = "bacillota"
+                """
+            }
+        }
+
+        then {
+            def untarTasks = workflow.trace.tasks().findAll { it.name.contains("UNTAR") }
+            assertAll(
+                { assert workflow.success },
+                { assert untarTasks.isEmpty() },
+                { assert workflow.out.blast_dbs.size() == 7 }
+            )
+        }
+    }
+}

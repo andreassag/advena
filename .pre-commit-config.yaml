@@ -1,13 +1,12 @@
 repos:
-  # Formatting for Nextflow (Groovy), JSON, YAML, Markdown via Prettier
+  # Formatting for JSON, YAML, Markdown, and JS config via Prettier
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
         additional_dependencies:
           - prettier@3.4.2
-          - prettier-plugin-groovy@0.2.1
-        files: \.(nf|config|json|yml|yaml|md)$
+        files: \.(json|yml|yaml|md|cjs)$
         types_or: [file]
 
   # Generic file hygiene

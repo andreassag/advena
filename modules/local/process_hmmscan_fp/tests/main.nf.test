@@ -1,0 +1,64 @@
+nextflow_process {
+
+    name "Test Process PROCESS_HMMSCAN_FP"
+    script "../main.nf"
+    process "PROCESS_HMMSCAN_FP"
+    tag "modules"
+    tag "modules_local"
+    tag "process_hmmscan_fp"
+
+    test("Should filter false positive HMM hits - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP_source.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/fp_all.tsv", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.sp_clean[0][1]).exists() },
+                { assert path(process.out.fp_hits[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should screen out false positives cleanly") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP_source.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/fp_all.tsv", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def clean = path(process.out.sp_clean[0][1]).text
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.fp_hits[0][1]).exists() },
+                { assert clean.contains("BSU_04800") },
+                { assert clean.contains("BSU_04860") },
+                { assert clean.contains("BSU_04870") },
+                { assert clean.contains("BSU_04940") }
+            )
+        }
+    }
+}

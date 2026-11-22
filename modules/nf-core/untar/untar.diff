@@ -1,0 +1,29 @@
+Changes in component 'nf-core/untar'
+Changes in 'untar/main.nf':
+--- modules/nf-core/untar/main.nf
++++ modules/nf-core/untar/main.nf
+@@ -56,11 +56,15 @@
+     if [[ \$(tar -taf ${archive} | grep -o -P "^.*?\\/" | uniq | wc -l) -eq 1 ]]; then
+         for i in `tar -tf ${archive}`;
+         do
+-            if [[ \$(echo "\${i}" | grep -E "/\$") == "" ]];
++            stripped=\${i#*/}
++            if [[ -z "\${stripped}" ]]; then
++                continue
++            elif [[ \$(echo "\${stripped}" | grep -E "/\$") == "" ]];
+             then
+-                touch \${i}
++                mkdir -p "${prefix}/\$(dirname "\${stripped}")"
++                touch "${prefix}/\${stripped}"
+             else
+-                mkdir -p \${i}
++                mkdir -p "${prefix}/\${stripped}"
+             fi
+         done
+     else
+
+'modules/nf-core/untar/meta.yml' is unchanged
+'modules/nf-core/untar/environment.yml' is unchanged
+'modules/nf-core/untar/tests/main.nf.test' is unchanged
+'modules/nf-core/untar/tests/main.nf.test.snap' is unchanged
+************************************************************

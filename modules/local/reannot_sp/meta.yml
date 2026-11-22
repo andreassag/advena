@@ -1,0 +1,66 @@
+name: reannot_sp
+description: Re-annotate tyrosine integrases (XerS classification) in signature proteins
+keywords:
+  - icescreen
+  - reannotation
+  - xers
+tools:
+  - icescreen:
+      description: Detection and annotation of ICEs and IMEs in Bacillota genomes
+      homepage: https://github.com/andreassag/icescreen
+      licence: ["AGPL-3.0-or-later"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - sp_clean:
+        type: file
+        description: FP-cleaned signature proteins TSV (*_detected_SP_hmm_cleaned.tsv)
+        pattern: "*.tsv"
+    - intyr_hits:
+        type: file
+        description: Filtered tyrosine integrase BLASTP hits (*_IntTyr_filtered.tsv)
+        pattern: "*.tsv"
+  - mode_file:
+      type: file
+      description: Taxonomic phylum mode YAML file
+      pattern: "*.yml"
+output:
+  final_sp:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_SP.tsv":
+          type: file
+          description: Final filtered and re-annotated signature proteins TSV
+          pattern: "*_detected_SP.tsv"
+  reannotated:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_SP_hmm_cleaned_reannotated.tsv":
+          type: file
+          description: Full re-annotated signature proteins table before filtering
+          pattern: "*_detected_SP_hmm_cleaned_reannotated.tsv"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - icescreen:
+          type: string
+          description: The name of the tool
+      - 'python3 -c ''import importlib.metadata; print(importlib.metadata.version("icescreen"))'' 2>/dev/null || echo ''1.3.3''':
+          type: eval
+          description: The expression to obtain the version of icescreen
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - pandas:
+          type: string
+          description: The name of the tool
+      - "python3 -c 'import pandas; print(pandas.__version__)'":
+          type: eval
+          description: The expression to obtain the version of pandas
+authors:
+  - "@andreassag"

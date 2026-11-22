@@ -11,15 +11,11 @@
 
 ## ICEscreen
 
-| Parameter          | Type    | Default     | Description                                                    |
-| ------------------ | ------- | ----------- | -------------------------------------------------------------- |
-| `--phylum`         | string  | `bacillota` | Taxonomic phylum; controls the detection mode file used        |
-| `--codon_table`    | integer | `11`        | NCBI genetic code for CDS translation                          |
-| `--icescreen_root` | string  | auto-detect | Path to the ICEscreen installation; overrides `ICESCREEN_ROOT` |
-| `--icescreen_db`   | string  | `null`      | Override path to pre-indexed databases (BLAST + HMM)           |
-
-`icescreen_root` is resolved in order: `--icescreen_root` parameter → `ICESCREEN_ROOT` environment variable →
-`~/repo/icescreen` → `/opt/icescreen`.
+| Parameter  | Type   | Default                                                                                      | Description                                                                        |
+| ---------- | ------ | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `--phylum` | string | `bacillota`                                                                                  | Taxonomic phylum; selects `mode/<phylum>.yml` (currently only `bacillota`)         |
+| `--db_url` | string | `https://github.com/andreassag/icescreen/releases/download/v1.3.3/icescreen_database.tar.gz` | URL or local path to the ICEscreen database archive (`.tar.gz`)                    |
+| `--db_dir` | string | `null`                                                                                       | Local directory containing a pre-extracted database or cache target for extraction |
 
 ---
 
@@ -32,20 +28,12 @@
 
 ---
 
-## Mobile element detection
-
-| Parameter                    | Type    | Default | Description                                            |
-| ---------------------------- | ------- | ------- | ------------------------------------------------------ |
-| `--min_cds_between_segments` | integer | `100`   | Minimum CDS count allowed between two ME segments      |
-| `--max_cds_for_ime_size`     | integer | `10`    | Maximum CDS count for classifying an element as an IME |
-
----
-
 ## Generic options
 
-| Parameter            | Type    | Default | Description                                                 |
-| -------------------- | ------- | ------- | ----------------------------------------------------------- |
-| `--publish_dir_mode` | string  | `copy`  | Nextflow `publishDir` mode: `copy`, `symlink`, `move`, etc. |
-| `--monochrome_logs`  | boolean | `false` | Disable ANSI colour in log output                           |
-| `--help`             | boolean | `false` | Display the help message and exit                           |
-| `--version`          | boolean | `false` | Display the pipeline version and exit                       |
+| Parameter               | Type           | Default               | Description                                                 |
+| ----------------------- | -------------- | --------------------- | ----------------------------------------------------------- |
+| `--publish_dir_mode`    | string         | `copy`                | Nextflow `publishDir` mode: `copy`, `symlink`, `move`, etc. |
+| `--monochrome_logs`     | boolean        | `false`               | Disable ANSI colour in log output                           |
+| `--help`                | boolean/string | `false`               | Display the help message (or parameter help) and exit       |
+| `--version`             | boolean        | `false`               | Display the pipeline version and exit                       |
+| `--trace_report_suffix` | string         | `yyyy-MM-dd_HH-mm-ss` | Timestamp suffix appended to `pipeline_info/` reports       |

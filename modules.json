@@ -1,5 +1,34 @@
 {
   "name": "andreassag/advena",
   "homePage": "https://github.com/andreassag/advena",
-  "repos": {}
+  "repos": {
+    "https://github.com/nf-core/modules.git": {
+      "modules": {
+        "nf-core": {
+          "blast/blastp": {
+            "branch": "master",
+            "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+            "installed_by": ["modules"],
+            "patch": "modules/nf-core/blast/blastp/blast-blastp.diff"
+          },
+          "blast/makeblastdb": {
+            "branch": "master",
+            "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+            "installed_by": ["modules"]
+          },
+          "hmmer/hmmpress": {
+            "branch": "master",
+            "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+            "installed_by": ["modules"]
+          },
+          "untar": {
+            "branch": "master",
+            "git_sha": "7b3452a23773f687ededb4befd037920e5a51341",
+            "installed_by": ["modules"],
+            "patch": "modules/nf-core/untar/untar.diff"
+          }
+        }
+      }
+    }
+  }
 }

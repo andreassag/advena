@@ -3,18 +3,88 @@ nextflow_pipeline {
     name "Test pipeline default execution"
     script "../main.nf"
     profile "test"
+    tag "pipeline"
 
-    test("Should run with stub") {
+    test("Should run full DAG with stub") {
+        tag "stub"
         options "-stub-run"
 
         when {
             params {
+                input = "${projectDir}/assets/samplesheet.csv"
                 outdir = "$outputDir"
             }
         }
 
         then {
-            assert workflow.success
+            def samples = ["GCF_000009045.1", "GCF_003176835.1"]
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/pipeline_info/software_versions.yml").exists() },
+                { assert samples.every { s ->
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_ME.tsv").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_ME.summary").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_SP_withMEIds.tsv").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gff.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.embl.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gb.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.fa.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.gff.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/detected_signature_proteins/${s}_detected_SP.tsv").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/param.conf.gz").exists() &&
+                    path("${outputDir}/ICEscreen_results/${s}/tmp_intermediate_files.tar.gz").exists()
+                } }
+            )
+        }
+    }
+
+    test("Should match golden ICEscreen reference outputs on Bacillota test genomes") {
+        tag "docker"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            def samples = ["GCF_000009045.1", "GCF_003176835.1"]
+            def readGz = { f ->
+                new java.util.zip.GZIPInputStream(new java.io.FileInputStream(path(f).toFile())).getText("UTF-8")
+            }
+            def versionsText = path("${outputDir}/pipeline_info/software_versions.yml").text
+            assertAll(
+                { assert workflow.success },
+                { assert versionsText.contains("BLAST_BLASTP:") },
+                { assert versionsText.contains("HMMSCAN_SP:") },
+                { assert versionsText.contains("GB_TO_FAA:") },
+                { assert versionsText.contains("DETECT_ME:") },
+                { assert versionsText.contains("CREATE_ANNOTATIONS:") },
+                { assert versionsText.contains("PACKAGE_RESULTS:") },
+                {
+                    samples.each { s ->
+                        def outSample = "${outputDir}/ICEscreen_results/${s}"
+                        def refSample = "${projectDir}/assets/icescreen_result/ICEscreen_results/${s}"
+
+                        assert path("${outSample}/detected_mobile_elements/${s}_detected_ME.tsv").text ==
+                            path("${refSample}/detected_mobile_elements/${s}_detected_ME.tsv").text
+                        assert path("${outSample}/detected_mobile_elements/${s}_detected_SP_withMEIds.tsv").text ==
+                            path("${refSample}/detected_mobile_elements/${s}_detected_SP_withMEIds.tsv").text
+                        assert path("${outSample}/detected_mobile_elements/${s}_detected_ME.summary").text ==
+                            path("${refSample}/detected_mobile_elements/${s}_detected_ME.summary").text
+
+                        assert path("${outSample}/detected_signature_proteins/${s}_detected_SP.tsv").readLines().size() > 1
+                        assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gff.gz").contains("##gff-version")
+                        assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.embl.gz").contains("ID   ")
+                        assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gb.gz").contains("LOCUS       ")
+                        assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.fa.gz").startsWith(">")
+                        assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.gff.gz").contains("##gff-version")
+                        assert readGz("${outSample}/param.conf.gz").contains("mode: bacillota")
+                        assert path("${outSample}/tmp_intermediate_files.tar.gz").toFile().length() > 0
+                    }
+                }
+            )
         }
     }
 }

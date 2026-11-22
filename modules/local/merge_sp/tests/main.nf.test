@@ -1,0 +1,60 @@
+nextflow_process {
+
+    name "Test Process MERGE_SP"
+    script "../main.nf"
+    process "MERGE_SP"
+    tag "modules"
+    tag "modules_local"
+    tag "merge_sp"
+
+    test("Should merge BLAST and HMM hits - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.merged[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should merge BLAST and HMM best SP hits") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            def merged = path(process.out.merged[0][1]).text
+            assertAll(
+                { assert process.success },
+                { assert merged.contains("BSU_04800") },
+                { assert merged.contains("BSU_04860") },
+                { assert merged.contains("BSU_04870") },
+                { assert merged.contains("BSU_04940") }
+            )
+        }
+    }
+}

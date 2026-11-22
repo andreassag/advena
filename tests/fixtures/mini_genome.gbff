@@ -1,0 +1,880 @@
+LOCUS       NC_000964            13000 bp    DNA     circular CON 12-FEB-2021
+DEFINITION  Bacillus subtilis subsp. subtilis str. 168 complete genome.
+ACCESSION   NC_000964
+VERSION     NC_000964.3
+DBLINK      BioProject: PRJNA76
+            BioSample: SAMEA3138188
+KEYWORDS    RefSeq; complete genome.
+SOURCE      Bacillus subtilis subsp. subtilis str. 168
+  ORGANISM  Bacillus subtilis subsp. subtilis str. 168
+            Bacteria; Bacillati; Bacillota; Bacilli; Bacillales; Bacillaceae;
+            Bacillus.
+REFERENCE   1
+  AUTHORS   Borriss,R., Danchin,A., Harwood,C.R., Medigue,C., Rocha,E.P.C.,
+            Sekowska,A. and Vallenet,D.
+  TITLE     Bacillus subtilis, the model Gram-positive bacterium: 20 years of
+            annotation refinement
+  JOURNAL   Microb Biotechnol 11 (1), 3-17 (2018)
+   PUBMED   29280348
+REFERENCE   2  (bases 1 to 4215606)
+  AUTHORS   Belda,E., Sekowska,A., Le Fevre,F., Morgat,A., Mornico,D.,
+            Ouzounis,C., Vallenet,D., Medigue,C. and Danchin,A.
+  TITLE     An updated metabolic view of the Bacillus subtilis 168 genome
+  JOURNAL   Microbiology (Reading, Engl.) 159 (Pt 4), 757-770 (2013)
+   PUBMED   23429746
+REFERENCE   3  (bases 1 to 4215606)
+  AUTHORS   Barbe,V., Cruveiller,S., Kunst,F., Lenoble,P., Meurice,G.,
+            Sekowska,A., Vallenet,D., Wang,T., Moszer,I., Medigue,C. and
+            Danchin,A.
+  TITLE     From a consortium sequence to a unified sequence: the Bacillus
+            subtilis 168 reference genome a decade later
+  JOURNAL   Microbiology (Reading, Engl.) 155 (Pt 6), 1758-1775 (2009)
+   PUBMED   19383706
+REFERENCE   4  (bases 1 to 4215606)
+  AUTHORS   Kunst,F., Ogasawara,N., Moszer,I., Albertini,A.M., Alloni,G.,
+            Azevedo,V., Bertero,M.G., Bessieres,P., Bolotin,A., Borchert,S.,
+            Borriss,R., Boursier,L., Brans,A., Braun,M., Brignell,S.C.,
+            Bron,S., Brouillet,S., Bruschi,C.V., Caldwell,B., Capuano,V.,
+            Carter,N.M., Choi,S.K., Cordani,J.J., Connerton,I.F.,
+            Cummings,N.J., Daniel,R.A., Denziot,F., Devine,K.M., Dusterhoft,A.,
+            Ehrlich,S.D., Emmerson,P.T., Entian,K.D., Errington,J., Fabret,C.,
+            Ferrari,E., Foulger,D., Fritz,C., Fujita,M., Fujita,Y., Fuma,S.,
+            Galizzi,A., Galleron,N., Ghim,S.Y., Glaser,P., Goffeau,A.,
+            Golightly,E.J., Grandi,G., Guiseppi,G., Guy,B.J., Haga,K.,
+            Haiech,J., Harwood,C.R., Henaut,A., Hilbert,H., Holsappel,S.,
+            Hosono,S., Hullo,M.F., Itaya,M., Jones,L., Joris,B., Karamata,D.,
+            Kasahara,Y., Klaerr-Blanchard,M., Klein,C., Kobayashi,Y.,
+            Koetter,P., Koningstein,G., Krogh,S., Kumano,M., Kurita,K.,
+            Lapidus,A., Lardinois,S., Lauber,J., Lazarevic,V., Lee,S.M.,
+            Levine,A., Liu,H., Masuda,S., Mauel,C., Medigue,C., Medina,N.,
+            Mellado,R.P., Mizuno,M., Moestl,D., Nakai,S., Noback,M., Noone,D.,
+            O'Reilly,M., Ogawa,K., Ogiwara,A., Oudega,B., Park,S.H., Parro,V.,
+            Pohl,T.M., Portelle,D., Porwollik,S., Prescott,A.M., Presecan,E.,
+            Pujic,P., Purnelle,B., Rapoport,G., Rey,M., Reynolds,S., Rieger,M.,
+            Rivolta,C., Rocha,E., Roche,B., Rose,M., Sadaie,Y., Sato,T.,
+            Scanlan,E., Schleich,S., Schroeter,R., Scoffone,F., Sekiguchi,J.,
+            Sekowska,A., Seror,S.J., Serror,P., Shin,B.S., Soldo,B.,
+            Sorokin,A., Tacconi,E., Takagi,T., Takahashi,H., Takemaru,K.,
+            Takeuchi,M., Tamakoshi,A., Tanaka,T., Terpstra,P., Togoni,A.,
+            Tosato,V., Uchiyama,S., Vandebol,M., Vannier,F., Vassarotti,A.,
+            Viari,A., Wambutt,R., Wedler,H., Weitzenegger,T., Winters,P.,
+            Wipat,A., Yamamoto,H., Yamane,K., Yasumoto,K., Yata,K., Yoshida,K.,
+            Yoshikawa,H.F., Zumstein,E., Yoshikawa,H. and Danchin,A.
+  TITLE     The complete genome sequence of the gram-positive bacterium
+            Bacillus subtilis
+  JOURNAL   Nature 390 (6657), 249-256 (1997)
+   PUBMED   9384377
+REFERENCE   5  (bases 1 to 4215606)
+  CONSRTM   NCBI Genome Project
+  TITLE     Direct Submission
+  JOURNAL   Submitted (17-SEP-2018) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+REFERENCE   6  (bases 1 to 4215606)
+  AUTHORS   Genoscope -,C.E.A.
+  CONSRTM   AMAbiotics and Genoscope
+  TITLE     Direct Submission
+  JOURNAL   Submitted (24-JAN-2013) A. Danchin, AMAbiotics, Bldg G1, 2, rue
+            Gaston Cremieux, 91000 EVRY antoine.danchin@normalesup.org Bldg G1
+            Genoscope / CEA (Commissariat a l'energie atomique et aux energies
+            alternatives): BP 191 91006 EVRY cedex - FRANCE (E-mail:
+            seqref@genoscope.cns.fr - Web: www.genoscope.cns.fr)
+REFERENCE   7  (bases 1 to 4215606)
+  AUTHORS   Genoscope -,C.E.A.
+  CONSRTM   Institut Pasteur and Genoscope
+  TITLE     Direct Submission
+  JOURNAL   Submitted (29-JAN-2009) Genoscope - Centre National de Sequencage :
+            BP 191 91006 EVRY cedex - FRANCE (E-mail : seqref@genoscope.cns.fr
+            - Web : www.genoscope.cns.fr)
+REFERENCE   8  (bases 1 to 4215606)
+  AUTHORS   Kunst,F., Ogasawara,N., Yoshikawa,H. and Danchin,A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (18-NOV-1997) I. Moszer, A. Danchin, Genetique des
+            Genomes Bacteriens, Institut Pasteur, 28 rue du Docteur Roux, 75724
+            Paris Cedex 15, FRANCE. E-mail: moszer@pasteur.fr,
+            antoine.danchin@normalesup.org Phone: +33 (0)1 45 68 84 41, Fax:
+            +33 (0)1 45 68 89 48
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence is identical to AL009126.
+            
+            On Aug 12, 2009 this sequence version replaced NC_000964.2.
+            
+            On or before Mar 17, 2009 this sequence version replaced
+            gi:32468687, gi:32468690, gi:32468695, gi:32468704, gi:32468715,
+            gi:32468723, gi:32468738, gi:32468743, gi:32468745, gi:32468758,
+            gi:32468767, gi:32468778, gi:32468787, gi:32468796, gi:32468802,
+            gi:32468809, gi:32468813, gi:32468825, gi:32468830, gi:32468833,
+            gi:32468840, gi:38680335.
+            Annotation results relative to BLAST similarities, COG
+            assignations, enzymatic function prediction (PRIAM software), TMHMM
+            and SignalP predictions, and synteny conservation (Syntonizer
+            software) are available in the MicroScope annotation platform
+            http://www.genoscope.cns.fr/agc/microscope.
+            The large cluster comprising the i, h and g rDNA regions could not
+            be properly resolved, we therefore incorporated the original
+            sequence of rRNAihg in the final assembly.
+            COMPLETENESS: full length.
+FEATURES             Location/Qualifiers
+     source          1..13000
+                     /organism="Bacillus subtilis subsp. subtilis str. 168"
+     gene            87..162
+                     /gene="trnS-Lys"
+                     /locus_tag="BSU_tRNA_49"
+                     /db_xref="GeneID:8302955"
+     gene            174..255
+                     /gene="trnS-Leu1"
+                     /locus_tag="BSU_tRNA_50"
+                     /db_xref="GeneID:8302923"
+     gene            336..422
+                     /gene="trnS-Leu2"
+                     /locus_tag="BSU_tRNA_51"
+                     /db_xref="GeneID:8302926"
+     gene            complement(505..1611)
+                     /gene="ydcL"
+                     /locus_tag="BSU_04800"
+                     /old_locus_tag="BSU04800"
+                     /db_xref="GeneID:938151"
+     CDS             complement(505..1611)
+                     /gene="ydcL"
+                     /locus_tag="BSU_04800"
+                     /old_locus_tag="BSU04800"
+                     /function="16.5: Explore"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 2a: Function from experimental evidences
+                     in other organisms; PubMedId: 22505685; Product type h :
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: integrase"
+                     /protein_id="NP_388361.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04800"
+                     /db_xref="EnsemblGenomes-Tr:CAB12287"
+                     /db_xref="GOA:P96629"
+                     /db_xref="InterPro:IPR002104"
+                     /db_xref="InterPro:IPR004107"
+                     /db_xref="InterPro:IPR010998"
+                     /db_xref="InterPro:IPR011010"
+                     /db_xref="InterPro:IPR013762"
+                     /db_xref="SubtiList:BG12099"
+                     /db_xref="UniProtKB/Swiss-Prot:P96629"
+                     /db_xref="GeneID:938151"
+                     /translation="MSVKKLENGQYQVDVSFGFDPITGERIRTRPVASTRKEALELEA
+                     KLRREFQEERARKSRSVSFPTLISIYLASCEIDSKPNYYQNQKYIINKHISDYFLKSD
+                     IQKITHREITDFRKHLMETGLSNKSVNNIMTSLSKIFDTAVHEEILKRNPCDNVKRLP
+                     LTRKKMKFWRPEEFKKFISLIPQDQLLFKTFYTVAFLTGLRCGEMLALQWKDIDKILL
+                     EIDVHKSCTWLDGQFVVTTPKTKNSIRRVSINKKLLKLLERWKEAQEELFNELGIRHS
+                     HDTYIFQYKDTPSRKDIFSRKIKYFCKDSDLTPIRLHDFRHSHVALLIHQGEDYITIK
+                     ERLGHGSVKTTIDVYGHLYPNKQKEMADKLDDLL"
+     gene            complement(1624..2133)
+                     /gene="immA"
+                     /locus_tag="BSU_04810"
+                     /old_locus_tag="BSU04810"
+                     /db_xref="GeneID:939924"
+     CDS             complement(1624..2133)
+                     /gene="immA"
+                     /locus_tag="BSU_04810"
+                     /old_locus_tag="BSU04810"
+                     /function="16.5: Explore"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:18761623, 21036995, 22505685"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 18761623, 21036995,
+                     22505685; Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: site-specific protease
+                     cleaving ImmR"
+                     /protein_id="NP_388362.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04810"
+                     /db_xref="EnsemblGenomes-Tr:CAB12288"
+                     /db_xref="GOA:P96630"
+                     /db_xref="InterPro:IPR010359"
+                     /db_xref="SubtiList:BG12100"
+                     /db_xref="UniProtKB/Swiss-Prot:P96630"
+                     /db_xref="GeneID:939924"
+                     /translation="MITIYTSKGIKHKVQSVIKTHGTNNVYEICDIQKIYILKNDLGQ
+                     ANGLLQHDKATDQYLIHINENLQHQQFVIAHELGHYFLHKRLNTFKVVNCSKVLKDKL
+                     EHQASLFASELILTDKMLNEALPYIQGFSKEQIAAYFNVPSFVTDYKLSQIGSFSNRI
+                     YSHEISAFG"
+     gene            complement(2130..2513)
+                     /gene="immR"
+                     /locus_tag="BSU_04820"
+                     /old_locus_tag="BSU04820"
+                     /db_xref="GeneID:938150"
+     CDS             complement(2130..2513)
+                     /gene="immR"
+                     /locus_tag="BSU_04820"
+                     /old_locus_tag="BSU04820"
+                     /function="16.5: Explore"
+                     /function="16.3: Control"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:8083175, 17511812, 22505685"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 8083175, 17511812,
+                     22505685; Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: transcriptional regulator
+                     (Xre family)"
+                     /protein_id="NP_388363.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04820"
+                     /db_xref="EnsemblGenomes-Tr:CAB12289"
+                     /db_xref="GOA:P96631"
+                     /db_xref="InterPro:IPR001387"
+                     /db_xref="InterPro:IPR010982"
+                     /db_xref="InterPro:IPR027910"
+                     /db_xref="SubtiList:BG12101"
+                     /db_xref="UniProtKB/Swiss-Prot:P96631"
+                     /db_xref="GeneID:938150"
+                     /translation="MSLGKRLKEARQKAGYTQKEAAEKLNIGNNNLSNYERDYRDPDT
+                     DTLLKLSNLYNVSTDYLLGKDEVSKKNETDLLNKTINEAIQELKDEDTLLFMNDGEFD
+                     EETARLVKKALKNGIKFIDELKKKE"
+     gene            2787..2981
+                     /gene="xis"
+                     /locus_tag="BSU_04830"
+                     /old_locus_tag="BSU04830"
+                     /db_xref="GeneID:939938"
+     CDS             2787..2981
+                     /gene="xis"
+                     /locus_tag="BSU_04830"
+                     /old_locus_tag="BSU04830"
+                     /function="16.3: Control"
+                     /function="16.1: Circulate"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:3269394, 17511812, 22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 3269394, 17511812,
+                     22505685, 26013486; Product type h: extrachromosomal
+                     origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: excisionase"
+                     /protein_id="NP_388364.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04830"
+                     /db_xref="EnsemblGenomes-Tr:CAB12290"
+                     /db_xref="GOA:O31490"
+                     /db_xref="SubtiList:BG12670"
+                     /db_xref="UniProtKB/Swiss-Prot:O31490"
+                     /db_xref="GeneID:939938"
+                     /translation="MKGEFLTARDIQKILGVKQAKSYDIIRTLNAQMKEEGYMVIQGK
+                     VSRAKFEECYCYKGPKSQTG"
+     gene            2978..3238
+                     /gene="ydzL"
+                     /locus_tag="BSU_04839"
+                     /old_locus_tag="BSU04839"
+                     /db_xref="GeneID:8303154"
+     CDS             2978..3238
+                     /gene="ydzL"
+                     /locus_tag="BSU_04839"
+                     /old_locus_tag="BSU04839"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 22505685, 26013486; Product type h:
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="YP_003097681.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04839"
+                     /db_xref="EnsemblGenomes-Tr:CAX52552"
+                     /db_xref="UniProtKB/Swiss-Prot:C0H3V5"
+                     /db_xref="GeneID:8303154"
+                     /translation="MIFINIDITNSFMKEAVPLARQMEGDWIARMKIALNSVIINHYL
+                     NLPLTIENVNELLRKGVSYRRICKHYGIGRKDIEKLRQSSVV"
+     gene            3292..3552
+                     /gene="ydcO"
+                     /locus_tag="BSU_04840"
+                     /old_locus_tag="BSU04840"
+                     /db_xref="GeneID:938142"
+     CDS             3292..3552
+                     /gene="ydcO"
+                     /locus_tag="BSU_04840"
+                     /old_locus_tag="BSU04840"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 22505685, 26013486; Product type h:
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="NP_388365.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04840"
+                     /db_xref="EnsemblGenomes-Tr:CAB12291"
+                     /db_xref="SubtiList:BG12102"
+                     /db_xref="UniProtKB/Swiss-Prot:P96632"
+                     /db_xref="GeneID:938142"
+                     /translation="MKIRVNATIITDVEALKADKDLNHFKDYATCETFVVDADNHLKA
+                     NEEISELLKGWDWWCIWSTRPLSKKDNQVFTLYNDDLYNLCR"
+     gene            complement(3583..3642)
+                     /gene="sncO"
+                     /locus_tag="BSU_misc_RNA_65"
+                     /db_xref="GeneID:37862803"
+     gene            3758..3886
+                     /locus_tag="BSU_04849"
+                     /old_locus_tag="BSU04849"
+                     /db_xref="GeneID:37862804"
+     CDS             3758..3886
+                     /locus_tag="BSU_04849"
+                     /old_locus_tag="BSU04849"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 5: Unknown function; PubMedId : 22505685"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: hypothetical protein"
+                     /protein_id="YP_009513947.1"
+                     /db_xref="GeneID:37862804"
+                     /translation="MMAIISLLGCHEGVKPLATDKRQDGYRTGANQKHKIEINVLL"
+     gene            3922..4302
+                     /gene="helP"
+                     /locus_tag="BSU_04850"
+                     /old_locus_tag="BSU04850"
+                     /db_xref="GeneID:939920"
+     CDS             3922..4302
+                     /gene="helP"
+                     /locus_tag="BSU_04850"
+                     /old_locus_tag="BSU04850"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:22505685, 23326247, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 22505685, 23326247,
+                     26013486; Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: helicase processivity
+                     factor"
+                     /protein_id="NP_388366.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04850"
+                     /db_xref="EnsemblGenomes-Tr:CAB12292"
+                     /db_xref="InterPro:IPR010365"
+                     /db_xref="SubtiList:BG12103"
+                     /db_xref="UniProtKB/Swiss-Prot:P96633"
+                     /db_xref="GeneID:939920"
+                     /translation="MNLNFIVPDINMTFGDMKFMGLNRERYVYDRENNKRTDVLESRI
+                     YNIASAVQGGQIEVTIPEYAGAKEIPPFADIELKNPKISAMATSQRDSTYANVMWKLE
+                     ADDIVVKGGSSVKPAAATGGNEKK"
+     gene            4338..5780
+                     /gene="conQ"
+                     /locus_tag="BSU_04860"
+                     /old_locus_tag="BSU04860"
+                     /db_xref="GeneID:939923"
+     CDS             4338..5780
+                     /gene="conQ"
+                     /locus_tag="BSU_04860"
+                     /old_locus_tag="BSU04860"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:17511812, 22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 17511812, 22505685,
+                     26013486; Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: coupling conjugation
+                     protein VirD4"
+                     /protein_id="NP_388367.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04860"
+                     /db_xref="EnsemblGenomes-Tr:CAB12293"
+                     /db_xref="GOA:P96634"
+                     /db_xref="InterPro:IPR002543"
+                     /db_xref="InterPro:IPR027417"
+                     /db_xref="SubtiList:BG12104"
+                     /db_xref="UniProtKB/Swiss-Prot:P96634"
+                     /db_xref="GeneID:939923"
+                     /translation="MSDFLNKRFWKYRGKRIRPYMRNNVKLAGAIIFVPVFLLSMFLF
+                     WREQLIHFDLSQVIKNFEWNVPLIIKSVLCSVLIAVGSIVASYFLLFDSYKKILHRQK
+                     IAKMIFSNKFYEKENVKVRKIFSNETDSKEKITYFPRMYYQVKNNHIYIRIAMDMSRF
+                     QNRFLDLGKDLENGLFCDLVDKQMEEGFVCFKLLYDVKKNRISIDDAVAENGVLPLMK
+                     HISWQFDKLPHMLIAGGTGGGKTYFMLTIIKACVGLGADVRILDPKNADLADLEEVLP
+                     KKVYSQKNGILMCLRKSVDGMMERMDEMKQMSNYKTGENYAYLGLKPVFIFFDEYVAF
+                     MDLLDMKERNEALSYMKQLVMLGRQAGYFLVLGAQRPDAKYLADGIRDQFSFRVSLGL
+                     MSDTGYGMMFGDVEKAYVNKKETGRGYANVGTGSVLEFYSPIVPKGYDFMSSIKNALV
+                     GVEGAQATAVASGSVSDQTASGEGVSEANG"
+     gene            5773..6831
+                     /gene="nicK"
+                     /locus_tag="BSU_04870"
+                     /old_locus_tag="BSU04870"
+                     /db_xref="GeneID:939922"
+     CDS             5773..6831
+                     /gene="nicK"
+                     /locus_tag="BSU_04870"
+                     /old_locus_tag="BSU04870"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:17511812, 17693500, 22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 17511812, 17693500,
+                     22505685, 26013486; Product type h: extrachromosomal
+                     origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: DNA relaxase"
+                     /protein_id="NP_388368.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04870"
+                     /db_xref="EnsemblGenomes-Tr:CAB12294"
+                     /db_xref="GOA:P96635"
+                     /db_xref="InterPro:IPR003491"
+                     /db_xref="SubtiList:BG12105"
+                     /db_xref="UniProtKB/Swiss-Prot:P96635"
+                     /db_xref="GeneID:939922"
+                     /translation="MDELKQPPHANRGVVIVKEKNEAVESPLVSMVDYIRVSFKTHDV
+                     DRIIEEVLHLSKDFMTEKQSGFYGYVGTYELDYIKVFYSAPDDNRGVLIEMSGQGCRQ
+                     FESFLECRKKTWYDFFQDCMQQGGSFTRFDLAIDDKKTYFSIPELLKKAQKGECISRF
+                     RKSDFNGSFDLSDGITGGTTIYFGSKKSEAYLCFYEKNYEQAEKYNIPLEELGDWNRY
+                     ELRLKNERAQVAIDALLKTKDLTLIAMQIINNYVRFVDADENITREHWKTSLFWSDFI
+                     GDVGRLPLYVKPQKDFYQKSRNWLRNSCAPTMKMVLEADEHLGKTDLSDMIAEAELAD
+                     KHKKMLDVYMADVADMVV"
+     gene            7096..7365
+                     /gene="ydcS"
+                     /locus_tag="BSU_04880"
+                     /old_locus_tag="BSU04880"
+                     /db_xref="GeneID:938148"
+     CDS             7096..7365
+                     /gene="ydcS"
+                     /locus_tag="BSU_04880"
+                     /old_locus_tag="BSU04880"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 22505685; Product type h :
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="NP_388369.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04880"
+                     /db_xref="EnsemblGenomes-Tr:CAB12295"
+                     /db_xref="SubtiList:BG12106"
+                     /db_xref="UniProtKB/Swiss-Prot:P96636"
+                     /db_xref="GeneID:938148"
+                     /translation="MHNVNLLNQAGLENALESVGCLDIVEDLIEKMQEYVLYHTETAE
+                     RFAIDIFTVVNNYTKKVHAIFNVLENEDGETNVKNVEFEVMHFTE"
+     gene            7404..7670
+                     /gene="ydcT"
+                     /locus_tag="BSU_04890"
+                     /old_locus_tag="BSU04890"
+                     /db_xref="GeneID:938146"
+     CDS             7404..7670
+                     /gene="ydcT"
+                     /locus_tag="BSU_04890"
+                     /old_locus_tag="BSU04890"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 22505685; Product type h :
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="NP_388370.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04890"
+                     /db_xref="EnsemblGenomes-Tr:CAB12296"
+                     /db_xref="SubtiList:BG12107"
+                     /db_xref="UniProtKB/Swiss-Prot:P96637"
+                     /db_xref="GeneID:938146"
+                     /translation="MFNINLLNQARLESDLDSLGCLDIAEELIEKMMEDVFYSDVAQR
+                     IIVQTLAVINNANAKLQATFNILEDEDMETDERSVEFEGISYYE"
+     gene            7687..7995
+                     /gene="yddA"
+                     /locus_tag="BSU_04900"
+                     /old_locus_tag="BSU04900"
+                     /db_xref="GeneID:938135"
+     CDS             7687..7995
+                     /gene="yddA"
+                     /locus_tag="BSU_04900"
+                     /old_locus_tag="BSU04900"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 22505685; Product type h :
+                     extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="NP_388371.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04900"
+                     /db_xref="EnsemblGenomes-Tr:CAB12297"
+                     /db_xref="SubtiList:BG12108"
+                     /db_xref="UniProtKB/Swiss-Prot:P96638"
+                     /db_xref="GeneID:938135"
+                     /translation="MSAVDKRFKSLGFNVGIPSLVFVRSLSRDCMLVVEGERVKGFAE
+                     YRYTFYKTRYLPDGRMTSLKVYMENQSIKRVLHRVASFLSFLERTKQIEQKECEKVAQ
+                     "
+     gene            7985..9049
+                     /gene="conB"
+                     /locus_tag="BSU_04910"
+                     /old_locus_tag="BSU04910"
+                     /db_xref="GeneID:939918"
+     CDS             7985..9049
+                     /gene="conB"
+                     /locus_tag="BSU_04910"
+                     /old_locus_tag="BSU04910"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 22505685, 26013486;
+                     Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: subunit of the
+                     conjugation machinery VirB8"
+                     /protein_id="NP_388372.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04910"
+                     /db_xref="EnsemblGenomes-Tr:CAB12298"
+                     /db_xref="GOA:O31491"
+                     /db_xref="InterPro:IPR024735"
+                     /db_xref="InterPro:IPR035628"
+                     /db_xref="SubtiList:BG12109"
+                     /db_xref="UniProtKB/Swiss-Prot:O31491"
+                     /db_xref="GeneID:939918"
+                     /translation="MLNKEIGSDKKEESFFRSAFQKLKRIERPEKDKQKVPRDRSKLI
+                     AVTLWSCVGSLLFICLLAVLLSINTRSQLNDMKDETNKPTNDDKQKISVTAAENFLSG
+                     FINEYMNVKNDQESIEKRMQSLESYMVKQEDNHFEDEERFNVDGLKGDRELKGYSLYN
+                     VKEGDKNSLFQYKVTYENLYPVEKEVEKEVKDGKKKKKVKEKVKTNEKYEKQMLLNIP
+                     VTNKGDSFAVSAVPYFTQIYDLKGDIAFKGKEETRDEYAGEKKESIESFLQNFFEKYA
+                     SEKKEEMVYMMKKPEALEGNLLFGEVQSVKIFETKKGFEVFCAVRFKEKENDIPVNEK
+                     FSLEITENSGQFYVNKLKHQ"
+     gene            9061..9309
+                     /gene="conC"
+                     /locus_tag="BSU_04920"
+                     /old_locus_tag="BSU04920"
+                     /db_xref="GeneID:938144"
+     CDS             9061..9309
+                     /gene="conC"
+                     /locus_tag="BSU_04920"
+                     /old_locus_tag="BSU04920"
+                     /function="18: Unknown function"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 22505685, 26013486;
+                     Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: subunit of the
+                     conjugation machinery"
+                     /protein_id="NP_388373.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04920"
+                     /db_xref="EnsemblGenomes-Tr:CAB12299"
+                     /db_xref="GOA:P96640"
+                     /db_xref="SubtiList:BG12110"
+                     /db_xref="UniProtKB/Swiss-Prot:P96640"
+                     /db_xref="GeneID:938144"
+                     /translation="MDFMNFFILGADLPTLGGVKGWASDVVIQFITIVVMFIAAKNLM
+                     KLKMGGIIFVCCIGSAVTWVIKHWSEFSGWINALMEKL"
+     gene            9322..9846
+                     /gene="conD"
+                     /locus_tag="BSU_04930"
+                     /old_locus_tag="BSU04930"
+                     /db_xref="GeneID:939921"
+     CDS             9322..9846
+                     /gene="conD"
+                     /locus_tag="BSU_04930"
+                     /old_locus_tag="BSU04930"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 22505685, 26013486;
+                     Product type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: subunit of the
+                     conjugation machinery"
+                     /protein_id="NP_388374.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04930"
+                     /db_xref="EnsemblGenomes-Tr:CAB12300"
+                     /db_xref="GOA:P96641"
+                     /db_xref="InterPro:IPR025608"
+                     /db_xref="SubtiList:BG12111"
+                     /db_xref="UniProtKB/Swiss-Prot:P96641"
+                     /db_xref="GeneID:939921"
+                     /translation="MGRLVFNYRKAMREPKKIQQLTENYSLPFAVELIPAINYFIFVG
+                     LCFGFWYGVRMIFPHAFDNSYVIVIFGIPFFLTMLVTKIKPEGKNIYIYFFDFAKYYF
+                     FIKLPQKKYCNDRKIDLSNEKQIEFRKLVKVVDYSNETKNAYEGNTQEFAVNKNGRRV
+                     GVLPNKKQFDSYAK"
+     gene            9734..12229
+                     /gene="conE"
+                     /locus_tag="BSU_04940"
+                     /old_locus_tag="BSU04940"
+                     /db_xref="GeneID:938130"
+     CDS             9734..12229
+                     /gene="conE"
+                     /locus_tag="BSU_04940"
+                     /old_locus_tag="BSU04940"
+                     /experiment="publication(s) with functional evidences,
+                     PMID:19734305, 19943900, 22505685, 26013486"
+                     /note="Evidence 1a: Function from experimental evidences
+                     in the studied strain; PubMedId: 19734305, 19943900,
+                     22505685, 26013486; Product type h: extrachromosomal
+                     origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: VirB4-like ATPase"
+                     /protein_id="NP_388375.3"
+                     /db_xref="EnsemblGenomes-Gn:BSU04940"
+                     /db_xref="EnsemblGenomes-Tr:CAB12301"
+                     /db_xref="GOA:P96642"
+                     /db_xref="InterPro:IPR016628"
+                     /db_xref="InterPro:IPR027417"
+                     /db_xref="SubtiList:BG12112"
+                     /db_xref="UniProtKB/Swiss-Prot:P96642"
+                     /db_xref="GeneID:938130"
+                     /translation="MRLKTPMKAIHKNLLLTRTGDVWAYYRIKSNSIPMQNKEKVESY
+                     KKKWQHLFEEITSYEDFHLMMYPSEYELEKRFKDLETDIAADAMDVARYYNEETVRLL
+                     EQRLGRLTKYDFILGVKLKSSLVNISVELKDNILSFFNTATDTVVKMLGWEQNVSTSF
+                     FEKYEEVEETLANIMASVRGERLSETEMTYINRYHFVRGLKHQTNEESEIKDVRSITN
+                     TIIDPTDPSVLHLHSDQDEGYSAFVVIDEFLHNMSESDLFYEAQSLPFPVEVQMKIQT
+                     ESKSITKPALNLKRQQLKEEQKEQQSTGDRSDVSTVTSATMIRHLQDEIKKEDVHVMN
+                     WLSVIVVHGKTKKECVGKATIVKRHLKGAGITCRLPVADQLNLFYKMLPGEKLDITDK
+                     NWIQKTTQDGVAESLFAVNSDIGSKIGFFLGWVDRFQEHTDLESAIMSSRDFVLFHPF
+                     LANQQLKGSKTRSPHCLITGDTGNGKSYLAKLIFNYISMLNIKSLYIDPKKEMRKWIQ
+                     RVLNDEYIRENFPLYIAHLEKYNYITLDHENTHNWGALDPISFLPPMKAKELVQVIFE
+                     QVYDFKGKDDINTAFLRATSEVIDAKQKGEQVGSLDIIRKMQSHPEEAVQKAGDYLNE
+                     VVSDSILKLCIHDGSNPALSLEKRITILEVENMDLPDHAERLENYTISQLKSSAVMFA
+                     LGKFCELFGMNQDEQTVEFIDEAWIFTTSQQGKKVERQMRRIGRSYNNAEYFISQSTK
+                     DALKEEDSGNFGVAFAFDEPNEREEVLKWMNMEVTKDNKKMMESMFQGQCLFKDYYGR
+                     TSKISIECLFEEWQGALKTVEKKAVAYAEEKYL"
+     gene            12248..12574
+                     /gene="yddF"
+                     /locus_tag="BSU_04950"
+                     /old_locus_tag="BSU04950"
+                     /db_xref="GeneID:938143"
+     CDS             12248..12574
+                     /gene="yddF"
+                     /locus_tag="BSU_04950"
+                     /old_locus_tag="BSU04950"
+                     /inference="ab initio prediction:AMIGene:2.0"
+                     /note="Evidence 4: Unknown function but conserved in other
+                     organisms; PubMedId: 19943900, 22505685, 26013486; Product
+                     type h: extrachromosomal origin"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ICEBs1 mobile element: conserved protein of
+                     unknown function"
+                     /protein_id="NP_388376.1"
+                     /db_xref="EnsemblGenomes-Gn:BSU04950"
+                     /db_xref="EnsemblGenomes-Tr:CAB12302"
+                     /db_xref="InterPro:IPR015055"
+                     /db_xref="SubtiList:BG12113"
+                     /db_xref="UniProtKB/Swiss-Prot:P96643"
+                     /db_xref="GeneID:938143"
+                     /translation="MEIAFLNSLVVTSPGFYKAEKITLDEVKQWLKHYDGRYKSFIGH
+                     KSTAQFLQKLLGIRIEQNRKTFRHMKYQKAICFSLYERYPENVLLTQRDLEKARYQFY
+                     LLTRLD"
+ORIGIN
+        1 cggtaaggca acggactttg actccgtcat gcgttggttc gaatccagct agcccagcca
+       61 tttttatttt tgaaatctaa tagtaagagc cattagctca gttggtagag catctgactt
+      121 ttaatcagag ggtcgaaggt tcgagtcctt catggctcac catttgtctt tttgcgggtg
+      181 tggcggaatt ggcagacgcg ctagacttag gatctagtgt cttacgacgt gggggttcga
+      241 gtcccttcac ccgcacttta tttacaaagt gcacgcaaat ctgttttact aggttaagag
+      301 cctactaaac cagcacaaca caatttaatg atcacgcggt cgtggcggaa tggcagacgc
+      361 gctaggttga gggcctagtg ggtgaataac ccgtggaggt tcaagtcctc tcggccgcat
+      421 caatgatacc aagggttttg acacccttgg tatttttttg tgtttatttt caaatgattt
+      481 actgcccaca aactgcccac ttacctaaag taagtcatct aatttatcag ccatttcctt
+      541 ttgcttgttt ggatataggt gtccataaac atcaattgtt gtttttacag aaccatgtcc
+      601 taaacgctct ttaattgtta tgtaatcttc tccttggtgt attaatagtg caacgtgtga
+      661 atgtctaaaa tcatgtaaac gtataggagt aagatcgcta tccttgcaaa agtatttaat
+      721 tttccgactg aaaatatctt ttcttgaagg tgtatcttta tattgaaaga tataggtatc
+      781 atgtgaatgt ctaataccta attcattaaa caactcttct tgtgcttctt tccaacgttc
+      841 tagtagctta agcaattttt tattgatgct aactcgccga atcgaatttt tagtttttgg
+      901 agtagtaaca acaaattgac catcaagcca ggtgcacgat ttatgcacat ctatttctaa
+      961 taagattttg tcaatatctt tccattgcag ggcgagcatt tcaccacatc ttagtccagt
+     1021 taaaaaagca acagtgtaaa aggttttaaa caataattga tcttgaggaa ttaaactaat
+     1081 aaattttttg aattcttctg gtctccaaaa cttcattttc tttcttgtta aaggtaatcg
+     1141 tttaacgttg tcacacggat ttctttttaa gatttcttca tgtacagctg tatcaaaaat
+     1201 tttgcttaga ctagtcatta tattattaac cgatttattg cttagacctg tttccattaa
+     1261 atgttttctg aaatcagtta tttctctatg tgtgattttt tgtatatcag atttcaaaaa
+     1321 gtaatcagat atatgtttgt ttataatgta cttctgattc tgataatagt ttggtttact
+     1381 atctatttca caacttgcta aataaattga aattagagtc ggaaagctta ctgatctgga
+     1441 ctttcttgct ctttcttctt gaaattctct tcttaatttt gcttctaatt ctaaagcctc
+     1501 ttttctggtt gatgctactg gtctcgtcct aattctttct ccagtaatcg ggtcaaatcc
+     1561 aaagctaacg tcaacttgat attgaccatt ttcaagtttt tttacagaca ttttatttct
+     1621 cctttaacca aaagcgctta tttcgtgtga atagattctg ttactaaatg agccaatttg
+     1681 agaaagttta taatcagtaa caaatgatgg tacgttgaag tatgctgcta tttgttcttt
+     1741 gctaaaaccc tgtatatatg gaagggcttc attaagcatt ttatctgtca gtattaattc
+     1801 tgatgcaaat aggcttgctt gatgctcaag tttatctttt agaactttag agcaattcac
+     1861 aactttaaaa gtgttcaatc ttttatggag aaagtaatgc cctaattcat gggcaattac
+     1921 aaattgttga tgttggaggt tctcgttgat atggattaaa tattgatctg tggctttgtc
+     1981 atgttgtagt aaaccgtttg cttgtccaag atcatttttg agtatataaa ttttttggat
+     2041 gtcacaaatt tcatagacat tatttgtacc atgtgtctta attactgatt gcactttatg
+     2101 tttaattcct ttgcttgtat aaattgttat cactctttct tctttaattc gtcaatgaat
+     2161 ttaattccgt tttttaatgc ttttttaaca aggcgtgcag tttcctcatc aaattcacca
+     2221 tcattcataa aaaggagtgt atcttcatcc tttaattcct gtatggcttc attaattgtt
+     2281 ttattgagta aatcagtttc gtttttcttg cttacttcat cctttcctaa taaatagtct
+     2341 gtagatacgt tatataagtt gctcaatttt aagagtgtgt ctgtatcagg atctctgtaa
+     2401 tctctttcgt aattagacaa gttattgtta ccgatattaa gtttctctgc ggcttctttc
+     2461 tgagtgtacc cagctttttg tcgagcttct tttaatcgtt tgcctaggct catttttatc
+     2521 atccatttca caaagagttg atttttataa aaataataac aacatttttt ggagaattca
+     2581 ttaatttcac ctataagtta aataaataat tctaaattct ccttttagga gtgtttgttt
+     2641 cttctttatg gagagtttaa ttatcaatat ttccatatat gttcaaaaaa atacacttta
+     2701 aggtgaattt tgtgttgact tacacgaaaa ggagttttat aataaagtta attcacaaag
+     2761 agttgagtta acgaggaggt gatattttga aaggagagtt tttaactgcg agagatattc
+     2821 aaaaaattct tggagttaaa caggctaaat cttatgacat cattagaact ttgaatgctc
+     2881 aaatgaaaga agaaggatat atggtcattc aaggtaaggt gagtagagct aagtttgaag
+     2941 agtgttattg ttacaaaggc ccaaaatctc aaacggggtg atttttataa acattgatat
+     3001 aacaaactcg tttatgaaag aagctgtccc tttagctaga caaatggaag gtgattggat
+     3061 agcacgaatg aaaattgctc tgaattcagt cattataaat cattatttaa accttccctt
+     3121 aacaattgaa aatgttaatg aattactgcg aaaaggcgtt tcatatcgca ggatatgtaa
+     3181 gcattacggc attggaagaa aagacattga aaagcttcgg caatcatccg tagtgtgacg
+     3241 ttatatacca ctatagggag ccgttaagaa tcctttgaaa ggagggatgc gatgaaaata
+     3301 agagtgaatg caacaatcat tactgatgtt gaagctttaa aggctgataa ggatttgaat
+     3361 cattttaaag actatgccac ttgtgaaaca ttcgttgttg atgctgataa tcatttgaag
+     3421 gctaatgaag aaatatctga gttgttaaaa ggctgggatt ggtggtgtat ctggtcaact
+     3481 cgtccattga gtaaaaagga taaccaagtg tttactttgt ataacgatga tttgtataac
+     3541 ttatgtcgat aggagtgttt gttccttgaa aactacatat agacaaaaaa agcgccttga
+     3601 cgaatgatca tcaagaacgc cggaaaataa aaactagaca cttttattat acggtattct
+     3661 tgttgaaatg tcatgcgtga gtatttgagt gatgaacagc aatcacttta aatgctgtag
+     3721 caggctagaa taagcgtgcg gaatagctgt agtcagcttg atggctataa ttagcctact
+     3781 aggttgccat gagggcgtaa agccgttagc aactgataag cgccaagatg gatacagaac
+     3841 cggagcgaat caaaaacata aaatcgaaat taatgttctt ttgtaaataa attataaaaa
+     3901 aatgaaatgg ggatatgaaa aatgaactta aactttattg taccggatat caatatgact
+     3961 tttggagaca tgaaattcat gggacttaac agagaaaggt atgtttatga tcgtgaaaat
+     4021 aataagcgta ctgacgtact ggaatctagg atttataaca ttgctagtgc tgtccaaggt
+     4081 ggtcaaattg aagtaactat tcctgagtat gctggggcaa aagaaattcc tccttttgca
+     4141 gatattgagt tgaaaaatcc aaaaattagc gctatggcga ctagtcaaag ggattcgacg
+     4201 tatgccaatg tgatgtggaa acttgaagct gatgatattg ttgttaaagg tggctcttct
+     4261 gtgaaacctg ccgcggcaac tggcgggaat gaaaagaaat aacatgatgc tctcatatcg
+     4321 gcaggcgggt gatgtatatg agtgatttct taaacaaaag attttggaaa tacaggggca
+     4381 aacgaatccg cccgtacatg agaaacaacg taaagttagc aggcgcaatc atctttgtgc
+     4441 ctgttttttt attgtctatg ttcctttttt ggagagaaca actcattcat tttgatctat
+     4501 ctcaagtgat aaaaaatttt gaatggaatg tgcctttaat cattaaaagc gttttatgct
+     4561 ctgtgctaat tgctgttgga agcatagttg catcttactt tcttttgttt gacagctata
+     4621 agaaaatcct tcacaggcaa aagattgcta aaatgatttt ctctaacaag ttttacgaaa
+     4681 aagaaaacgt gaaagtaaga aaaatctttt caaatgaaac tgactcaaag gaaaagatca
+     4741 catactttcc tagaatgtat taccaggtca aaaacaacca catctatatt cgtattgcta
+     4801 tggacatgag ccgttttcag aatcgcttcc tagacttagg aaaggatttg gaaaacggct
+     4861 tattttgtga cttggttgat aaacaaatgg aagaaggttt tgtatgcttt aagcttcttt
+     4921 acgatgtcaa aaagaatcgt atttccattg atgatgcagt agctgagaat ggagtccttc
+     4981 cgttaatgaa gcatatctca tggcaatttg ataagttgcc gcacatgctt attgctggtg
+     5041 gtacaggtgg agggaaaaca tacttcatgc taacgatcat taaggcatgt gttggactgg
+     5101 gggcagatgt aagaatacta gaccctaaaa atgcagattt agcagacttg gaagaagtac
+     5161 ttccgaaaaa ggtctattcc caaaagaacg gtattcttat gtgcctgaga aagtctgtag
+     5221 atggcatgat ggaacgaatg gatgaaatga agcaaatgtc taactataag acaggtgaaa
+     5281 actatgctta tttaggctta aaacctgttt ttatcttctt tgatgaatat gtggcattta
+     5341 tggatttgtt agatatgaaa gaaagaaacg aagccctttc ttacatgaaa cagttggtca
+     5401 tgttggggag acaggcgggg tattttctcg ttttaggcgc acaacgtcca gatgcaaaat
+     5461 atttagctga cggtattcgt gatcagttta gctttcgtgt ttcattgggt ttaatgtccg
+     5521 atacgggtta cggaatgatg tttggcgatg ttgaaaaagc atatgtgaat aaaaaggaga
+     5581 cagggcgagg atatgccaat gtgggcacag gttcagtgtt ggagttttac agccctatcg
+     5641 tgccgaaagg atatgatttt atgtcatcta ttaaaaatgc gctggttgga gtcgagggag
+     5701 cgcaggcgac ggcagtcgcc agcggcagcg taagcgacca gacggccagc ggcgaaggag
+     5761 tgagcgaagc gaatggatga gctaaaacaa cccccccacg ctaacagggg ggtagtaatc
+     5821 gtaaaagaaa aaaatgaagc cgttgaaagt cctttggtat caatggttga ctatattcga
+     5881 gtctctttta aaactcatga tgttgacaga attattgaag aggttcttca ccttagcaaa
+     5941 gactttatga ctgagaaaca atctggtttc tatggctacg ttggcacgta tgaactggac
+     6001 tatatcaaag tcttttattc tgcgccggat gacaacagag gtgttttgat agaaatgtcc
+     6061 ggtcaaggtt gccgtcaatt tgaatccttc ttggaatgcc ggaagaaaac atggtacgac
+     6121 ttctttcaag attgcatgca acaaggcggt tcgttcactc gctttgattt agctattgat
+     6181 gataaaaaga catacttttc tataccagaa ctgttaaaga aagcccaaaa gggcgaatgt
+     6241 atttcacgat ttagaaaatc tgatttcaat ggctcctttg atctatctga tggcattaca
+     6301 ggcgggacga caatatattt cggttctaaa aagtcagaag cgtacctttg cttttatgag
+     6361 aaaaactatg aacaagcaga aaagtataac attccgttag aagaactagg cgattggaat
+     6421 cgttatgaat tgcggcttaa aaatgaacgt gcacaagtgg cgatagatgc tttattgaaa
+     6481 acaaaggatt taaccttaat cgctatgcag atcattaata actatgtaag gttcgttgat
+     6541 gctgatgaaa acatcactag agagcattgg aaaacgagcc ttttttggtc tgattttata
+     6601 ggcgatgttg ggagacttcc tttgtacgtc aaaccacaaa aagacttcta tcagaaatca
+     6661 agaaactggc ttcgtaactc ttgtgctccc actatgaaaa tggtgcttga agctgatgaa
+     6721 catttaggga aaaccgatct gtcagatatg attgcagaag ctgaactggc tgacaaacat
+     6781 aaaaaaatgt tagatgtgta tatggctgat gttgctgaca tggtcgttta aaaccaagct
+     6841 gctaaacctt aataaacaca ggtgatgcga ttaaacgtat gtgtcaacgg taccggaacg
+     6901 aagtgaggat aaggagttga catattcagc gctacccaaa ccctcttggc attgaacaaa
+     6961 caaccgtttg ttcctgccta ccggcgaggg agtcccccga tgattcgggg gaataggggg
+     7021 atagattaac agcaatccaa cgagctaccg ttggtgggtt tgggtgaaac ccaagaacta
+     7081 acttggaggg ataagatgca taatgtcaat ctgttgaatc aggctggact ggaaaatgct
+     7141 ttggaatcag ttggctgttt agatattgta gaagatttaa tagaaaagat gcaggaatat
+     7201 gttttgtatc ataccgaaac tgccgaaaga tttgcgattg atatctttac agtagtaaac
+     7261 aactacacta aaaaggttca tgcgatattt aatgttcttg aaaatgaaga cggtgagaca
+     7321 aatgttaaaa atgtagaatt tgaagtaatg cattttacgg agtaaggaca attttcctta
+     7381 tgactttaaa gggggaacat caggtgttta atattaatct gttgaatcag gcccgacttg
+     7441 agagtgattt ggattccctt gggtgtttgg atattgctga ggaactgatt gaaaaaatga
+     7501 tggaagatgt tttttacagt gatgtagctc aaagaatcat tgttcaaaca cttgctgtta
+     7561 taaataacgc caatgcaaaa cttcaagcta cgtttaacat cttagaagat gaagatatgg
+     7621 agacagacga acgaagcgtg gagtttgaag gaattagcta ctacgaataa ggggtgaaaa
+     7681 tgtgcggtgt ctgctgtaga taaacgattc aaaagcttag gttttaatgt gggcattccc
+     7741 tctttagttt ttgtgagaag tttaagcaga gattgcatgt tggttgttga aggagaacga
+     7801 gtaaaaggat ttgctgagta tcgttacaca ttctataaaa caagatactt gccagacggt
+     7861 cgaatgacta gcttaaaagt ttatatggag aatcaaagca taaaaagggt gttacatcgt
+     7921 gtagcatcct ttttatcttt cttggaaaga acgaaacaaa ttgaacagaa ggagtgtgaa
+     7981 aaagttgctc aataaagaaa ttggctctga taagaaggaa gaatcctttt ttcggtctgc
+     8041 ttttcaaaaa ctgaaacgaa ttgaaagacc ggaaaaagac aaacaaaaag taccccgtga
+     8101 caggtcaaag ctgatagccg tcacactatg gtcttgtgta gggagcttgc tatttatctg
+     8161 tctgcttgct gtgcttctgt caattaatac tcgctcccaa cttaatgaca tgaaagacga
+     8221 aacgaataag ccaacaaatg acgataaaca aaaaatttcg gtgactgctg ccgaaaactt
+     8281 tctgtcaggg ttcatcaatg aatatatgaa tgtgaagaac gatcaagaat ctattgaaaa
+     8341 acgtatgcag agccttgaaa gctatatggt taaacaggaa gataaccatt ttgaagatga
+     8401 agaacgcttc aatgtggatg gtttaaaagg tgatcgagag ttaaagggtt acagcttata
+     8461 taacgtgaaa gaaggtgata aaaacagcct ttttcaatat aaggtcacat atgaaaatct
+     8521 ataccctgta gaaaaggaag ttgaaaaaga agttaaagac ggaaagaaga aaaagaaggt
+     8581 gaaagaaaag gttaaaacaa acgagaaata cgaaaaacaa atgttgctga atattccagt
+     8641 cacaaataaa ggtgattcct ttgcggtgtc tgctgtccct tattttacac agatttatga
+     8701 tctgaaaggc gatattgctt ttaagggtaa agaagaaact agagacgaat atgcaggcga
+     8761 gaaaaaagaa tctatcgaat catttcttca aaatttcttt gagaaatacg cttctgaaaa
+     8821 gaaagaagaa atggtttata tgatgaaaaa gccggaagca ttggaaggaa acttgttatt
+     8881 tggggaagtg cagtcagtga aaatcttcga gacgaaaaaa ggtttcgagg ttttttgtgc
+     8941 tgttcgattt aaggaaaaag aaaatgacat tccggtaaat gaaaaattca gtctagagat
+     9001 tacggaaaac agcggtcagt tttatgtaaa taaactcaaa catcaatagg aggtttaaat
+     9061 atggatttca tgaatttctt tattcttggc gcagaccttc caacacttgg aggggtaaaa
+     9121 ggttgggcat cagatgttgt tatccaattc attacgattg tggtcatgtt catagccgca
+     9181 aagaatctga tgaaattaaa aatgggcggc attatctttg tttgctgtat tggcagtgcg
+     9241 gtaacgtggg ttattaaaca ctggtcagaa ttctccggct ggatcaatgc gctaatggaa
+     9301 aaattgtaag ggggcatctg aatggggcgt ctggtgttca actaccggaa ggcaatgaga
+     9361 gagccgaaaa aaatccaaca attaaccgaa aattattcgt taccctttgc agttgagtta
+     9421 ataccggcta ttaactattt catttttgtt ggcttatgct ttggattctg gtacggcgtg
+     9481 aggatgattt tccctcacgc ttttgataac agttacgtca ttgtgatttt tgggatacca
+     9541 ttttttttaa cgatgcttgt aacgaaaata aagccggaag gcaaaaacat ctatatatat
+     9601 ttctttgatt tcgcaaagta ttacttcttc atcaagcttc cacaaaagaa gtattgcaat
+     9661 gatcgaaaga ttgatttaag taacgaaaaa caaattgagt ttcgaaaact tgtgaaggtg
+     9721 gtggattatt caaatgagac taaaaacgcc tatgaaggca atacacaaga atttgctgtt
+     9781 aacaagaacg ggcgacgtgt gggcgtacta ccgaataaaa agcaattcga ttcctatgca
+     9841 aaataaagaa aaagttgaat cgtataaaaa gaagtggcag catctttttg aagaaattac
+     9901 atcttatgag gattttcact tgatgatgta tccaagtgag tatgaattag aaaaacgatt
+     9961 taaggattta gaaacagata ttgcggcaga tgcaatggat gtggcacgtt actacaatga
+    10021 agaaaccgta aggctgttag aacagcgatt aggaaggctg acaaagtacg acttcatttt
+    10081 aggtgtaaaa ctgaaaagca gtcttgtaaa tattagtgtc gaacttaaag acaatatact
+    10141 atcttttttc aatacagcga ctgatacagt cgtgaaaatg ctcgggtggg aacaaaatgt
+    10201 ttccacctct ttttttgaaa aatatgagga agtcgaagaa acactagcga atatcatggc
+    10261 ttctgttcgc ggagaacggc tttcagaaac agaaatgaca tacattaacc gttatcactt
+    10321 tgtacgtggg ttaaagcacc aaacgaatga agaaagtgag ataaaggatg ttcgctctat
+    10381 tacaaacacg atcatagacc ccactgaccc atcagtattg catttgcata gtgatcaaga
+    10441 tgaaggctat tcagcttttg tcgtgattga cgaatttctt cacaatatgt cggaaagtga
+    10501 tttgttttat gaagcacagt ctcttccctt ccctgttgaa gttcagatga aaattcaaac
+    10561 ggaatcaaag tccattacca agcctgccct caacctcaaa agacagcaat tgaaagaaga
+    10621 acaaaaagaa caacaaagca caggcgatcg aagtgatgtt tccactgtca caagtgccac
+    10681 aatgataagg catttacaag atgaaataaa gaaagaagat gtgcatgtga tgaactggct
+    10741 gtcggtgata gtcgttcatg gaaagacaaa aaaagaatgt gtgggaaaag caacgattgt
+    10801 caaaaggcat ttaaaaggcg ctggcattac ttgtcggctt ccggtggctg atcaattgaa
+    10861 ccttttttat aaaatgcttc ctggtgaaaa gttagacata accgataaga actggattca
+    10921 aaaaacaacg caagacggtg tggctgaaag tctgtttgct gttaactctg atattggttc
+    10981 gaaaatcggg ttctttctcg gttgggttga tcgtttccaa gagcacaccg acttagaaag
+    11041 tgccattatg tccagccgtg attttgtctt attccaccct ttcttagcga atcagcagtt
+    11101 aaaaggttca aagacacgtt ctcctcactg cttaatcaca ggagacacag gaaacggcaa
+    11161 gtcatatcta gcgaaattga tctttaacta tatcagcatg ttaaacatca aatctctgta
+    11221 tatagaccct aaaaaggaaa tgagaaagtg gattcaaaga gtcttgaatg atgagtacat
+    11281 tagagagaac tttcccttat atattgcaca tttagagaaa tacaactata tcacgctaga
+    11341 tcatgaaaac acgcacaact ggggagcgct tgaccctatc tccttcctcc ctcctatgaa
+    11401 agcaaaagag ctagttcaag tcatttttga acaagtatat gactttaaag ggaaggacga
+    11461 cataaacaca gctttccttc gtgctacgtc agaagtgatt gatgcgaaac aaaaaggtga
+    11521 acaggtcggc tcacttgata ttattcggaa gatgcagagc catcccgaag aagctgtaca
+    11581 aaaagctggt gactatttaa atgaggtcgt gtcagattcc attttgaaac tttgtattca
+    11641 tgatggttca aatcctgcat tgtcactaga aaagcgaatt accattttag aagttgaaaa
+    11701 tatggatttg ccggatcatg ctgagcgact tgaaaactac acgatatcac aactaaagtc
+    11761 tagtgcggtc atgtttgcac taggtaagtt ctgcgagcta ttcggcatga atcaagacga
+    11821 acagactgtt gaatttatag atgaagcttg gatattcacc acgtcacaac aaggaaaaaa
+    11881 agtagaaaga caaatgcgcc ggattggtcg ctcatacaac aatgcggaat acttcatttc
+    11941 tcaatccaca aaagacgctt taaaagaaga ggattctgga aactttggcg ttgcctttgc
+    12001 ttttgacgaa ccaaacgagc gtgaagaagt gttgaaatgg atgaacatgg aggtcacaaa
+    12061 agataacaaa aaaatgatgg aatccatgtt tcaaggtcaa tgcttattta aagattacta
+    12121 tggccgcacc tctaaaattt cgattgaatg cctattcgaa gaatggcaag gtgctctgaa
+    12181 aacagttgag aaaaaagccg tcgcatatgc ggaagaaaaa tatttgtaaa aaggggttga
+    12241 atcgtacatg gaaatagctt tcttaaactc tcttgttgtc acgagtccag gcttttataa
+    12301 agctgagaaa atcacattgg acgaagttaa acaatggctg aagcattatg atggtcgata
+    12361 caaaagtttt atcggacata aatcaacggc acagtttctg caaaaattat taggtatcag
+    12421 aattgagcaa aatcgaaaga ctttcagaca tatgaaatat caaaaagcaa tctgtttctc
+    12481 tctgtatgaa cgatatcctg aaaacgtgtt gctaacgcaa agagacttag agaaagccag
+    12541 ataccaattt tatttattaa ctcggttaga ttaggaggtg gttgtaatga aaaagaaaag
+    12601 aattttgatt gtgtcggcta ttgtgttgct gtttttaact gttgcttcag ctgtaacggt
+    12661 attttcggct gatggagata caacgacgca gccaaaagtc gaaaaagctg gcggcgtgga
+    12721 attgaaggtg aaaaggtttc caatctcacg ctatcaagcg aataatgaag catctgacga
+    12781 tttaatcaag ggggcgtttg ttgggctgac aaacgtcact ttttcttttg cgggaaacat
+    12841 tgtccgtgtg gttgatacgg ggatggatat tttgtataac ttgcaaccga ttgacgagtt
+    12901 cgcaaattct attacaaacg tctctaaaac agtttataaa acactgaaaa agaatttcgg
+    12961 tgaagcttta tttattttca cgtgcgccta tgttgtctac
+//

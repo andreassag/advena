@@ -1,0 +1,45 @@
+name: extract_sp_faa
+description: Extract candidate signature protein FASTA records from a proteome FAA based on merged SP hits
+keywords:
+  - fasta
+  - signature proteins
+  - icescreen
+tools:
+  - python:
+      description: Python standard library FASTA extraction
+      homepage: https://www.python.org/
+      licence: ["PSF-2.0"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - merged_sp:
+        type: file
+        description: Merged signature proteins TSV (*_detected_SP_source.tsv)
+        pattern: "*.tsv"
+    - faa:
+        type: file
+        description: Proteome CDS FASTA file
+        pattern: "*.faa"
+output:
+  sp_faa:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_SP_source.faa":
+          type: file
+          description: Extracted FASTA sequences for candidate signature proteins
+          pattern: "*_detected_SP_source.faa"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - "python3 --version 2>&1 | sed 's/Python //'":
+          type: eval
+          description: The expression to obtain the version of Python
+authors:
+  - "@andreassag"

@@ -4,7 +4,8 @@
 and Integrative and Mobilizable Elements (IMEs) in Bacillota genomes.
 
 This pipeline is a Nextflow DSL2 reimplementation of the original [ICEscreen](https://github.com/ICEscreen/ICEscreen)
-Snakemake pipeline, orchestrating the ICEscreen Python scripts and databases via Docker or Conda.
+Snakemake pipeline, combining standard [`nf-core/modules`](https://github.com/nf-core/modules) with containerized
+[ICEscreen](https://github.com/andreassag/icescreen) Python tools (`ghcr.io/andreassag/icescreen:v1.3.3`).
 
 ---
 
@@ -13,15 +14,26 @@ Snakemake pipeline, orchestrating the ICEscreen Python scripts and databases via
 ```mermaid
 graph LR
     A[GenBank input<br/>samplesheet.csv] --> B[GB_TO_FAA]
-    B --> C[BLASTP_SEARCH<br/>×7 databases]
-    B --> D[HMMSCAN_SP<br/>~20 profiles]
+    DB[db_url / db_dir] --> P[PREPARE_DATABASE<br/>UNTAR + MAKEBLASTDB + HMMPRESS]
+    P --> B
+    B --> C[BLAST_BLASTP<br/>x7 databases]
+    P --> C
+    B --> D[HMMSCAN_SP<br/>22 profiles]
+    P --> D
     C --> E[PROCESS_BLASTP]
     D --> F[PROCESS_HMMSCAN]
     E --> G[MERGE_SP]
     F --> G
-    G --> H[FP_SCREENING]
-    H --> I[REANNOT_SP]
+    G --> H1[EXTRACT_SP_FAA]
+    B --> H1
+    H1 --> H2[HMMSCAN_FP<br/>3 FP profiles]
+    P --> H2
+    G --> H3[PROCESS_HMMSCAN_FP]
+    H2 --> H3
+    H3 --> I[REANNOT_SP]
+    E --> I
     I --> J[DETECT_ME]
+    A --> J
     I --> K[CREATE_ANNOTATIONS]
     J --> K
     J --> L[PACKAGE_RESULTS]
@@ -32,8 +44,11 @@ graph LR
 
 ## Features
 
-- ICE/IME structure detection and boundary assembly using the original
-  [ICEscreen](https://github.com/ICEscreen/ICEscreen) logic
+- ICE/IME structure detection and boundary assembly using the [ICEscreen](https://github.com/andreassag/icescreen)
+  v1.3.3 logic
+- Automatic database retrieval and indexing via `nf-core/untar`, `nf-core/blast/makeblastdb`, and
+  `nf-core/hmmer/hmmpress`
+- Parameter and samplesheet validation via `nf-schema`
 - Support for Docker, Singularity, Apptainer, Podman, and Conda
 
 ---

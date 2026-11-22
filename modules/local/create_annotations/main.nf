@@ -8,6 +8,7 @@
 process CREATE_ANNOTATIONS {
     tag "${meta.id}"
     label "process_low"
+
     conda "${moduleDir}/../environment.yml"
     container "ghcr.io/andreassag/icescreen:v1.3.3"
 
@@ -15,57 +16,47 @@ process CREATE_ANNOTATIONS {
     tuple val(meta), path(final_sp), path(detected_me), path(genbank)
 
     output:
-    tuple val(meta), path("${meta.id}_source.fa.gz"), emit: source_fasta
-    tuple val(meta), path("${meta.id}_source.gff.gz"), emit: source_gff
-    tuple val(meta), path("${meta.id}_icescreen.gff.gz"), emit: annotated_gff
-    tuple val(meta), path("${meta.id}_icescreen.embl.gz"), emit: annotated_embl
-    tuple val(meta), path("${meta.id}_icescreen.gb.gz"), emit: annotated_gb
-    path "versions.yml", emit: versions
-
-    when:
-    task.ext.when == null || task.ext.when
+    tuple val(meta), path("${prefix}_source.fa.gz"), emit: source_fasta
+    tuple val(meta), path("${prefix}_source.gff.gz"), emit: source_gff
+    tuple val(meta), path("${prefix}_icescreen.gff.gz"), emit: annotated_gff
+    tuple val(meta), path("${prefix}_icescreen.embl.gz"), emit: annotated_embl
+    tuple val(meta), path("${prefix}_icescreen.gb.gz"), emit: annotated_gb
+    tuple val("${task.process}"), val("icescreen"), eval("python3 -c 'import importlib.metadata; print(importlib.metadata.version(\"icescreen\"))' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_icescreen
+    tuple val("${task.process}"), val("biopython"), eval("python3 -c 'import Bio; print(Bio.__version__)' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_biopython
 
     script:
+    def args = task.ext.args ?: ""
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
     # Extract genome sequence from GenBank into FASTA and GFF3
     genbank_to_gff3_and_fasta \\
         -i ${genbank} \\
-        --gff ${meta.id}_source.gff \\
-        --fasta ${meta.id}_source.fa
+        --gff ${prefix}_source.gff \\
+        --fasta ${prefix}_source.fa
 
     # Generate annotated output files (GFF3, EMBL, GenBank)
     generate_annotation_files \\
+        ${args} \\
         -s ${final_sp} \\
         -m ${detected_me} \\
         -g ${genbank} \\
-        -o ${meta.id}_icescreen
+        -o ${prefix}_icescreen
 
     # Compress outputs
-    gzip -f ${meta.id}_source.fa
-    gzip -f ${meta.id}_source.gff
-    gzip -f ${meta.id}_icescreen.gff
-    gzip -f ${meta.id}_icescreen.embl
-    gzip -f ${meta.id}_icescreen.gb
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python3 --version 2>&1 | sed 's/Python //')
-        biopython: \$(python3 -c "import Bio; print(Bio.__version__)")
-    END_VERSIONS
+    gzip -f ${prefix}_source.fa
+    gzip -f ${prefix}_source.gff
+    gzip -f ${prefix}_icescreen.gff
+    gzip -f ${prefix}_icescreen.embl
+    gzip -f ${prefix}_icescreen.gb
     """
 
     stub:
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
-    echo "" | gzip > ${meta.id}_source.fa.gz
-    echo "" | gzip > ${meta.id}_source.gff.gz
-    echo "" | gzip > ${meta.id}_icescreen.gff.gz
-    echo "" | gzip > ${meta.id}_icescreen.embl.gz
-    echo "" | gzip > ${meta.id}_icescreen.gb.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: 3.11.0
-        biopython: 1.85
-    END_VERSIONS
+    echo "" | gzip > ${prefix}_source.fa.gz
+    echo "" | gzip > ${prefix}_source.gff.gz
+    echo "" | gzip > ${prefix}_icescreen.gff.gz
+    echo "" | gzip > ${prefix}_icescreen.embl.gz
+    echo "" | gzip > ${prefix}_icescreen.gb.gz
     """
 }

@@ -1,0 +1,99 @@
+nextflow_process {
+
+    name "Test Process HMMER_HMMSCAN"
+    script "../main.nf"
+    process "HMMER_HMMSCAN"
+    tag "modules"
+    tag "modules_local"
+    tag "hmmer_hmmscan"
+
+    setup {
+        run("HMMER_HMMPRESS") {
+            script "../../../../../modules/nf-core/hmmer/hmmpress/main.nf"
+            process {
+                """
+                input[0] = [
+                    [id: 'IntTyr_Phage_integrase'],
+                    file("${projectDir}/tests/fixtures/IntTyr_Phage_integrase.hmm", checkIfExists: true)
+                ]
+                """
+            }
+        }
+    }
+
+    test("Should run hmmscan - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'mini'], file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true) ]
+                input[1] = HMMER_HMMPRESS.out.compressed_db.map { _meta, h3 ->
+                    [file("${projectDir}/tests/fixtures/IntTyr_Phage_integrase.hmm", checkIfExists: true)] + h3
+                }
+                """
+            }
+        }
+
+        then {
+            def tsvOut = process.out.per_profile_tsv[0][1]
+            def txtOut = process.out.per_profile_txt[0][1]
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.results[0][1]).readLines()[0].startsWith("target_name\taccession") },
+                { assert (tsvOut instanceof List ? tsvOut.size() : 1) == 1 },
+                { assert (txtOut instanceof List ? txtOut.size() : 1) == 1 }
+            )
+        }
+    }
+
+    test("Should detect integrase HMM hits and format 23-column TSV") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'mini'], file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true) ]
+                input[1] = HMMER_HMMPRESS.out.compressed_db.map { _meta, h3 ->
+                    [file("${projectDir}/tests/fixtures/IntTyr_Phage_integrase.hmm", checkIfExists: true)] + h3
+                }
+                """
+            }
+        }
+
+        then {
+            def lines = path(process.out.results[0][1]).readLines()
+            assertAll(
+                { assert process.success },
+                { assert lines.size() > 1 },
+                { assert lines[0].split("\t").size() == 23 },
+                { assert lines.any { it.contains("BSU_04800") } }
+            )
+        }
+    }
+
+    test("Should handle empty FASTA cleanly without failing") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [ [id: 'empty'], file("${projectDir}/tests/fixtures/empty.faa", checkIfExists: true) ]
+                input[1] = HMMER_HMMPRESS.out.compressed_db.map { _meta, h3 ->
+                    [file("${projectDir}/tests/fixtures/IntTyr_Phage_integrase.hmm", checkIfExists: true)] + h3
+                }
+                """
+            }
+        }
+
+        then {
+            def lines = path(process.out.results[0][1]).readLines()
+            assertAll(
+                { assert process.success },
+                { assert lines.size() == 1 },
+                { assert lines[0].startsWith("target_name\taccession") }
+            )
+        }
+    }
+}

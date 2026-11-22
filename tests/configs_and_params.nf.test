@@ -1,0 +1,116 @@
+nextflow_pipeline {
+
+    name "Test pipeline configurations, parameters, and schema validation"
+    script "../main.nf"
+    tag "pipeline"
+    tag "config"
+
+    test("Should print version and exit cleanly") {
+        tag "stub"
+
+        when {
+            params {
+                version = true
+            }
+        }
+
+        then {
+            def out = (workflow.stdout + workflow.stderr).join("\n")
+            assertAll(
+                { assert workflow.success },
+                { assert out.contains("andreassag/advena 1.0.0") }
+            )
+        }
+    }
+
+    test("Should print help message and exit cleanly") {
+        tag "stub"
+
+        when {
+            params {
+                help = true
+            }
+        }
+
+        then {
+            def out = (workflow.stdout + workflow.stderr).join("\n")
+            assertAll(
+                { assert workflow.success },
+                { assert out.contains("--input") },
+                { assert out.contains("--db_url") },
+                { assert out.contains("--blastp_evalue") }
+            )
+        }
+    }
+
+    test("Should reject unsupported phylum via nf-schema") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+                phylum = "invalid_phylum"
+            }
+        }
+
+        then {
+            assert workflow.failed
+        }
+    }
+
+    test("Should reject malformed samplesheet extension via nf-schema") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                def badCsv = new File("${workDir}/bad_samplesheet.csv")
+                badCsv.text = "sample,genbank\nsample1,/tmp/genome.txt\n"
+                input = badCsv.absolutePath
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.failed
+        }
+    }
+
+    test("Should reuse db_dir and apply custom BLASTP parameters on mini genome") {
+        tag "docker"
+
+        when {
+            params {
+                def cacheDir = new File("${workDir}/db_cache")
+                cacheDir.mkdirs()
+                def proc = ["tar", "-xzf", "${projectDir}/tests/fixtures/mini_db.tar.gz", "-C", cacheDir.absolutePath].execute()
+                proc.waitFor()
+                new File(cacheDir, "database").renameTo(new File(cacheDir, "icescreen_database"))
+
+                def miniCsv = new File("${workDir}/mini_samplesheet.csv")
+                miniCsv.text = "sample,genbank\nmini,${projectDir}/tests/fixtures/mini_genome.gbff\n"
+
+                input = miniCsv.absolutePath
+                outdir = "$outputDir"
+                db_dir = cacheDir.absolutePath
+                blastp_evalue = 1e-5
+                blastp_max_target_seqs = 3
+            }
+        }
+
+        then {
+            def out = (workflow.stdout + workflow.stderr).join("\n")
+            def untarTasks = workflow.trace.tasks().findAll { it.name.contains("UNTAR") }
+            assertAll(
+                { assert workflow.success },
+                { assert untarTasks.isEmpty() },
+                { assert out.contains("0.00001") },
+                { assert out.contains("blastp_max_target_seqs: 3") },
+                { assert path("${outputDir}/ICEscreen_results/mini/detected_mobile_elements/mini_detected_ME.tsv").text.contains("Complete ICE (I+C+R+V)") },
+                { assert path("${outputDir}/ICEscreen_results/mini/detected_signature_proteins/mini_detected_SP.tsv").exists() }
+            )
+        }
+    }
+}

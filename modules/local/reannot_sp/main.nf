@@ -8,47 +8,37 @@
 process REANNOT_SP {
     tag "${meta.id}"
     label "process_low"
+
     conda "${moduleDir}/../environment.yml"
     container "ghcr.io/andreassag/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(sp_clean), path(intyr_hits)
-    path db
+    path mode_file
 
     output:
-    tuple val(meta), path("${meta.id}_detected_SP.tsv"), emit: final_sp
-    tuple val(meta), path("${meta.id}_detected_SP_hmm_cleaned_reannotated.tsv"), emit: reannotated
-    path "versions.yml", emit: versions
-
-    when:
-    task.ext.when == null || task.ext.when
+    tuple val(meta), path("${prefix}_detected_SP.tsv"), emit: final_sp
+    tuple val(meta), path("${prefix}_detected_SP_hmm_cleaned_reannotated.tsv"), emit: reannotated
+    tuple val("${task.process}"), val("icescreen"), eval("python3 -c 'import importlib.metadata; print(importlib.metadata.version(\"icescreen\"))' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_icescreen
+    tuple val("${task.process}"), val("pandas"), eval("python3 -c 'import pandas; print(pandas.__version__)' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_pandas
 
     script:
-    def mode_file = "${db}/mode/${params.phylum}.yml"
+    def args = task.ext.args ?: ""
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
     reannot_SP \\
+        ${args} \\
         -a ${sp_clean} \\
         -b ${intyr_hits} \\
         -c ${mode_file} \\
-        --outall ${meta.id}_detected_SP_hmm_cleaned_reannotated.tsv \\
-        --outfiltered ${meta.id}_detected_SP.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python3 --version 2>&1 | sed 's/Python //')
-        pandas: \$(python3 -c "import pandas; print(pandas.__version__)")
-    END_VERSIONS
+        --outall ${prefix}_detected_SP_hmm_cleaned_reannotated.tsv \\
+        --outfiltered ${prefix}_detected_SP.tsv
     """
 
     stub:
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${meta.id}_detected_SP.tsv
-    touch ${meta.id}_detected_SP_hmm_cleaned_reannotated.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: 3.11.0
-        pandas: 2.2.0
-    END_VERSIONS
+    touch ${prefix}_detected_SP.tsv
+    touch ${prefix}_detected_SP_hmm_cleaned_reannotated.tsv
     """
 }

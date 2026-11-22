@@ -6,14 +6,14 @@ advena takes a CSV samplesheet as input, with one genome per row:
 
 ```csv
 sample,genbank
-GCF_000009045,/data/GCF_000009045.gbff
-GCF_003176835,/data/GCF_003176835.gbff
+GCF_000009045.1,/data/GCF_000009045.1.gbff
+GCF_003176835.1,/data/GCF_003176835.1.gbff
 ```
 
-| Column    | Description                                           |
-| --------- | ----------------------------------------------------- |
-| `sample`  | Unique sample identifier used in all output filenames |
-| `genbank` | Path to a GenBank file (`.gb` or `.gbff`)             |
+| Column    | Description                                                   |
+| --------- | ------------------------------------------------------------- |
+| `sample`  | Unique sample identifier (no spaces) used in output filenames |
+| `genbank` | Path to a GenBank file (`.gb`, `.gbk`, or `.gbff`)            |
 
 An example samplesheet is provided in
 [`assets/samplesheet.csv`](https://github.com/andreassag/advena/blob/main/assets/samplesheet.csv).
@@ -45,6 +45,12 @@ Combine a container engine profile with an optional execution profile:
 # SLURM cluster with Singularity
 -profile singularity,slurm
 
+# Apptainer (local)
+-profile apptainer
+
+# Podman (local)
+-profile podman
+
 # Conda (local)
 -profile conda
 
@@ -54,35 +60,33 @@ Combine a container engine profile with an optional execution profile:
 
 ---
 
-## Specifying the ICEscreen installation
+## Database caching and custom archives
 
-advena reads the ICEscreen Python scripts and databases at runtime. There are three ways to provide the paths:
+By default, advena downloads `icescreen_database.tar.gz` from `--db_url`, extracts it, builds protein BLAST indices, and
+presses HMM profiles automatically.
 
-1. **Environment variable (recommended)**: Set `ICESCREEN_ROOT` before running the pipeline.
-
-```bash
-export ICESCREEN_ROOT=/opt/icescreen
-nextflow run andreassag/advena --input samplesheet.csv --outdir results -profile docker
-```
-
-2. **Pipeline parameter**: Pass `--icescreen_root` directly.
+1. **Cache or reuse an extracted database directory (`--db_dir`)**:
 
 ```bash
 nextflow run andreassag/advena \
-  --input samplesheet.csv \
-  --outdir results \
-  --icescreen_root /opt/icescreen \
-  -profile docker
+    --input samplesheet.csv \
+    --outdir results \
+    --db_dir /data/icescreen_db_cache \
+    -profile docker
 ```
 
-3. **Override database path**: Use `--icescreen_db` to override database path.
+If `/data/icescreen_db_cache/icescreen_database` (or `/data/icescreen_db_cache` directly) already contains
+`icescreen.conf`, extraction is skipped and the cached files are reused directly. Otherwise, `UNTAR` extracts the
+archive into `--db_dir` for future runs.
+
+2. **Use a custom archive URL or local `.tar.gz` file (`--db_url`)**:
 
 ```bash
 nextflow run andreassag/advena \
-  --input samplesheet.csv \
-  --outdir results \
-  --icescreen_db /data/icescreen_databases \
-  -profile docker
+    --input samplesheet.csv \
+    --outdir results \
+    --db_url /data/icescreen_database.tar.gz \
+    -profile docker
 ```
 
 ---
@@ -111,20 +115,5 @@ nextflow run andreassag/advena \
     --outdir results \
     --blastp_evalue 1e-5 \
     --blastp_max_target_seqs 5 \
-    -profile docker
-```
-
----
-
-## Adjusting ME detection parameters
-
-Mobile element segmentation thresholds can be adjusted for non-standard genomes:
-
-```bash
-nextflow run andreassag/advena \
-    --input samplesheet.csv \
-    --outdir results \
-    --min_cds_between_segments 50 \
-    --max_cds_for_ime_size 20 \
     -profile docker
 ```

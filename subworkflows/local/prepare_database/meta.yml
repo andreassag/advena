@@ -1,0 +1,45 @@
+name: prepare_database
+description: Download/extract or reuse ICEscreen databases and build BLASTP and HMMER indices
+keywords:
+  - icescreen
+  - database
+  - blast
+  - hmmer
+modules:
+  - untar
+  - blast/makeblastdb
+  - hmmer/hmmpress
+input:
+  - db_url:
+      type: string
+      description: URL or local path to the icescreen_database.tar.gz archive
+  - db_dir:
+      type: string
+      description: Optional directory containing a pre-extracted ICEscreen database or cache destination
+  - phylum:
+      type: string
+      description: Taxonomic phylum mode name (e.g. bacillota)
+output:
+  - db_root:
+      type: directory
+      description: Root directory of the extracted ICEscreen database
+  - mode_file:
+      type: file
+      description: Phylum detection configuration YAML file
+  - ice_finder_db:
+      type: file
+      description: SQLite database for ICEfinder annotations
+  - me_conf:
+      type: file
+      description: Mobile element detection configuration file (icescreen.conf)
+  - blast_dbs:
+      type: channel
+      description: Indexed BLASTP protein databases ([meta, db_dir])
+  - sp_hmms:
+      type: list
+      description: Pressed SP HMM profiles (.hmm and .h3* files)
+  - fp_hmms:
+      type: list
+      description: Pressed FP HMM profiles (.hmm and .h3* files)
+authors:
+  - "@andreassag"

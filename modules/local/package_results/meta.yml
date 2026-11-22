@@ -1,0 +1,128 @@
+name: package_results
+description: Archive ICEscreen intermediate analysis outputs and generate param.conf.gz summary
+keywords:
+  - icescreen
+  - archive
+  - packaging
+tools:
+  - tar:
+      description: GNU tar archiving utility
+      homepage: https://www.gnu.org/software/tar/
+      licence: ["GPL-3.0-or-later"]
+  - gzip:
+      description: GNU gzip compression utility
+      homepage: https://www.gnu.org/software/gzip/
+      licence: ["GPL-3.0-or-later"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - faa:
+        type: file
+        description: Proteome CDS FASTA file
+    - blast_raw:
+        type: list
+        description: Header-normalized raw BLASTP outputs
+    - blast_best:
+        type: file
+        description: Best BLASTP hit per locus
+    - blast_unfiltered:
+        type: list
+        description: Unfiltered annotated BLASTP results
+    - blast_filtered:
+        type: list
+        description: Filtered BLASTP results
+    - blast_filtered_best:
+        type: list
+        description: Best filtered BLASTP results per database
+    - hmm_compiled:
+        type: file
+        description: Compiled SP hmmscan output TSV
+    - hmm_per_profile_tsv:
+        type: list
+        description: Per-profile SP hmmscan TSVs
+    - hmm_per_profile_txt:
+        type: list
+        description: Per-profile SP hmmscan domtblout files
+    - hmm_best:
+        type: file
+        description: Best SP hmmscan hits per locus
+    - hmm_unfiltered:
+        type: file
+        description: Unfiltered annotated SP hmmscan results
+    - hmm_filtered:
+        type: file
+        description: Filtered SP hmmscan results
+    - merged_sp:
+        type: file
+        description: Merged BLAST and HMM SP hits
+    - sp_no_fp:
+        type: file
+        description: FP-cleaned SP hits
+    - sp_faa:
+        type: file
+        description: Extracted SP FASTA sequences
+    - fp_all:
+        type: file
+        description: Compiled FP hmmscan output TSV
+    - fp_hits:
+        type: file
+        description: Detected false positive hits
+    - fp_per_profile_tsv:
+        type: list
+        description: Per-profile FP hmmscan TSVs
+    - fp_per_profile_txt:
+        type: list
+        description: Per-profile FP hmmscan domtblout files
+    - sp_reannotated:
+        type: file
+        description: Re-annotated SP hits prior to final filtering
+    - final_sp:
+        type: file
+        description: Final detected signature proteins TSV
+    - me_log:
+        type: file
+        description: Mobile element detection log
+  - mode_file:
+      type: file
+      description: Taxonomic phylum mode YAML file
+      pattern: "*.yml"
+output:
+  archive:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "tmp_intermediate_files.tar.gz":
+          type: file
+          description: Gzipped tarball of intermediate ICEscreen outputs
+          pattern: "tmp_intermediate_files.tar.gz"
+  param_conf:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "param.conf.gz":
+          type: file
+          description: Gzipped parameter configuration summary
+          pattern: "param.conf.gz"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - tar:
+          type: string
+          description: The name of the tool
+      - 'tar --version 2>&1 | head -1 | sed "s/tar (GNU tar) //; s/ Copyright.*//"':
+          type: eval
+          description: The expression to obtain the version of tar
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - gzip:
+          type: string
+          description: The name of the tool
+      - 'gzip --version 2>&1 | head -1 | sed "s/gzip //"':
+          type: eval
+          description: The expression to obtain the version of gzip
+authors:
+  - "@andreassag"

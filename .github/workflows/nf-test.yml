@@ -4,9 +4,13 @@ on:
   push:
     branches: [main, develop]
     paths:
+      - "main.nf"
       - "modules/**"
+      - "subworkflows/**"
       - "workflows/**"
       - "tests/**"
+      - "assets/schema_input.json"
+      - "nextflow_schema.json"
       - "nf-test.config"
       - "nextflow.config"
       - "conf/**"
@@ -14,9 +18,13 @@ on:
     branches: [main, develop]
     types: [opened, synchronize, reopened, labeled]
     paths:
+      - "main.nf"
       - "modules/**"
+      - "subworkflows/**"
       - "workflows/**"
       - "tests/**"
+      - "assets/schema_input.json"
+      - "nextflow_schema.json"
       - "nf-test.config"
       - "nextflow.config"
       - "conf/**"
@@ -33,7 +41,7 @@ jobs:
         id: get-shards
 
   nf-test:
-    name: nf-test modules
+    name: nf-test (stub)
     needs: [get-shards]
     runs-on: ubuntu-latest
     steps:
@@ -49,8 +57,8 @@ jobs:
         with:
           version: "0.9.5"
 
-      - name: Run nf-test
-        run: nf-test test tests/ --verbose
+      - name: Run nf-test (stub)
+        run: nf-test test --tag stub --verbose
 
       - name: Upload nf-test logs on failure
         if: failure()

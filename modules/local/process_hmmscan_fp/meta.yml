@@ -1,0 +1,66 @@
+name: process_hmmscan_fp
+description: Filter false positive signature protein hits using ICEscreen process_hmmscan_fp
+keywords:
+  - icescreen
+  - hmmer
+  - false positive
+tools:
+  - icescreen:
+      description: Detection and annotation of ICEs and IMEs in Bacillota genomes
+      homepage: https://github.com/andreassag/icescreen
+      licence: ["AGPL-3.0-or-later"]
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - merged_sp:
+        type: file
+        description: Merged signature proteins TSV (*_detected_SP_source.tsv)
+        pattern: "*.tsv"
+    - fp_all:
+        type: file
+        description: Compiled FP hmmscan TSV (*_fp_all.tsv)
+        pattern: "*.tsv"
+  - mode_file:
+      type: file
+      description: Taxonomic phylum mode YAML file
+      pattern: "*.yml"
+output:
+  sp_clean:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_detected_SP_hmm_cleaned.tsv":
+          type: file
+          description: Signature proteins cleaned of false positive hits
+          pattern: "*_detected_SP_hmm_cleaned.tsv"
+  fp_hits:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information
+      - "${prefix}_hmm_fp_hits.tsv":
+          type: file
+          description: Annotated false positive hits removed
+          pattern: "*_hmm_fp_hits.tsv"
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - icescreen:
+          type: string
+          description: The name of the tool
+      - 'python3 -c ''import importlib.metadata; print(importlib.metadata.version("icescreen"))'' 2>/dev/null || echo ''1.3.3''':
+          type: eval
+          description: The expression to obtain the version of icescreen
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - pandas:
+          type: string
+          description: The name of the tool
+      - "python3 -c 'import pandas; print(pandas.__version__)'":
+          type: eval
+          description: The expression to obtain the version of pandas
+authors:
+  - "@andreassag"

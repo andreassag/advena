@@ -1,0 +1,64 @@
+nextflow_process {
+
+    name "Test Process REANNOT_SP"
+    script "../main.nf"
+    process "REANNOT_SP"
+    tag "modules"
+    tag "modules_local"
+    tag "reannot_sp"
+
+    test("Should reannotate signature proteins - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/IntTyr_filtered.tsv", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.final_sp[0][1]).exists() },
+                { assert path(process.out.reannotated[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should perform XerS re-annotation and emit final SP table") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/IntTyr_filtered.tsv", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def finalSp = path(process.out.final_sp[0][1]).text
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.reannotated[0][1]).exists() },
+                { assert finalSp.contains("BSU_04800") },
+                { assert finalSp.contains("BSU_04860") },
+                { assert finalSp.contains("BSU_04870") },
+                { assert finalSp.contains("BSU_04940") }
+            )
+        }
+    }
+}

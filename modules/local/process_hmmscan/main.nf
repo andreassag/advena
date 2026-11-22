@@ -8,49 +8,39 @@
 process PROCESS_HMMSCAN {
     tag "${meta.id}"
     label "process_low"
+
     conda "${moduleDir}/../environment.yml"
     container "ghcr.io/andreassag/icescreen:v1.3.3"
 
     input:
     tuple val(meta), path(hmmscan_results)
-    path db
+    path mode_file
 
     output:
-    tuple val(meta), path("${meta.id}_hmm_SP.tsv"), emit: best_hits
-    tuple val(meta), path("${meta.id}_unfiltered.tsv"), emit: hmm_unfiltered
-    tuple val(meta), path("${meta.id}_filtered.tsv"), emit: hmm_filtered
-    path "versions.yml", emit: versions
-
-    when:
-    task.ext.when == null || task.ext.when
+    tuple val(meta), path("${prefix}_hmm_SP.tsv"), emit: best_hits
+    tuple val(meta), path("${prefix}_unfiltered.tsv"), emit: hmm_unfiltered
+    tuple val(meta), path("${prefix}_filtered.tsv"), emit: hmm_filtered
+    tuple val("${task.process}"), val("icescreen"), eval("python3 -c 'import importlib.metadata; print(importlib.metadata.version(\"icescreen\"))' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_icescreen
+    tuple val("${task.process}"), val("pandas"), eval("python3 -c 'import pandas; print(pandas.__version__)' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_pandas
 
     script:
-    def mode_file = "${db}/mode/${params.phylum}.yml"
+    def args = task.ext.args ?: ""
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
     process_hmmscan_results \\
+        ${args} \\
         -i ${hmmscan_results} \\
         -c ${mode_file} \\
-        --outall ${meta.id}_unfiltered.tsv \\
-        --outfiltered ${meta.id}_filtered.tsv \\
-        --outbest ${meta.id}_hmm_SP.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python3 --version 2>&1 | sed 's/Python //')
-        pandas: \$(python3 -c "import pandas; print(pandas.__version__)")
-    END_VERSIONS
+        --outall ${prefix}_unfiltered.tsv \\
+        --outfiltered ${prefix}_filtered.tsv \\
+        --outbest ${prefix}_hmm_SP.tsv
     """
 
     stub:
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${meta.id}_hmm_SP.tsv
-    touch ${meta.id}_unfiltered.tsv
-    touch ${meta.id}_filtered.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: 3.11.0
-        pandas: 2.2.0
-    END_VERSIONS
+    touch ${prefix}_hmm_SP.tsv
+    touch ${prefix}_unfiltered.tsv
+    touch ${prefix}_filtered.tsv
     """
 }

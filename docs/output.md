@@ -1,29 +1,32 @@
 # Output
 
-Results are written to `<outdir>/<sample>/` for each sample:
+Results are written to `<outdir>/ICEscreen_results/<sample>/` for each sample, with execution metadata in
+`<outdir>/pipeline_info/`:
 
 ```text
 <outdir>/
-└── <sample>/
-    ├── detected_mobile_elements/
-    │   ├── <sample>_detected_ME.tsv
-    │   ├── <sample>_detected_ME.summary
-    │   ├── <sample>_detected_SP_withMEIds.tsv
-    │   └── standard_genome_annotation_formats/
-    │       ├── <sample>_icescreen.gff.gz
-    │       ├── <sample>_icescreen.embl.gz
-    │       ├── <sample>_icescreen.gb.gz
-    │       ├── <sample>_source.fa.gz
-    │       └── <sample>_source.gff.gz
-    ├── detected_signature_proteins/
-    │   └── <sample>_detected_SP.tsv
-    ├── param.conf.gz
-    ├── tmp_intermediate_files.tar.gz
-    └── pipeline_info/
-        ├── execution_report_<timestamp>.html
-        ├── execution_timeline_<timestamp>.html
-        ├── execution_trace_<timestamp>.txt
-        └── pipeline_dag_<timestamp>.html
+├── ICEscreen_results/
+│   └── <sample>/
+│       ├── detected_mobile_elements/
+│       │   ├── <sample>_detected_ME.tsv
+│       │   ├── <sample>_detected_ME.summary
+│       │   ├── <sample>_detected_SP_withMEIds.tsv
+│       │   └── standard_genome_annotation_formats/
+│       │       ├── <sample>_icescreen.gff.gz
+│       │       ├── <sample>_icescreen.embl.gz
+│       │       ├── <sample>_icescreen.gb.gz
+│       │       ├── <sample>_source.fa.gz
+│       │       └── <sample>_source.gff.gz
+│       ├── detected_signature_proteins/
+│       │   └── <sample>_detected_SP.tsv
+│       ├── param.conf.gz
+│       └── tmp_intermediate_files.tar.gz
+└── pipeline_info/
+    ├── execution_report_<timestamp>.html
+    ├── execution_timeline_<timestamp>.html
+    ├── execution_trace_<timestamp>.txt
+    ├── pipeline_dag_<timestamp>.html
+    └── software_versions.yml
 ```
 
 ---
@@ -86,11 +89,12 @@ original Snakemake pipeline.
 
 ## Pipeline info
 
-Nextflow execution reports written to `pipeline_info/`:
+Nextflow execution reports and collated tool versions written to `pipeline_info/`:
 
-| File                           | Contents                               |
-| ------------------------------ | -------------------------------------- |
-| `execution_report_<ts>.html`   | Per-task resource usage and status     |
-| `execution_timeline_<ts>.html` | Gantt chart of task execution timing   |
-| `execution_trace_<ts>.txt`     | Tab-separated task metadata            |
-| `pipeline_dag_<ts>.html`       | Directed acyclic graph of the workflow |
+| File                           | Contents                                |
+| ------------------------------ | --------------------------------------- |
+| `execution_report_<ts>.html`   | Per-task resource usage and status      |
+| `execution_timeline_<ts>.html` | Gantt chart of task execution timing    |
+| `execution_trace_<ts>.txt`     | Tab-separated task metadata             |
+| `pipeline_dag_<ts>.html`       | Directed acyclic graph of the workflow  |
+| `software_versions.yml`        | Versions of all tools used across steps |

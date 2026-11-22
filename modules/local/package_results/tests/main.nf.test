@@ -1,0 +1,110 @@
+nextflow_process {
+
+    name "Test Process PACKAGE_RESULTS"
+    script "../main.nf"
+    process "PACKAGE_RESULTS"
+    tag "modules"
+    tag "modules_local"
+    tag "package_results"
+
+    test("Should archive intermediates and create param.conf.gz - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/blast_raw/test_Relaxase.tsv", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/hmmscan_all.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.txt", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP_source.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/fp_all.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_fp_hits.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.txt", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned_reannotated.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_ME.log", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.archive[0][1]).exists() },
+                { assert path(process.out.param_conf[0][1]).exists() }
+            )
+        }
+    }
+
+    test("Should mirror ICEscreen directory tree in tar.gz and build param.conf.gz") {
+        tag "docker"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'test'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/blast_raw/test_Relaxase.tsv", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/blast_SP.tsv", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/hmmscan_all.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.txt", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP_source.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/fp_all.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/hmm_fp_hits.tsv", checkIfExists: true),
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.tsv", checkIfExists: true)],
+                    [file("${projectDir}/tests/fixtures/per_profile/test_profile.txt", checkIfExists: true)],
+                    file("${projectDir}/tests/fixtures/detected_SP_hmm_cleaned_reannotated.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_ME.log", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/bacillota.yml", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            def paramText = new java.util.zip.GZIPInputStream(
+                new java.io.FileInputStream(path(process.out.param_conf[0][1]).toFile())
+            ).getText("UTF-8")
+            def tarProc = ["tar", "-tzf", path(process.out.archive[0][1]).toString()].execute()
+            tarProc.waitFor()
+            def tarEntries = tarProc.in.text
+            assertAll(
+                { assert process.success },
+                { assert tarProc.exitValue() == 0 },
+                { assert tarEntries.contains("results/test/icescreen_detection_SP/Blast_mode/blastp_output/") },
+                { assert tarEntries.contains("results/test/icescreen_detection_SP/HMM_mode/hmmscan_output/test.tsv") },
+                { assert tarEntries.contains("results/test/icescreen_detection_SP/hits_cleaning/proteins_to_remove/hmmscan_compiled_output/test.tsv") },
+                { assert paramText.contains("** Parameters:") },
+                { assert paramText.contains("SP_detection:") }
+            )
+        }
+    }
+}
