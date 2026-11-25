@@ -23,12 +23,18 @@ process DETECT_ME {
     tuple val(meta), path("${prefix}_detected_ME.summary"), emit: summary
     tuple val(meta), path("${prefix}_detected_ME.log"), emit: log
     tuple val("${task.process}"), val("icescreen"), eval("python3 -c 'import importlib.metadata; print(importlib.metadata.version(\"icescreen\"))' 2>/dev/null || echo 'unknown'"), topic: versions, emit: versions_icescreen
-    tuple val("${task.process}"), val("python"), eval("python3 --version 2>&1 | sed 's/Python //'"), topic: versions, emit: versions_python
+    tuple val("${task.process}"), val("python"), eval("python3 --version 2>&1 | sed -n '1{s/Python //; p}'"), topic: versions, emit: versions_python
 
     script:
     def args = task.ext.args ?: ""
     prefix = task.ext.prefix ?: "${meta.id}"
     """
+    GB_IN="${genbank}"
+    if [[ "\${GB_IN}" == *.gz ]]; then
+        gzip -cdf "${genbank}" > "${prefix}_input.gbff"
+        GB_IN="${prefix}_input.gbff"
+    fi
+
     icescreen_OO \\
         ${args} \\
         -i ${final_sp} \\
@@ -36,7 +42,7 @@ process DETECT_ME {
         -o ${prefix}_detected_ME.tsv \\
         -m ${prefix}_detected_SP_withMEIds.tsv \\
         -l ${prefix}_detected_ME.log \\
-        --gb_input ${genbank} \\
+        --gb_input "\${GB_IN}" \\
         --taxo_mode_file ${mode_file}
     """
 

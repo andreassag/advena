@@ -1,0 +1,32 @@
+nextflow_process {
+
+    name "Test Process QUAST"
+    script "../main.nf"
+    process "QUAST"
+    tag "modules"
+    tag "modules_local"
+    tag "quast"
+
+    test("Should compute genome assembly contiguity metrics - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">contig1\\nACGTACGTACGTACGT\\n"
+                input[0] = [[id: 'mini'], fa.toPath()]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.transposed_report[0][1]).exists() },
+                { assert path(process.out.report[0][1]).exists() }
+            )
+        }
+    }
+}

@@ -1,0 +1,34 @@
+nextflow_process {
+
+    name "Test Process CONTEXTUALIZE_ME"
+    script "../main.nf"
+    process "CONTEXTUALIZE_ME"
+    tag "modules"
+    tag "modules_local"
+    tag "contextualize_me"
+
+    test("Should contextualize mobile elements - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    [], [], [], [], [], []
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.contextualized_me[0][1]).exists() },
+                { assert path(process.out.contextualized_me[0][1]).text.contains("plasmid_borne_warning") }
+            )
+        }
+    }
+}

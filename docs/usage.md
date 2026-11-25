@@ -2,118 +2,81 @@
 
 ## Samplesheet
 
-advena takes a CSV samplesheet as input, with one genome per row:
+advena accepts a CSV samplesheet with one genome per row. Provide `genbank`, `fasta`, or both:
 
 ```csv
-sample,genbank
-GCF_000009045.1,/data/GCF_000009045.1.gbff
-GCF_003176835.1,/data/GCF_003176835.1.gbff
+sample,genbank,fasta
+GCF_000009045.1,/data/GCF_000009045.1.gbff,
+isolate_raw,,/data/isolate_raw.fna.gz
 ```
 
-| Column    | Description                                                   |
-| --------- | ------------------------------------------------------------- |
-| `sample`  | Unique sample identifier (no spaces) used in output filenames |
-| `genbank` | Path to a GenBank file (`.gb`, `.gbk`, or `.gbff`)            |
+| Column    | Description                                                       |
+| --------- | ----------------------------------------------------------------- |
+| `sample`  | Unique sample identifier (no spaces) used in output filenames     |
+| `genbank` | Optional GenBank file (`.gb`, `.gbk`, or `.gbff`, optional `.gz`) |
+| `fasta`   | Optional FASTA assembly (`.fa`, `.fna`, `.fasta`, optional `.gz`) |
 
-An example samplesheet is provided in
-[`assets/samplesheet.csv`](https://github.com/andreassag/advena/blob/main/assets/samplesheet.csv).
+When only `fasta` is supplied, advena automatically annotates the assembly using **Bakta** before running ICEscreen.
 
 ---
 
-## Basic usage
+## Running Core vs. Extended Modules
+
+By default, advena runs core ICEscreen detection and element sequence extraction (`EXTRACT_ME_SEQUENCES`). External
+database stages are opt-in:
 
 ```bash
+# Default core run
 nextflow run andreassag/advena \
     --input samplesheet.csv \
     --outdir results \
+    -profile docker
+
+# Cargo profiling (AMRFinderPlus + CARD RGI + eggNOG + DefenseFinder) + cohort reporting
+nextflow run andreassag/advena \
+    --input samplesheet.csv \
+    --outdir results \
+    --db_cache_dir /data/advena_dbs \
+    --eggnog_db /data/eggnog_db \
+    --run_amr --run_eggnog --run_defense \
+    --run_att_sites --run_cohort_cluster --run_multiqc --run_synteny \
+    -profile docker
+
+# Enable every optional module at once
+nextflow run andreassag/advena \
+    --input samplesheet.csv \
+    --outdir results \
+    --db_cache_dir /data/advena_dbs \
+    --eggnog_db /data/eggnog_db \
+    --gtdbtk_db /data/gtdbtk_db \
+    --run_all \
     -profile docker
 ```
 
 ---
 
-## Container engine profiles
+## Database Caching & Large DB Safety Guards
 
-Combine a container engine profile with an optional execution profile:
+Pass `--db_cache_dir /path/to/cache` to automatically download and reuse small/medium reference databases via Nextflow
+`storeDir` (ICEscreen, Bakta-light, CheckM2, AMRFinderPlus, CARD, DefenseFinder, MOB-suite, and geNomad).
 
-```bash
-# Docker (local)
--profile docker
+Any database can be overridden with an explicit local path (`--amrfinderplus_db`, `--card_db`, `--eggnog_db`,
+`--defensefinder_db`, `--bakta_db`, `--checkm2_db`, `--gtdbtk_db`, `--mobsuite_db`, `--genomad_db`, `--antismash_db`).
 
-# Singularity on an HPC cluster
--profile singularity,hpc
-
-# SLURM cluster with Singularity
--profile singularity,slurm
-
-# Apptainer (local)
--profile apptainer
-
-# Podman (local)
--profile podman
-
-# Conda (local)
--profile conda
-
-# Test dataset with Docker
--profile test,docker
-```
+For databases exceeding 30 GB (**GTDB-Tk**, **eggNOG-mapper**, and **Bakta full**), advena requires an explicit `--*_db`
+path unless `--auto_download_large_dbs true` is set.
 
 ---
 
-## Database caching and custom archives
-
-By default, advena downloads `icescreen_database.tar.gz` from `--db_url`, extracts it, builds protein BLAST indices, and
-presses HMM profiles automatically.
-
-1. **Cache or reuse an extracted database directory (`--db_dir`)**:
+## Container Engine & Execution Profiles
 
 ```bash
-nextflow run andreassag/advena \
-    --input samplesheet.csv \
-    --outdir results \
-    --db_dir /data/icescreen_db_cache \
-    -profile docker
-```
-
-If `/data/icescreen_db_cache/icescreen_database` (or `/data/icescreen_db_cache` directly) already contains
-`icescreen.conf`, extraction is skipped and the cached files are reused directly. Otherwise, `UNTAR` extracts the
-archive into `--db_dir` for future runs.
-
-2. **Use a custom archive URL or local `.tar.gz` file (`--db_url`)**:
-
-```bash
-nextflow run andreassag/advena \
-    --input samplesheet.csv \
-    --outdir results \
-    --db_url /data/icescreen_database.tar.gz \
-    -profile docker
-```
-
----
-
-## Resuming a run
-
-Nextflow caches completed tasks. If a run is interrupted, resume from where it left off:
-
-```bash
-nextflow run andreassag/advena \
-    --input samplesheet.csv \
-    --outdir results \
-    -profile docker \
-    -resume
-```
-
----
-
-## Adjusting BLAST parameters
-
-The BLASTP search sensitivity can be tuned with `--blastp_evalue` and `--blastp_max_target_seqs`:
-
-```bash
-nextflow run andreassag/advena \
-    --input samplesheet.csv \
-    --outdir results \
-    --blastp_evalue 1e-5 \
-    --blastp_max_target_seqs 5 \
-    -profile docker
+-profile docker               # Docker (local)
+-profile singularity,hpc      # Singularity on an HPC cluster
+-profile singularity,slurm    # SLURM cluster with Singularity
+-profile apptainer            # Apptainer
+-profile podman               # Podman
+-profile conda                # Conda (local)
+-profile test,docker          # Core Bacillota golden test dataset
+-profile test_full,docker     # Offline integration test using miniature fixture DBs
 ```

@@ -1,0 +1,32 @@
+nextflow_process {
+
+    name "Test Process INTEGRONFINDER"
+    script "../main.nf"
+    process "INTEGRONFINDER"
+    tag "modules"
+    tag "modules_local"
+    tag "integronfinder"
+
+    test("Should detect integrons and CALINs with IntegronFinder - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">NC_000964.3\\nACGTACGTACGTACGT\\n"
+                input[0] = [[id: 'mini'], fa.toPath()]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.integrons[0][1]).exists() },
+                { assert path(process.out.summary[0][1]).exists() }
+            )
+        }
+    }
+}

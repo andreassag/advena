@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/andreassag/advena/main/nextflow_schema.json",
   "title": "andreassag/advena pipeline parameters",
-  "description": "Nextflow pipeline for ICEscreen: detection and annotation of ICEs and IMEs in Bacillota genomes",
+  "description": "Nextflow v2.0.0 mobileome discovery, cargo profiling, and comparative genomics pipeline for Bacillota ICEs and IMEs",
   "type": "object",
   "$defs": {
     "input_output_options": {
@@ -12,7 +12,7 @@
       "properties": {
         "input": {
           "type": "string",
-          "description": "Path to comma-separated samplesheet CSV containing sample IDs and GenBank paths.",
+          "description": "Path to comma-separated samplesheet CSV containing sample IDs and GenBank and/or FASTA paths.",
           "format": "file-path",
           "schema": "assets/schema_input.json",
           "mimetype": "text/csv",
@@ -30,7 +30,7 @@
     "icescreen_options": {
       "title": "ICEscreen options",
       "type": "object",
-      "description": "Parameters for the ICEscreen detection pipeline.",
+      "description": "Parameters for the core ICEscreen detection workflow.",
       "properties": {
         "phylum": {
           "type": "string",
@@ -66,6 +66,232 @@
           "description": "Maximum number of target sequences per BLASTP query.",
           "default": 10,
           "minimum": 1
+        }
+      }
+    },
+    "module_toggle_options": {
+      "title": "Optional analysis module toggles",
+      "type": "object",
+      "description": "Enable optional QC, mobile cargo profiling, complementary MGE context, and cohort comparative genomics stages.",
+      "properties": {
+        "run_all": {
+          "type": "boolean",
+          "description": "Convenience preset enabling all optional analysis stages (QC, taxonomy, AMR/CARD, eggNOG, DefenseFinder, BGC, MGE context, att sites, cohort clustering, MultiQC, and synteny).",
+          "default": false
+        },
+        "run_qc": {
+          "type": "boolean",
+          "description": "Run QUAST and CheckM2 assembly quality and completeness checks.",
+          "default": false
+        },
+        "run_taxonomy_check": {
+          "type": "boolean",
+          "description": "Run GTDB-Tk taxonomic classification to verify Bacillota phylum assignment.",
+          "default": false
+        },
+        "run_amr": {
+          "type": "boolean",
+          "description": "Run AMRFinderPlus (--plus) and CARD RGI with native locus/coordinate dereplication (DEREP_AMR_CARD).",
+          "default": false
+        },
+        "run_eggnog": {
+          "type": "boolean",
+          "description": "Run eggNOG-mapper (DIAMOND mode) and extract hierarchical Bacteria/Bacillota OGs and COG categories.",
+          "default": false
+        },
+        "run_defense": {
+          "type": "boolean",
+          "description": "Run DefenseFinder (MacSyFinder + CasFinder models) for anti-phage defense and toxin-antitoxin systems.",
+          "default": false
+        },
+        "run_bgc": {
+          "type": "boolean",
+          "description": "Run antiSMASH-lite on annotated GenBank genomes and intersect secondary metabolite BGCs with ICE/IME intervals.",
+          "default": false
+        },
+        "run_mge_context": {
+          "type": "boolean",
+          "description": "Run MOB-suite recon, geNomad, ISEScan, and IntegronFinder to disambiguate plasmids, prophages, IS elements, and integrons.",
+          "default": false
+        },
+        "run_att_sites": {
+          "type": "boolean",
+          "description": "Detect attL/attR direct repeats and tRNA/housekeeping integration hotspots flanking boundary integrases.",
+          "default": false
+        },
+        "run_cohort_cluster": {
+          "type": "boolean",
+          "description": "Run cross-genome ICE/IME clustering with skani (--small-genomes) and MMseqs2.",
+          "default": false
+        },
+        "run_multiqc": {
+          "type": "boolean",
+          "description": "Generate an interactive MultiQC cohort report combining QC, ICE/IME, AMR/CARD, eggNOG COG, and MGE context panels.",
+          "default": false
+        },
+        "run_synteny": {
+          "type": "boolean",
+          "description": "Generate pyGenomeViz SVG and interactive HTML synteny alignments for clustered ICE/IME loci.",
+          "default": false
+        }
+      }
+    },
+    "database_options": {
+      "title": "Database options",
+      "type": "object",
+      "description": "Unified cache directory and per-tool reference database paths.",
+      "properties": {
+        "db_cache_dir": {
+          "type": "string",
+          "description": "Unified cache directory for auto-downloaded reference databases via Nextflow storeDir.",
+          "format": "directory-path"
+        },
+        "auto_download_large_dbs": {
+          "type": "boolean",
+          "description": "Explicitly allow automatic download of large (>30 GB) databases (GTDB-Tk, eggNOG, Bakta full) when their --*_db path is unset.",
+          "default": false
+        },
+        "bakta_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded Bakta database directory.",
+          "format": "directory-path"
+        },
+        "bakta_db_type": {
+          "type": "string",
+          "description": "Bakta database flavour when auto-downloading ('light' or 'full').",
+          "default": "light",
+          "enum": ["light", "full"]
+        },
+        "checkm2_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded CheckM2 DIAMOND database file or directory.",
+          "format": "path"
+        },
+        "gtdbtk_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded GTDB-Tk reference data directory.",
+          "format": "directory-path"
+        },
+        "amrfinderplus_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded AMRFinderPlus database directory.",
+          "format": "directory-path"
+        },
+        "card_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded CARD database directory or card.json file.",
+          "format": "path"
+        },
+        "eggnog_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded eggNOG-mapper database directory.",
+          "format": "directory-path"
+        },
+        "defensefinder_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded DefenseFinder/MacSyFinder models directory.",
+          "format": "directory-path"
+        },
+        "mobsuite_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded MOB-suite database directory.",
+          "format": "directory-path"
+        },
+        "genomad_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded geNomad database directory.",
+          "format": "directory-path"
+        },
+        "antismash_db": {
+          "type": "string",
+          "description": "Path to a pre-downloaded antiSMASH database directory.",
+          "format": "directory-path"
+        }
+      }
+    },
+    "qc_and_cargo_options": {
+      "title": "QC, cargo, MGE context, and cohort options",
+      "type": "object",
+      "description": "Thresholds and scope parameters for QC gating, element extraction, AMR/CARD dereplication, eggNOG, att site detection, and cohort clustering.",
+      "properties": {
+        "strict_qc": {
+          "type": "boolean",
+          "description": "Exclude samples failing CheckM2 completeness/contamination thresholds from downstream ICEscreen analysis instead of warning only.",
+          "default": false
+        },
+        "min_completeness": {
+          "type": "number",
+          "description": "Minimum CheckM2 genome completeness percentage for QC pass.",
+          "default": 90.0,
+          "minimum": 0,
+          "maximum": 100
+        },
+        "max_contamination": {
+          "type": "number",
+          "description": "Maximum CheckM2 genome contamination percentage for QC pass.",
+          "default": 5.0,
+          "minimum": 0,
+          "maximum": 100
+        },
+        "filter_non_bacillota": {
+          "type": "boolean",
+          "description": "Exclude samples whose GTDB-Tk phylum is not Bacillota/Firmicutes instead of warning only.",
+          "default": false
+        },
+        "me_flank_bp": {
+          "type": "integer",
+          "description": "Flanking nucleotides to extend upstream and downstream when slicing detected ICE/IME intervals.",
+          "default": 0,
+          "minimum": 0
+        },
+        "cargo_scope": {
+          "type": "string",
+          "description": "Scope of AMR/CARD, eggNOG, and DefenseFinder cargo profiling: extracted mobile elements only ('elements') or whole genome ('genome').",
+          "default": "elements",
+          "enum": ["elements", "genome"]
+        },
+        "amr_derep_overlap": {
+          "type": "number",
+          "description": "Minimum reciprocal coordinate overlap fraction (0-1) to merge AMRFinderPlus and CARD RGI hits.",
+          "default": 0.8,
+          "minimum": 0,
+          "maximum": 1
+        },
+        "rgi_include_loose": {
+          "type": "boolean",
+          "description": "Include CARD RGI 'Loose' hits in addition to 'Perfect' and 'Strict' during AMR/CARD dereplication.",
+          "default": false
+        },
+        "eggnog_tax_scope": {
+          "type": ["string", "integer"],
+          "description": "Taxonomic scope passed to eggNOG-mapper (--tax_scope), e.g. '1239' (Bacillota/Firmicutes) or '2' (Bacteria).",
+          "default": "1239"
+        },
+        "att_flank_bp": {
+          "type": "integer",
+          "description": "Flanking window length (bp) around boundary integrases searched for attL/attR direct repeats.",
+          "default": 5000,
+          "minimum": 100
+        },
+        "me_ani_threshold": {
+          "type": "number",
+          "description": "Minimum skani nucleotide ANI percentage to group two ICEs/IMEs into the same cohort cluster.",
+          "default": 95.0,
+          "minimum": 50,
+          "maximum": 100
+        },
+        "me_af_threshold": {
+          "type": "number",
+          "description": "Minimum skani aligned fraction percentage to group two ICEs/IMEs into the same cohort cluster.",
+          "default": 70.0,
+          "minimum": 0,
+          "maximum": 100
+        },
+        "synteny_max_elements_per_cluster": {
+          "type": "integer",
+          "description": "Maximum number of representative ICE/IME slices plotted per cluster in pyGenomeViz synteny figures.",
+          "default": 15,
+          "minimum": 2
         }
       }
     },
@@ -116,6 +342,15 @@
     },
     {
       "$ref": "#/$defs/blast_options"
+    },
+    {
+      "$ref": "#/$defs/module_toggle_options"
+    },
+    {
+      "$ref": "#/$defs/database_options"
+    },
+    {
+      "$ref": "#/$defs/qc_and_cargo_options"
     },
     {
       "$ref": "#/$defs/generic_options"

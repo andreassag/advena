@@ -1,0 +1,40 @@
+nextflow_process {
+
+    name "Test Process BAKTA_BAKTA"
+    script "../main.nf"
+    process "BAKTA_BAKTA"
+    tag "modules"
+    tag "modules_local"
+    tag "bakta"
+    tag "bakta_bakta"
+
+    test("Should annotate FASTA genome into GenBank and GFF3 - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">contig1\\nACGTACGTACGTACGT\\n"
+                def db = new File("${workDir}/bakta_db")
+                db.mkdirs()
+                new File(db, "bakta.db").text = ""
+                input[0] = [[id: 'mini'], fa.toPath()]
+                input[1] = db.toPath()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.gbff[0][1]).exists() },
+                { assert path(process.out.gff3[0][1]).exists() },
+                { assert path(process.out.faa[0][1]).exists() },
+                { assert path(process.out.txt[0][1]).exists() },
+                { assert path(process.out.tsv[0][1]).exists() }
+            )
+        }
+    }
+}

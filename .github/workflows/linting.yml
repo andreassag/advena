@@ -33,3 +33,20 @@ jobs:
         with:
           version: latest-stable
       - run: nextflow lint .
+
+  Python-Lint-and-Unit-Tests:
+    name: Python Lint and Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install Python dev dependencies
+        run: pip install ".[dev]"
+      - name: Lint Python helpers and tests (Ruff)
+        run: |
+          ruff check bin/ tests/python/ tests/fixtures/
+          ruff format --check bin/ tests/python/ tests/fixtures/
+      - name: Run Python unit tests (pytest)
+        run: pytest --cov=bin tests/python/

@@ -1,0 +1,30 @@
+nextflow_process {
+
+    name "Test Process AMRFINDERPLUS_UPDATE"
+    script "../main.nf"
+    process "AMRFINDERPLUS_UPDATE"
+    tag "modules"
+    tag "modules_local"
+    tag "amrfinderplus"
+    tag "amrfinderplus_update"
+
+    test("Should download AMRFinderPlus reference database - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.db[0]).exists() },
+                { assert path("${process.out.db[0]}/version.txt").exists() }
+            )
+        }
+    }
+}

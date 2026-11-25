@@ -1,0 +1,164 @@
+nextflow_pipeline {
+
+    name "Test v2.0.0 full opt-in DAG (--run_all and FASTA input)"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("Should run complete --run_all DAG with stub") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+                run_all = true
+            }
+        }
+
+        then {
+            def samples = ["GCF_000009045.1", "GCF_003176835.1"]
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/qc/qc_gate_summary.tsv").exists() },
+                { assert path("${outputDir}/cohort/me_clusters.tsv").exists() },
+                { assert path("${outputDir}/cohort/og_presence_absence.tsv").exists() },
+                { assert path("${outputDir}/cohort/cohort_me_cargo_summary.tsv").exists() },
+                { assert path("${outputDir}/cohort/synteny/CLUSTER_001_synteny.svg").exists() },
+                { assert path("${outputDir}/multiqc/multiqc_report.html").exists() },
+                { assert path("${outputDir}/pipeline_info/software_versions.yml").exists() },
+                { assert path("${outputDir}/pipeline_info/software_versions.yml").text.contains("MULTIQC:") },
+                { assert samples.every { s ->
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_cds_manifest.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/amr_dereplicated/${s}_amr_card_derep.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/eggnog/${s}_cargo_ogs.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/defensefinder/${s}_defense_finder_systems.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_me_cargo_profile.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_advena.gff.gz").exists() &&
+                    path("${outputDir}/mge_context/${s}/att_sites/${s}_att_sites.tsv").exists() &&
+                    path("${outputDir}/mge_context/${s}/${s}_detected_ME_contextualized.tsv").exists()
+                } }
+            )
+        }
+    }
+
+    test("Should route raw FASTA-only samplesheet through Bakta in stub mode") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                def rawFa = new File("${workDir}/raw_genome.fna")
+                rawFa.text = ">contig1\nACGTACGTACGTACGT\n"
+                def faCsv = new File("${workDir}/fasta_samplesheet.csv")
+                faCsv.text = "sample,fasta\nraw_sample,${rawFa.absolutePath}\n"
+
+                input = faCsv.absolutePath
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/bakta/raw_sample/raw_sample.gbff").exists() },
+                { assert path("${outputDir}/icescreen/raw_sample/detected_mobile_elements/raw_sample_detected_ME.tsv").exists() },
+                { assert path("${outputDir}/icescreen/raw_sample/me_sequences/raw_sample_ME_regions.bed").exists() }
+            )
+        }
+    }
+
+    test("Should run cargo profiling with --cargo_scope genome in stub mode") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+                run_amr = true
+                run_eggnog = true
+                cargo_scope = "genome"
+            }
+        }
+
+        then {
+            def samples = ["GCF_000009045.1", "GCF_003176835.1"]
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/cohort/cohort_me_cargo_summary.tsv").exists() },
+                { assert samples.every { s ->
+                    path("${outputDir}/cargo/${s}/amr_dereplicated/${s}_amr_card_derep.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/eggnog/${s}_cargo_ogs.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_me_cargo_profile.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_advena.gff.gz").exists()
+                } }
+            )
+        }
+    }
+
+    test("Should enforce --strict_qc and --filter_non_bacillota gate in stub mode") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+                run_qc = true
+                run_taxonomy_check = true
+                strict_qc = true
+                filter_non_bacillota = true
+            }
+        }
+
+        then {
+            def samples = ["GCF_000009045.1", "GCF_003176835.1"]
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/qc/qc_gate_summary.tsv").exists() },
+                { assert samples.every { s ->
+                    path("${outputDir}/qc/quast/${s}/transposed_report.tsv").exists() &&
+                    path("${outputDir}/qc/checkm2/${s}/quality_report.tsv").exists() &&
+                    path("${outputDir}/qc/gtdbtk/${s}/classify/${s}.bac120.summary.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/${s}_detected_ME.tsv").exists()
+                } }
+            )
+        }
+    }
+
+    test("Should run offline full integration profile (-profile test_full) with miniature fixture DBs") {
+        tag "docker"
+        config "../conf/test_full.config"
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            def samples = ["mini_cargo", "mini_ref"]
+            assertAll(
+                { assert workflow.success },
+                { assert path("${outputDir}/pipeline_info/software_versions.yml").exists() },
+                { assert path("${outputDir}/pipeline_info/software_versions.yml").text.contains("MULTIQC:") },
+                { assert path("${outputDir}/multiqc/multiqc_report.html").exists() },
+                { assert path("${outputDir}/cohort/me_clusters.tsv").exists() },
+                { assert path("${outputDir}/cohort/og_presence_absence.tsv").exists() },
+                { assert path("${outputDir}/cohort/cohort_me_cargo_summary.tsv").exists() },
+                { assert samples.every { s ->
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/${s}_detected_ME.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_cds_manifest.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/amr_dereplicated/${s}_amr_card_derep.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/eggnog/${s}_cargo_ogs.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/defensefinder/${s}_defense_finder_systems.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_me_cargo_profile.tsv").exists() &&
+                    path("${outputDir}/cargo/${s}/${s}_advena.gff.gz").exists() &&
+                    path("${outputDir}/mge_context/${s}/att_sites/${s}_att_sites.tsv").exists() &&
+                    path("${outputDir}/mge_context/${s}/${s}_detected_ME_contextualized.tsv").exists()
+                } }
+            )
+        }
+    }
+}

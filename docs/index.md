@@ -1,55 +1,48 @@
 # advena
 
-**advena** is a Nextflow pipeline for ICEscreen: detection and annotation of Integrative and Conjugative Elements (ICEs)
-and Integrative and Mobilizable Elements (IMEs) in Bacillota genomes.
-
-This pipeline is a Nextflow DSL2 reimplementation of the original [ICEscreen](https://github.com/ICEscreen/ICEscreen)
-Snakemake pipeline, combining standard [`nf-core/modules`](https://github.com/nf-core/modules) with containerized
-[ICEscreen](https://github.com/andreassag/icescreen) Python tools (`ghcr.io/andreassag/icescreen:v1.3.3`).
+**advena** (v2.0.0) is a modular Nextflow DSL2 pipeline for **mobileome discovery, cargo profiling, and comparative
+genomics** of Integrative and Conjugative Elements (ICEs) and Integrative and Mobilizable Elements (IMEs) in _Bacillota_
+genomes.
 
 ---
 
-## Overview
+## Architecture Overview
 
 ```mermaid
-graph LR
-    A[GenBank input<br/>samplesheet.csv] --> B[GB_TO_FAA]
-    DB[db_url / db_dir] --> P[PREPARE_DATABASE<br/>UNTAR + MAKEBLASTDB + HMMPRESS]
-    P --> B
-    B --> C[BLAST_BLASTP<br/>x7 databases]
-    P --> C
-    B --> D[HMMSCAN_SP<br/>22 profiles]
-    P --> D
-    C --> E[PROCESS_BLASTP]
-    D --> F[PROCESS_HMMSCAN]
-    E --> G[MERGE_SP]
-    F --> G
-    G --> H1[EXTRACT_SP_FAA]
-    B --> H1
-    H1 --> H2[HMMSCAN_FP<br/>3 FP profiles]
-    P --> H2
-    G --> H3[PROCESS_HMMSCAN_FP]
-    H2 --> H3
-    H3 --> I[REANNOT_SP]
-    E --> I
-    I --> J[DETECT_ME]
-    A --> J
-    I --> K[CREATE_ANNOTATIONS]
-    J --> K
-    J --> L[PACKAGE_RESULTS]
-    K --> M[GFF3 / EMBL / GenBank]
+flowchart TD
+    IN["samplesheet.csv (genbank and/or fasta)"] --> BAKTA["Bakta (FASTA only)"]
+    IN --> QC["QUAST + CheckM2 + GTDB-Tk (--run_qc / --run_taxonomy_check)"]
+    BAKTA --> ICE["Core ICEscreen v1.3.3"]
+    QC --> ICE
+    ICE --> SLICE["EXTRACT_ME_SEQUENCES (.bed, .fna.gz, .faa.gz, slices/*.gbk.gz)"]
+    SLICE -. "--run_amr" .-> AMR["AMRFinderPlus (--plus) + CARD RGI -> DEREP_AMR_CARD"]
+    SLICE -. "--run_eggnog" .-> EGG["eggNOG-mapper -> PARSE_EGGNOG_OGS (@2 + @1239)"]
+    SLICE -. "--run_defense" .-> DEF["DefenseFinder"]
+    ICE -. "--run_bgc" .-> BGC["antiSMASH-lite + INTERSECT_BGC_ME"]
+    AMR --> MERGE["MERGE_CARGO_ANNOTATIONS"]
+    EGG --> MERGE
+    DEF --> MERGE
+    BGC --> MERGE
+    ICE -. "--run_mge_context / --run_att_sites" .-> CTX["MOB-suite + geNomad + ISEScan + IntegronFinder + attL/attR"]
+    MERGE --> COHORT["skani + MMseqs2 + Cohort Summary + Pan-ME OG Matrix"]
+    CTX --> COHORT
+    COHORT -. "--run_multiqc" .-> MQC["MultiQC Dashboard"]
+    COHORT -. "--run_synteny" .-> PGV["pyGenomeViz Synteny (SVG + HTML)"]
 ```
 
 ---
 
-## Features
+## Key Capabilities
 
-- ICE/IME structure detection and boundary assembly using the [ICEscreen](https://github.com/andreassag/icescreen)
-  v1.3.3 logic
-- Automatic database retrieval and indexing via `nf-core/untar`, `nf-core/blast/makeblastdb`, and
-  `nf-core/hmmer/hmmpress`
-- Parameter and samplesheet validation via `nf-schema`
-- Support for Docker, Singularity, Apptainer, Podman, and Conda
+- **Core ICEscreen v1.3.3 + always-on element extraction**: Byte-identical ICE/IME detection plus BED, nucleotide,
+  protein, GFF3, and per-element GenBank slicing
+- **Flexible inputs & pre-QC**: GenBank and/or raw FASTA assemblies (Bakta), QUAST, CheckM2, and GTDB-Tk phylum checks
+- **Dereplicated AMR & stress cargo**: AMRFinderPlus (`--plus`) + CARD RGI merged natively via `DEREP_AMR_CARD`
+- **eggNOG Orthologous Groups**: Hierarchical Bacteria (`@2`) and Bacillota (`@1239`) OGs, COG categories, and pan-ME OG
+  presence/absence matrices
+- **Defense, BGC & MGE context**: DefenseFinder, antiSMASH-lite, MOB-suite, geNomad, ISEScan, IntegronFinder, and
+  `attL`/`attR` hotspot detection
+- **Cohort clustering & visualization**: `skani` (`--small-genomes`), `MMseqs2`, `MultiQC`, and `pyGenomeViz`
 
 ---
 
@@ -62,4 +55,5 @@ nextflow run andreassag/advena \
     -profile docker
 ```
 
-See [Installation](installation.md) and [Usage](usage.md) for full details.
+See [Installation](installation.md), [Usage](usage.md), [Parameters](parameters.md), and [Output](output.md) for full
+details.

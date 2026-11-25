@@ -1,0 +1,11 @@
+vers: '2.0.0-mini'
+format_version: 2
+short_desc: 'Miniature offline DefenseFinder models for advena testing'
+maintainer:
+  name: 'advena-test'
+  email: 'advena-test@example.org'
+cite:
+  - 'Tesson et al., Nature Communications 2022'
+doc: 'https://github.com/mdmparis/defense-finder-models'
+license: 'GPL-3.0'
+copyright: 'advena-test'

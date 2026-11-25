@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process MULTIQC"
+    script "../main.nf"
+    process "MULTIQC"
+    tag "modules"
+    tag "modules_local"
+    tag "multiqc"
+
+    test("Should aggregate QC, versions, and advena custom panels into MultiQC report - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def vers = new File("${workDir}/software_versions_mqc_versions.yml")
+                vers.text = 'EXTRACT_ME_SEQUENCES:\\n  python: "3.12.0"\\n'
+                def panel = new File("${workDir}/icescreen_summary_mqc.yaml")
+                panel.text = "id: 'advena_icescreen_summary'\\nsection_name: 'advena'\\nplot_type: 'bargraph'\\ndata: {}\\n"
+                input[0] = [vers.toPath(), panel.toPath()]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.report[0]).exists() },
+                { assert path(process.out.data[0]).exists() },
+                { assert process.out.versions_multiqc.size() == 1 }
+            )
+        }
+    }
+}

@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process DEFENSEFINDER_RUN"
+    script "../main.nf"
+    process "DEFENSEFINDER_RUN"
+    tag "modules"
+    tag "modules_local"
+    tag "defensefinder"
+    tag "defensefinder_run"
+
+    test("Should run DefenseFinder on ordered element proteomes - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/dbs/mini_defensefinder_db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.systems[0][1]).exists() },
+                { assert path(process.out.genes[0][1]).exists() }
+            )
+        }
+    }
+}

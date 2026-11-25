@@ -43,8 +43,8 @@ process PACKAGE_RESULTS {
     output:
     tuple val(meta), path("tmp_intermediate_files.tar.gz"), emit: archive
     tuple val(meta), path("param.conf.gz"), emit: param_conf
-    tuple val("${task.process}"), val("tar"), eval('tar --version 2>&1 | head -1 | sed "s/tar (GNU tar) //; s/ Copyright.*//"'), topic: versions, emit: versions_tar
-    tuple val("${task.process}"), val("gzip"), eval('gzip --version 2>&1 | head -1 | sed "s/gzip //"'), topic: versions, emit: versions_gzip
+    tuple val("${task.process}"), val("tar"), eval('tar --version 2>&1 | sed -n "1{s/tar (GNU tar) //; s/ Copyright.*//; p}"'), topic: versions, emit: versions_tar
+    tuple val("${task.process}"), val("gzip"), eval('gzip --version 2>&1 | sed -n "1{s/gzip //; p}"'), topic: versions, emit: versions_gzip
 
     script:
     def S = "${meta.id}"

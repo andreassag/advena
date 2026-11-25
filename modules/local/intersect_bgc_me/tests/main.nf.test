@@ -1,0 +1,39 @@
+nextflow_process {
+
+    name "Test Process INTERSECT_BGC_ME"
+    script "../main.nf"
+    process "INTERSECT_BGC_ME"
+    tag "modules"
+    tag "modules_local"
+    tag "intersect_bgc_me"
+
+    test("Should intersect BGC and ME intervals - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def manifest = new File("${workDir}/mini_ME_cds_manifest.tsv")
+                manifest.text = "sample\\tme_id\\tcontig\\tlocus_tag\\torig_start\\torig_end\\n"
+                def asJson = new File("${workDir}/mini.json")
+                asJson.text = '{"records": []}\\n'
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    manifest.toPath(),
+                    asJson.toPath()
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.overlaps[0][1]).exists() },
+                { assert path(process.out.overlaps[0][1]).text.contains("bgc_region_id") }
+            )
+        }
+    }
+}

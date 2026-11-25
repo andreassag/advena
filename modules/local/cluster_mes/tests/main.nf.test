@@ -1,0 +1,42 @@
+nextflow_process {
+
+    name "Test Process CLUSTER_MES"
+    script "../main.nf"
+    process "CLUSTER_MES"
+    tag "modules"
+    tag "modules_local"
+    tag "cluster_mes"
+
+    test("Should cluster mobile elements from skani and MMseqs2 outputs - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def bed = new File("${workDir}/mini_ME_regions.bed")
+                bed.text = "NC_000964.3\\t504\\t12229\\tmini__ID_1\\t0\\t+\\n"
+                def manifest = new File("${workDir}/mini_ME_cds_manifest.tsv")
+                manifest.text = "sample\\tme_id\\tme_category\\tlocus_tag\\nmini\\tID_1\\tComplete ICE\\tBSU_04800\\n"
+                def skani = new File("${workDir}/skani_triangle.tsv")
+                skani.text = "Ref_file\\tQuery_file\\tANI\\tAlign_fraction_ref\\tAlign_fraction_query\\tRef_name\\tQuery_name\\n"
+                def mmseqs = new File("${workDir}/pan_me_cluster.tsv")
+                mmseqs.text = ""
+                input[0] = [bed.toPath()]
+                input[1] = [manifest.toPath()]
+                input[2] = skani.toPath()
+                input[3] = mmseqs.toPath()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.clusters_tsv[0]).exists() },
+                { assert path(process.out.clusters_tsv[0]).text.contains("me_cluster_id") },
+                { assert path(process.out.clusters_json[0]).exists() }
+            )
+        }
+    }
+}

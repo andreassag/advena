@@ -1,0 +1,37 @@
+nextflow_process {
+
+    name "Test Process CHECKM2_PREDICT"
+    script "../main.nf"
+    process "CHECKM2_PREDICT"
+    tag "modules"
+    tag "modules_local"
+    tag "checkm2"
+    tag "checkm2_predict"
+
+    test("Should predict genome completeness and contamination - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">contig1\\nACGTACGTACGTACGT\\n"
+                def db = new File("${workDir}/checkm2_db")
+                db.mkdirs()
+                new File(db, "uniref100.KO.1.dmnd").text = ""
+                input[0] = [[id: 'mini'], fa.toPath()]
+                input[1] = db.toPath()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.quality_report[0][1]).exists() },
+                { assert path(process.out.quality_report[0][1]).text.contains("Completeness") }
+            )
+        }
+    }
+}

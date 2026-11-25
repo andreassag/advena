@@ -1,0 +1,30 @@
+nextflow_process {
+
+    name "Test Process CHECKM2_DATABASEDOWNLOAD"
+    script "../main.nf"
+    process "CHECKM2_DATABASEDOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "checkm2"
+    tag "checkm2_databasedownload"
+
+    test("Should download CheckM2 DIAMOND database - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.db[0]).exists() },
+                { assert path("${process.out.db[0]}/uniref100.KO.1.dmnd").exists() }
+            )
+        }
+    }
+}

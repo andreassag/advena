@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process DETECT_ATT_SITES"
+    script "../main.nf"
+    process "DETECT_ATT_SITES"
+    tag "modules"
+    tag "modules_local"
+    tag "detect_att_sites"
+
+    test("Should detect attL/attR sites - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini_cargo'],
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/mini_genome_cargo.gbff", checkIfExists: true),
+                    []
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.att_sites[0][1]).exists() },
+                { assert path(process.out.att_sites[0][1]).text.contains("att_repeat_seq") }
+            )
+        }
+    }
+}

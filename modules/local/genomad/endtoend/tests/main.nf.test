@@ -1,0 +1,37 @@
+nextflow_process {
+
+    name "Test Process GENOMAD_ENDTOEND"
+    script "../main.nf"
+    process "GENOMAD_ENDTOEND"
+    tag "modules"
+    tag "modules_local"
+    tag "genomad"
+    tag "genomad_endtoend"
+
+    test("Should identify plasmid and provirus regions with geNomad - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">NC_000964.3\\nACGTACGTACGTACGT\\n"
+                def db = new File("${workDir}/genomad_db")
+                db.mkdirs()
+                new File(db, "genomad_db").text = ""
+                input[0] = [[id: 'mini'], fa.toPath()]
+                input[1] = db.toPath()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.plasmid_summary[0][1]).exists() },
+                { assert path(process.out.virus_summary[0][1]).exists() }
+            )
+        }
+    }
+}

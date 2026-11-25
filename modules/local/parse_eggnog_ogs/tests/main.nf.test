@@ -1,0 +1,34 @@
+nextflow_process {
+
+    name "Test Process PARSE_EGGNOG_OGS"
+    script "../main.nf"
+    process "PARSE_EGGNOG_OGS"
+    tag "modules"
+    tag "modules_local"
+    tag "parse_eggnog_ogs"
+
+    test("Should parse eggNOG hierarchical OGs - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.cargo_ogs[0][1]).exists() },
+                { assert path(process.out.cargo_ogs[0][1]).text.contains("bacillota_og") }
+            )
+        }
+    }
+}

@@ -1,0 +1,30 @@
+nextflow_process {
+
+    name "Test Process GENOMAD_DOWNLOAD"
+    script "../main.nf"
+    process "GENOMAD_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "genomad"
+    tag "genomad_download"
+
+    test("Should download geNomad reference database - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.db[0]).exists() },
+                { assert path("${process.out.db[0]}/version.txt").exists() }
+            )
+        }
+    }
+}

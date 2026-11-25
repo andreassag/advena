@@ -1,0 +1,31 @@
+nextflow_process {
+
+    name "Test Process MMSEQS_EASYCLUSTER"
+    script "../main.nf"
+    process "MMSEQS_EASYCLUSTER"
+    tag "modules"
+    tag "modules_local"
+    tag "mmseqs"
+    tag "mmseqs_easycluster"
+
+    test("Should cluster pan-ME protein sequences with MMseqs2 - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.clusters[0]).exists() },
+                { assert path(process.out.rep_seqs[0]).exists() }
+            )
+        }
+    }
+}

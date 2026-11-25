@@ -1,0 +1,38 @@
+nextflow_process {
+
+    name "Test Process COHORT_SUMMARY"
+    script "../main.nf"
+    process "COHORT_SUMMARY"
+    tag "modules"
+    tag "modules_local"
+    tag "cohort_summary"
+
+    test("Should build cohort summary and pan-ME OG matrix - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true)]
+                input[1] = []
+                input[2] = []
+                input[3] = []
+                input[4] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.cohort_summary[0]).exists() },
+                { assert path(process.out.og_matrix[0]).exists() },
+                { assert path(process.out.mqc_icescreen[0]).exists() },
+                { assert path(process.out.mqc_amr[0]).exists() },
+                { assert path(process.out.mqc_cog[0]).exists() },
+                { assert path(process.out.mqc_mge[0]).exists() }
+            )
+        }
+    }
+}

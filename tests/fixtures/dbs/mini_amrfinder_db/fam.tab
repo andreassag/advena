@@ -1,0 +1,12 @@
+fam_id	parent_id	gene_symbol	hmm_id	length	complete_cutoff	partial_cutoff	scope	element_type	element_subtype	class	subclass	name
+ALL		-	-	0	0	0	core	AMR	AMR	-	-	root
+AMR	ALL	-	-	0	0	0	core	AMR	AMR	-	-	Antimicrobial resistance
+STRESS	ALL	-	-	0	0	0	plus	STRESS	STRESS	-	-	Stress response
+TET	AMR	-	-	0	0	0	core	AMR	AMR	TETRACYCLINE	TETRACYCLINE	Tetracycline resistance
+ERM	AMR	-	-	0	0	0	core	AMR	AMR	MACROLIDE	MACROLIDE	Macrolide resistance
+METAL	STRESS	-	-	0	0	0	plus	STRESS	METAL	METAL	METAL	Heavy metal resistance
+BIOCIDE	STRESS	-	-	0	0	0	plus	STRESS	BIOCIDE	BIOCIDE	BIOCIDE	Biocide resistance
+tet(M)	TET	tet(M)	NF033146.1	240	27.1	27.1	core	AMR	AMR	TETRACYCLINE	TETRACYCLINE	tetracycline resistance ribosomal protection protein Tet(M)
+erm(B)	ERM	erm(B)	-	160	0	0	core	AMR	AMR	MACROLIDE	MACROLIDE	23S rRNA methyltransferase Erm(B)
+cadA	METAL	cadA	NF033201.1	230	27.1	27.1	plus	STRESS	METAL	CADMIUM	CADMIUM	cadmium-translocating P-type ATPase CadA
+qacA	BIOCIDE	qacA	-	160	0	0	plus	STRESS	BIOCIDE	QUATERNARY_AMMONIUM	QUATERNARY_AMMONIUM	multidrug efflux MFS transporter QacA

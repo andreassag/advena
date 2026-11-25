@@ -1,0 +1,33 @@
+nextflow_process {
+
+    name "Test Process EXTRACT_GENOME_FASTA"
+    script "../main.nf"
+    process "EXTRACT_GENOME_FASTA"
+    tag "modules"
+    tag "modules_local"
+    tag "extract_genome_fasta"
+
+    test("Should extract FASTA from GenBank - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.fasta[0][1]).exists() },
+                { assert path(process.out.fasta[0][1]).text.startsWith(">mini") }
+            )
+        }
+    }
+}

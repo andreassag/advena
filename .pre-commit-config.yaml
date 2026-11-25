@@ -9,15 +9,48 @@ repos:
         files: \.(json|yml|yaml|md|cjs)$
         types_or: [file]
 
+  # Python linting and formatting via Ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^(bin|tests/python|tests/fixtures)/.*\.py$
+      - id: ruff-format
+        files: ^(bin|tests/python|tests/fixtures)/.*\.py$
+
   # Generic file hygiene
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: \.md$
+        exclude: ^(assets/|modules/nf-core/|tests/fixtures/)|\.md$
       - id: end-of-file-fixer
+        exclude: ^(assets/|modules/nf-core/|tests/fixtures/)
       - id: check-yaml
       - id: check-json
       - id: check-merge-conflict
       - id: mixed-line-ending
         args: [--fix=lf]
+
+  # Fast local validation hooks (<10s)
+  - repo: local
+    hooks:
+      - id: pytest-unit
+        name: Python unit tests (pytest)
+        entry: pytest tests/python/
+        language: system
+        pass_filenames: false
+        files: ^(bin|tests/python|pyproject\.toml)
+      - id: schema-validate
+        name: JSON schema validation (Draft 2020-12)
+        entry: python3 tests/python/validate_schemas.py
+        language: system
+        pass_filenames: false
+        files: ^(nextflow_schema\.json|assets/schema_input\.json|nextflow\.config)$
+      - id: nextflow-lint
+        name: Nextflow lint
+        entry: nextflow lint .
+        language: system
+        pass_filenames: false
+        files: \.(nf|config)$

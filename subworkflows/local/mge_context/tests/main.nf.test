@@ -1,0 +1,51 @@
+nextflow_workflow {
+
+    name "Test Workflow MGE_CONTEXT"
+    script "../main.nf"
+    workflow "MGE_CONTEXT"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "mge_context"
+
+    test("Should run MOB-suite, geNomad, ISEScan, IntegronFinder, att sites, and contextualize - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                att_flank_bp = 5000
+                outdir = "$outputDir"
+                publish_dir_mode = "copy"
+            }
+            workflow {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">NC_000964.3\\nACGTACGTACGTACGT\\n"
+                def gff3 = new File("${workDir}/mini.gff3")
+                gff3.text = "##gff-version 3\\n"
+                def genomadDb = new File("${workDir}/genomad_db")
+                genomadDb.mkdirs()
+                new File(genomadDb, "genomad_db").text = ""
+
+                input[0] = channel.of([[id: 'mini'], fa.toPath()])
+                input[1] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true)])
+                input[2] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)])
+                input[3] = channel.of([[id: 'mini'], gff3.toPath()])
+                input[4] = channel.value([])
+                input[5] = channel.value(genomadDb.toPath())
+                input[6] = true
+                input[7] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.contextualized_me[0][1]).exists() },
+                { assert path(workflow.out.att_sites[0][1]).exists() }
+            )
+        }
+    }
+}

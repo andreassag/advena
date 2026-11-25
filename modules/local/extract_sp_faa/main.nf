@@ -17,7 +17,7 @@ process EXTRACT_SP_FAA {
 
     output:
     tuple val(meta), path("${prefix}_detected_SP_source.faa"), emit: sp_faa
-    tuple val("${task.process}"), val("python"), eval("python3 --version 2>&1 | sed 's/Python //'"), topic: versions, emit: versions_python
+    tuple val("${task.process}"), val("python"), eval("python3 --version 2>&1 | sed -n '1{s/Python //; p}'"), topic: versions, emit: versions_python
 
     script:
     prefix = task.ext.prefix ?: "${meta.id}"

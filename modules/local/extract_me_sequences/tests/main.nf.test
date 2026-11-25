@@ -1,0 +1,39 @@
+nextflow_process {
+
+    name "Test Process EXTRACT_ME_SEQUENCES"
+    script "../main.nf"
+    process "EXTRACT_ME_SEQUENCES"
+    tag "modules"
+    tag "modules_local"
+    tag "extract_me_sequences"
+
+    test("Should slice mobile element sequences - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/detected_SP.tsv", checkIfExists: true),
+                    file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.bed[0][1]).exists() },
+                { assert path(process.out.fna[0][1]).exists() },
+                { assert path(process.out.faa[0][1]).exists() },
+                { assert path(process.out.gff3[0][1]).exists() },
+                { assert path(process.out.manifest[0][1]).exists() },
+                { assert path(process.out.me_count[0][1]).text.trim() == "1" }
+            )
+        }
+    }
+}

@@ -1,0 +1,42 @@
+nextflow_process {
+
+    name "Test Process MERGE_CARGO_ANNOTATIONS"
+    script "../main.nf"
+    process "MERGE_CARGO_ANNOTATIONS"
+    tag "modules"
+    tag "modules_local"
+    tag "merge_cargo_annotations"
+
+    test("Should merge cargo annotations and emit enriched GFF3 - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def manifest = new File("${workDir}/mini_ME_cds_manifest.tsv")
+                manifest.text = "sample\\tme_id\\tme_category\\tcontig\\tlocus_tag\\tprotein_id\\torig_start\\torig_end\\tstrand\\tis_signature_protein\\tsp_type\\tproduct\\n"
+                input[0] = [
+                    [id: 'mini'],
+                    manifest.toPath(),
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    []
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.cargo_profile[0][1]).exists() },
+                { assert path(process.out.cargo_profile[0][1]).text.contains("amr_detected_by") },
+                { assert path(process.out.enriched_gff[0][1]).exists() }
+            )
+        }
+    }
+}

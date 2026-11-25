@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process PYGENOMEVIZ_SYNTENY"
+    script "../main.nf"
+    process "PYGENOMEVIZ_SYNTENY"
+    tag "modules"
+    tag "modules_local"
+    tag "pygenomeviz_synteny"
+
+    test("Should render cluster synteny SVG and HTML outputs - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def clusters = new File("${workDir}/me_clusters.tsv")
+                clusters.text = "me_cluster_id\\tcluster_size\\telement_key\\tsample\\tme_id\\tme_category\\tlength_bp\\tn_cds\\tclustering_evidence\\n"
+                input[0] = clusters.toPath()
+                input[1] = [file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)]
+                input[2] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.manifest[0]).exists() },
+                { assert process.out.svgs.size() >= 1 },
+                { assert process.out.htmls.size() >= 1 }
+            )
+        }
+    }
+}

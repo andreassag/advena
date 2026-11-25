@@ -17,11 +17,18 @@
       "genbank": {
         "type": "string",
         "format": "file-path",
-        "pattern": "^\\S+\\.(gb|gbk|gbff)$",
-        "errorMessage": "GenBank file path must be provided, cannot contain spaces, and must have extension .gb, .gbk, or .gbff"
+        "pattern": "^\\S+\\.(gb|gbk|gbff)(\\.gz)?$",
+        "errorMessage": "GenBank file path cannot contain spaces and must have extension .gb, .gbk, or .gbff (optionally .gz)"
+      },
+      "fasta": {
+        "type": "string",
+        "format": "file-path",
+        "pattern": "^\\S+\\.(fa|fna|fasta)(\\.gz)?$",
+        "errorMessage": "FASTA file path cannot contain spaces and must have extension .fa, .fna, or .fasta (optionally .gz)"
       }
     },
-    "required": ["sample", "genbank"],
+    "required": ["sample"],
+    "anyOf": [{ "required": ["genbank"] }, { "required": ["fasta"] }],
     "additionalProperties": false
   }
 }

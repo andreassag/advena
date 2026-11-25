@@ -25,9 +25,15 @@ process GB_TO_FAA {
     def args = task.ext.args ?: ""
     prefix = task.ext.prefix ?: "${meta.id}"
     """
+    GB_IN="${genbank}"
+    if [[ "\${GB_IN}" == *.gz ]]; then
+        gzip -cdf "${genbank}" > "${prefix}_input.gbff"
+        GB_IN="${prefix}_input.gbff"
+    fi
+
     gb_to_faa \\
         ${args} \\
-        -i ${genbank} \\
+        -i "\${GB_IN}" \\
         -o ${prefix}.faa \\
         -c ${mode_file}
     """

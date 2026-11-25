@@ -10,6 +10,7 @@
 # Pipeline work and output directories
 work/
 results/
+site/
 
 # Nextflow execution reports (generated per run)
 pipeline_info/
@@ -27,6 +28,13 @@ __pycache__/
 .venv/
 dist/
 build/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local CI (gh act) artefacts
+.act-artifacts/
 
 # Editor / IDE
 .vscode/

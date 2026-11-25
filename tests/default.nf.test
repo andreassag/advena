@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline default execution"
+    name "Test pipeline default execution (v2.0.0)"
     script "../main.nf"
     profile "test"
     tag "pipeline"
 
-    test("Should run full DAG with stub") {
+    test("Should run default core DAG with stub") {
         tag "stub"
         options "-stub-run"
 
@@ -22,17 +22,23 @@ nextflow_pipeline {
                 { assert workflow.success },
                 { assert path("${outputDir}/pipeline_info/software_versions.yml").exists() },
                 { assert samples.every { s ->
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_ME.tsv").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_ME.summary").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/${s}_detected_SP_withMEIds.tsv").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gff.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.embl.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gb.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.fa.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.gff.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/detected_signature_proteins/${s}_detected_SP.tsv").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/param.conf.gz").exists() &&
-                    path("${outputDir}/ICEscreen_results/${s}/tmp_intermediate_files.tar.gz").exists()
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/${s}_detected_ME.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/${s}_detected_ME.summary").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/${s}_detected_SP_withMEIds.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gff.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.embl.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gb.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.fa.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.gff.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/detected_signature_proteins/${s}_detected_SP.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_regions.bed").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_regions.fna.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_cds.faa.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_cds.gff3.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/${s}_ME_cds_manifest.tsv").exists() &&
+                    path("${outputDir}/icescreen/${s}/me_sequences/slices/${s}__ID_1.gbk.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/param.conf.gz").exists() &&
+                    path("${outputDir}/icescreen/${s}/tmp_intermediate_files.tar.gz").exists()
                 } }
             )
         }
@@ -61,10 +67,11 @@ nextflow_pipeline {
                 { assert versionsText.contains("GB_TO_FAA:") },
                 { assert versionsText.contains("DETECT_ME:") },
                 { assert versionsText.contains("CREATE_ANNOTATIONS:") },
+                { assert versionsText.contains("EXTRACT_ME_SEQUENCES:") },
                 { assert versionsText.contains("PACKAGE_RESULTS:") },
                 {
                     samples.each { s ->
-                        def outSample = "${outputDir}/ICEscreen_results/${s}"
+                        def outSample = "${outputDir}/icescreen/${s}"
                         def refSample = "${projectDir}/assets/icescreen_result/ICEscreen_results/${s}"
 
                         assert path("${outSample}/detected_mobile_elements/${s}_detected_ME.tsv").text ==
@@ -80,6 +87,10 @@ nextflow_pipeline {
                         assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_icescreen.gb.gz").contains("LOCUS       ")
                         assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.fa.gz").startsWith(">")
                         assert readGz("${outSample}/detected_mobile_elements/standard_genome_annotation_formats/${s}_source.gff.gz").contains("##gff-version")
+                        assert path("${outSample}/me_sequences/${s}_ME_regions.bed").readLines().size() >= 1
+                        assert path("${outSample}/me_sequences/${s}_ME_cds_manifest.tsv").readLines().size() > 1
+                        assert readGz("${outSample}/me_sequences/${s}_ME_regions.fna.gz").startsWith(">")
+                        assert readGz("${outSample}/me_sequences/${s}_ME_cds.faa.gz").startsWith(">")
                         assert readGz("${outSample}/param.conf.gz").contains("mode: bacillota")
                         assert path("${outSample}/tmp_intermediate_files.tar.gz").toFile().length() > 0
                     }

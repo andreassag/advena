@@ -1,0 +1,33 @@
+nextflow_process {
+
+    name "Test Process SKANI_TRIANGLE"
+    script "../main.nf"
+    process "SKANI_TRIANGLE"
+    tag "modules"
+    tag "modules_local"
+    tag "skani"
+    tag "skani_triangle"
+
+    test("Should compute all-vs-all ANI/AF matrix across ME slices - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fna = new File("${workDir}/mini_ME_regions.fna")
+                fna.text = ">mini__ID_1\\nACGTACGTACGTACGT\\n"
+                input[0] = [fna.toPath()]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.matrix[0]).exists() },
+                { assert path(process.out.matrix[0]).text.contains("Ref_file") }
+            )
+        }
+    }
+}

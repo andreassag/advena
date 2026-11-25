@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "advena-helpers"
+version = "2.0.0"
+description = "Python helper utilities and unit tests for the advena Nextflow mobileome pipeline"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+bio = ["biopython>=1.83", "pygenomeviz>=1.0"]
+dev = [
+  "pytest>=8.3",
+  "pytest-cov>=5.0",
+  "ruff>=0.8",
+  "jsonschema>=4.23",
+  "pre-commit>=4.0",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]
+pythonpath = ["bin"]
+addopts = "-ra -q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["bin", "tests/python"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]

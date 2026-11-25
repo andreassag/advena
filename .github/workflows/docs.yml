@@ -41,6 +41,7 @@ jobs:
         run: mkdocs build --strict
 
       - name: Upload pages artifact
+        if: ${{ !env.ACT }}
         uses: actions/upload-pages-artifact@v5
         with:
           path: site/
@@ -49,7 +50,7 @@ jobs:
     name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && !env.ACT
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

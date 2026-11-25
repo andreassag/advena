@@ -1,0 +1,30 @@
+nextflow_process {
+
+    name "Test Process GTDBTK_DOWNLOAD"
+    script "../main.nf"
+    process "GTDBTK_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "gtdbtk"
+    tag "gtdbtk_download"
+
+    test("Should download GTDB-Tk reference database - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.db[0]).exists() },
+                { assert path("${process.out.db[0]}/release_stub/gtdbtk_db.txt").exists() }
+            )
+        }
+    }
+}

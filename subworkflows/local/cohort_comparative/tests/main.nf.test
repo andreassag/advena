@@ -1,0 +1,64 @@
+nextflow_workflow {
+
+    name "Test Workflow COHORT_COMPARATIVE"
+    script "../main.nf"
+    workflow "COHORT_COMPARATIVE"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "cohort_comparative"
+
+    test("Should run cohort clustering, summary, MultiQC, and synteny plots - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                me_ani_threshold = 95.0
+                me_af_threshold = 80.0
+                synteny_max_elements_per_cluster = 12
+                outdir = "$outputDir"
+                publish_dir_mode = "copy"
+            }
+            workflow {
+                """
+                def bed = new File("${workDir}/mini_ME_regions.bed")
+                bed.text = "NC_000964.3\\t504\\t12229\\tmini__ID_1\\t0\\t+\\n"
+                def fna = new File("${workDir}/mini_ME_regions.fna")
+                fna.text = ">mini__ID_1\\nACGTACGTACGTACGT\\n"
+                def manifest = new File("${workDir}/mini_ME_cds_manifest.tsv")
+                manifest.text = "sample\\tme_id\\tme_category\\tlocus_tag\\nmini\\tID_1\\tComplete ICE\\tBSU_04800\\n"
+                def vers = new File("${workDir}/software_versions_mqc_versions.yml")
+                vers.text = 'COHORT_SUMMARY:\\n  python: "3.12.0"\\n'
+
+                input[0] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true)])
+                input[1] = channel.empty()
+                input[2] = channel.empty()
+                input[3] = channel.of([[id: 'mini'], bed.toPath()])
+                input[4] = channel.of([[id: 'mini'], fna.toPath()])
+                input[5] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)])
+                input[6] = channel.of([[id: 'mini'], manifest.toPath()])
+                input[7] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)])
+                input[8] = channel.empty()
+                input[9] = channel.of(vers.toPath())
+                input[10] = true
+                input[11] = true
+                input[12] = true
+                input[13] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.clusters_tsv[0]).exists() },
+                { assert path(workflow.out.cohort_summary[0]).exists() },
+                { assert path(workflow.out.og_matrix[0]).exists() },
+                { assert path(workflow.out.multiqc_report[0]).exists() },
+                { assert workflow.out.versions_multiqc.size() == 1 },
+                { assert workflow.out.synteny_svgs.size() >= 1 }
+            )
+        }
+    }
+}

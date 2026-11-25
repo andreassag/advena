@@ -1,0 +1,64 @@
+nextflow_workflow {
+
+    name "Test Workflow INPUT_AND_QC"
+    script "../main.nf"
+    workflow "INPUT_AND_QC"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "input_and_qc"
+
+    test("Should normalize GenBank and FASTA inputs and run QC + taxonomy - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                strict_qc = false
+                filter_non_bacillota = false
+                min_completeness = 90.0
+                max_contamination = 5.0
+                outdir = "$outputDir"
+                publish_dir_mode = "copy"
+            }
+            workflow {
+                """
+                def rawFa = new File("${workDir}/raw.fna")
+                rawFa.text = ">contig1\\nACGTACGTACGTACGT\\n"
+                def baktaDb = new File("${workDir}/bakta_db")
+                baktaDb.mkdirs()
+                new File(baktaDb, "bakta.db").text = ""
+                def checkm2Db = new File("${workDir}/checkm2_db")
+                checkm2Db.mkdirs()
+                new File(checkm2Db, "uniref100.KO.1.dmnd").text = ""
+                def gtdbtkDb = new File("${workDir}/gtdbtk_db")
+                gtdbtkDb.mkdirs()
+
+                input[0] = channel.of(
+                    [[id: 'mini_gb'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true), null],
+                    [[id: 'mini_fa'], null, rawFa.toPath()]
+                )
+                input[1] = channel.value(baktaDb.toPath())
+                input[2] = channel.value(checkm2Db.toPath())
+                input[3] = channel.value(gtdbtkDb.toPath())
+                input[4] = true
+                input[5] = true
+                input[6] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.genbank.size() == 2 },
+                { assert workflow.out.fasta.size() == 2 },
+                { assert workflow.out.quast_reports.size() == 2 },
+                { assert workflow.out.checkm2_reports.size() == 2 },
+                { assert workflow.out.gtdbtk_summaries.size() == 2 },
+                { assert workflow.out.bakta_txts.size() == 1 },
+                { assert path(workflow.out.qc_summary[0]).exists() }
+            )
+        }
+    }
+}

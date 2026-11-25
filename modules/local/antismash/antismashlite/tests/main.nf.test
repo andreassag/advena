@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process ANTISMASH_ANTISMASHLITE"
+    script "../main.nf"
+    process "ANTISMASH_ANTISMASHLITE"
+    tag "modules"
+    tag "modules_local"
+    tag "antismash"
+    tag "antismash_antismashlite"
+
+    test("Should detect BGC regions on annotated GenBank - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)
+                ]
+                input[1] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.json[0][1]).exists() },
+                { assert path(process.out.json[0][1]).text.contains("records") }
+            )
+        }
+    }
+}

@@ -1,0 +1,29 @@
+nextflow_process {
+
+    name "Test Process EGGNOG_DOWNLOAD"
+    script "../main.nf"
+    process "EGGNOG_DOWNLOAD"
+    tag "modules"
+    tag "modules_local"
+    tag "eggnog_download"
+
+    test("Should download eggNOG reference database - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.db[0]).exists() },
+                { assert path("${process.out.db[0]}/eggnog.db").exists() }
+            )
+        }
+    }
+}

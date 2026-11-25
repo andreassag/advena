@@ -1,20 +1,37 @@
 # advena
 
-**advena** is a Nextflow pipeline for ICEscreen: detection and annotation of Integrative and Conjugative Elements (ICEs)
-and Integrative and Mobilizable Elements (IMEs) in Bacillota genomes.
+**advena** (v2.0.0) is a modular Nextflow DSL2 pipeline for **mobileome discovery, cargo profiling, and comparative
+genomics** of Integrative and Conjugative Elements (ICEs) and Integrative and Mobilizable Elements (IMEs) in _Bacillota_
+genomes.
 
-This pipeline is a Nextflow DSL2 reimplementation of the original [ICEscreen](https://github.com/ICEscreen/ICEscreen)
-Snakemake workflow, combining standard [`nf-core/modules`](https://github.com/nf-core/modules) for database preparation,
-BLAST+, and HMMER with containerized ICEscreen Python tools (`ghcr.io/andreassag/icescreen:v1.3.3`).
+Built around a Nextflow DSL2 reimplementation of [ICEscreen](https://github.com/ICEscreen/ICEscreen) v1.3.3, **advena**
+keeps core ICE/IME detection and element sequence extraction enabled by default while providing opt-in subworkflows
+(`--run_*` flags or `--run_all`) for raw FASTA annotation, assembly/phylum QC, dereplicated AMR/stress profiling, eggNOG
+Orthologous Group (OG) classification, anti-phage defense & BGC discovery, plasmid/prophage/IS/integron/`att` context,
+and cohort clustering, MultiQC dashboards, and synteny plots.
 
 ## Features
 
-- ICE/IME structure detection and boundary assembly using the [ICEscreen](https://github.com/andreassag/icescreen)
-  v1.3.3 logic
-- Automatic database download/extraction (`UNTAR`), protein BLAST DB indexing (`BLAST_MAKEBLASTDB`), and HMM profile
-  compression (`HMMER_HMMPRESS`) via `nf-core/modules`, with optional local caching via `--db_dir`
-- Parameter and samplesheet validation via [`nf-schema`](https://nextflow-io.github.io/nf-schema)
-- Support for Docker, Singularity, Apptainer, Podman, and Conda
+- **Flexible input & pre-detection QC**: Accept annotated GenBank (`.gb`/`.gbk`/`.gbff[.gz]`), raw FASTA assemblies
+  (auto-annotated with **Bakta**), or both; optional **QUAST** + **CheckM2** + **GTDB-Tk** QC/phylum gate (`--run_qc`,
+  `--run_taxonomy_check`)
+- **Core ICEscreen v1.3.3 + always-on element slicing**: Detects ICE/IME structures and slices each element into BED6,
+  `.fna.gz`, `.faa.gz`, `.gff3.gz`, CDS manifest, and per-element `.gbk.gz` (`--me_flank_bp`)
+- **Mobile cargo profiling**:
+  - **AMRFinderPlus** (`--plus`) + **CARD RGI** (Strict + Perfect) merged via native locus-tag and >=80% reciprocal
+    coordinate overlap dereplication (`DEREP_AMR_CARD`) preserving AMR, metal, biocide, heat/acid stress, and virulence
+    genes alongside CARD ARO ontology terms (`--run_amr`)
+  - **eggNOG-mapper** (DIAMOND mode) extracting hierarchical `Bacteria (@2)` and `Bacillota (@1239)` OGs, COG
+    categories, KEGG, and PFAMs (`--run_eggnog`)
+  - **DefenseFinder** (MacSyFinder + CasFinder models) for anti-phage defense and TA systems (`--run_defense`)
+  - **antiSMASH-lite** secondary metabolite/bacteriocin BGC intersection (`--run_bgc`)
+- **Complementary MGE context**: **MOB-suite** recon, **geNomad**, **ISEScan**, and **IntegronFinder**
+  (`--run_mge_context`), plus `attL`/`attR` direct repeat and tRNA/housekeeping hotspot detection (`--run_att_sites`)
+- **Cohort comparative genomics & reporting**: **skani** (`--small-genomes`) + **MMseqs2** element clustering
+  (`--run_cohort_cluster`), pan-ME eggNOG OG presence/absence matrix, **MultiQC** dashboard (`--run_multiqc`), and
+  **pyGenomeViz** SVG/HTML synteny alignments (`--run_synteny`)
+- **Unified database caching & 4-tier local verification**: `--db_cache_dir` (`storeDir`), per-tool `--*_db` overrides,
+  > 30 GB DB safety guards, `pytest` + `Ruff`, `nf-test`, and local GitHub Actions testing via `gh act`
 
 ## Requirements
 
@@ -24,131 +41,75 @@ BLAST+, and HMMER with containerized ICEscreen Python tools (`ghcr.io/andreassag
 ## Quick Start
 
 ```bash
+# Default core run (ICEscreen + element sequence extraction)
 nextflow run andreassag/advena \
     --input assets/samplesheet.csv \
     --outdir results \
     -profile docker
+
+# Enable cargo profiling + MGE context + cohort reporting
+nextflow run andreassag/advena \
+    --input assets/samplesheet.csv \
+    --outdir results \
+    --db_cache_dir /data/advena_dbs \
+    --eggnog_db /data/eggnog_db \
+    --run_amr --run_eggnog --run_defense --run_att_sites --run_cohort_cluster --run_multiqc --run_synteny \
+    -profile docker
 ```
 
-To verify the pipeline with the bundled test dataset:
+Verify with the bundled test datasets:
 
 ```bash
-nextflow run andreassag/advena \
-    -profile test,docker
+nextflow run andreassag/advena -profile test,docker
+nextflow run andreassag/advena -profile test_full,docker
 ```
 
-See the [documentation](https://andreassag.github.io/advena) for full details.
+See the [documentation](https://andreassag.github.io/advena) for full parameter, database, and output references.
 
 ## Input
 
-A CSV samplesheet with one row per genome:
+A CSV samplesheet with one row per genome (`genbank`, `fasta`, or both):
 
-| Column    | Description                                      |
-| --------- | ------------------------------------------------ |
-| `sample`  | Unique sample identifier (no spaces)             |
-| `genbank` | Path to GenBank file (`.gb`, `.gbk`, or `.gbff`) |
+| Column    | Description                                                      |
+| --------- | ---------------------------------------------------------------- |
+| `sample`  | Unique sample identifier (no spaces)                             |
+| `genbank` | Optional path to GenBank file (`.gb`, `.gbk`, `.gbff`, `.gz`)    |
+| `fasta`   | Optional path to FASTA assembly (`.fa`, `.fna`, `.fasta`, `.gz`) |
 
 ```csv
-sample,genbank
-genome_A,/path/to/genome_A.gbff
-genome_B,/path/to/genome_B.gbff
+sample,genbank,fasta
+genome_A,/path/to/genome_A.gbff,
+genome_B,,/path/to/genome_B.fna.gz
 ```
 
-## Parameters
-
-| Parameter                  | Default                                                                                      | Description                                                     |
-| -------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `--input`                  | (required)                                                                                   | Path to samplesheet CSV                                         |
-| `--outdir`                 | `results`                                                                                    | Output directory                                                |
-| `--phylum`                 | `bacillota`                                                                                  | Taxonomic phylum (`bacillota`)                                  |
-| `--db_url`                 | `https://github.com/andreassag/icescreen/releases/download/v1.3.3/icescreen_database.tar.gz` | URL or path to ICEscreen database archive (`.tar.gz`)           |
-| `--db_dir`                 | `null`                                                                                       | Directory containing pre-extracted DB or local extraction cache |
-| `--blastp_evalue`          | `0.001`                                                                                      | E-value threshold for BLASTP                                    |
-| `--blastp_max_target_seqs` | `10`                                                                                         | Max target sequences per BLASTP query                           |
-
-## Output
-
-Results are organized per sample under `<outdir>/ICEscreen_results/<sample>/`:
+## Output (v2.0.0 Layout)
 
 ```text
 <outdir>/
-├── ICEscreen_results/
-│   └── <sample>/
-│       ├── detected_mobile_elements/
-│       │   ├── <sample>_detected_ME.tsv
-│       │   ├── <sample>_detected_ME.summary
-│       │   ├── <sample>_detected_SP_withMEIds.tsv
-│       │   └── standard_genome_annotation_formats/
-│       │       ├── <sample>_icescreen.gff.gz
-│       │       ├── <sample>_icescreen.embl.gz
-│       │       ├── <sample>_icescreen.gb.gz
-│       │       ├── <sample>_source.fa.gz
-│       │       └── <sample>_source.gff.gz
-│       ├── detected_signature_proteins/
-│       │   └── <sample>_detected_SP.tsv
-│       ├── param.conf.gz
-│       └── tmp_intermediate_files.tar.gz
-└── pipeline_info/
-    ├── execution_report_<timestamp>.html
-    ├── execution_timeline_<timestamp>.html
-    ├── execution_trace_<timestamp>.txt
-    ├── pipeline_dag_<timestamp>.html
-    └── software_versions.yml
+├── bakta/<sample>/                 # Bakta annotation (FASTA-only inputs)
+├── qc/                             # QUAST, CheckM2, GTDB-Tk & qc_gate_summary.tsv
+├── icescreen/<sample>/             # Core ICEscreen results + me_sequences/ slices
+├── cargo/<sample>/                 # AMRFinderPlus, CARD RGI, DEREP, eggNOG, DefenseFinder, BGC, advena.gff.gz
+├── mge_context/<sample>/           # MOB-suite, geNomad, ISEScan, IntegronFinder, att_sites, contextualized ME TSV
+├── cohort/                         # skani, MMseqs2, me_clusters.tsv, og_presence_absence.tsv, synteny/
+├── multiqc/multiqc_report.html     # Interactive cohort MultiQC dashboard
+└── pipeline_info/                  # Execution reports & software_versions.yml
 ```
 
-## Profiles
-
-Combine a container engine profile with optional execution profiles:
+## Local Development & Pre-Push Verification
 
 ```bash
--profile docker               # Docker
--profile singularity,hpc      # Singularity on an HPC cluster
--profile singularity,slurm    # SLURM cluster with Singularity
--profile apptainer            # Apptainer
--profile podman               # Podman
--profile conda                # Conda (local)
--profile test,docker          # Test dataset with Docker
-```
-
-## Pipeline Overview
-
-```mermaid
-graph LR
-    A[GenBank<br/>samplesheet.csv] --> B[GB_TO_FAA]
-    DB[db_url / db_dir] --> P[PREPARE_DATABASE<br/>UNTAR + MAKEBLASTDB + HMMPRESS]
-    P --> B
-    B --> C[BLAST_BLASTP<br/>x7 databases]
-    P --> C
-    B --> D[HMMSCAN_SP<br/>22 profiles]
-    P --> D
-    C --> E[PROCESS_BLASTP]
-    D --> F[PROCESS_HMMSCAN]
-    E --> G[MERGE_SP]
-    F --> G
-    G --> H1[EXTRACT_SP_FAA]
-    B --> H1
-    H1 --> H2[HMMSCAN_FP<br/>3 FP profiles]
-    P --> H2
-    G --> H3[PROCESS_HMMSCAN_FP]
-    H2 --> H3
-    H3 --> I[REANNOT_SP]
-    E --> I
-    I --> J[DETECT_ME]
-    A --> J
-    I --> K[CREATE_ANNOTATIONS]
-    J --> K
-    J --> L[PACKAGE_RESULTS]
-    K --> M[GFF3 / EMBL / GenBank]
+make lint        # Nextflow lint, Prettier, Ruff, JSON schemas, MkDocs strict
+make test-unit   # pytest unit tests on bin/ Python helpers
+make test-stub   # Default + --run_all DAG stubs and nf-test --tag stub
+make test        # Containerized nf-test suite (--profile docker)
+make test-ci     # Run GitHub Actions PR workflows locally via gh act
+make preflight   # All-in-one pre-push gate
 ```
 
 ## Citations
 
-If you use this pipeline, please cite:
-
-> Lao, J., Lacroix, T., Guedon, G., et al. ICEscreen: a tool to detect Firmicute ICEs and IMEs, isolated or integrated
-> in genomes. _NAR Genomics and Bioinformatics_, 2024.
-
-See [CITATIONS.md](CITATIONS.md) for a complete list of tools used by this pipeline.
+See [CITATIONS.md](CITATIONS.md) for the complete list of tools and references used by **advena**.
 
 ## License
 

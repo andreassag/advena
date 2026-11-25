@@ -25,23 +25,33 @@ jobs:
 
       - name: Validate execution profiles
         run: |
-          for prof in docker singularity apptainer podman conda test hpc slurm debug test,docker singularity,hpc singularity,slurm; do
+          for prof in docker singularity apptainer podman conda test test_full hpc slurm debug test,docker test_full,docker singularity,hpc singularity,slurm; do
             echo "Checking profile: $prof"
             nextflow config -profile "$prof" > /dev/null
           done
 
-      - name: Run pipeline (test, stub)
+      - name: Run pipeline (test, default stub)
         run: |
           nextflow run . \
             -profile test \
             -stub-run
 
+      - name: Run pipeline (test, --run_all stub)
+        run: |
+          nextflow run . \
+            -profile test \
+            --run_all \
+            --outdir results_all_stub \
+            -stub-run
+
       - name: Upload pipeline logs on failure
         if: failure()
+        continue-on-error: ${{ env.ACT == 'true' }}
         uses: actions/upload-artifact@v7
         with:
           name: nextflow-logs
           path: |
             .nextflow.log
             results/pipeline_info/
+            results_all_stub/pipeline_info/
           retention-days: 7

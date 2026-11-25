@@ -1,0 +1,32 @@
+nextflow_process {
+
+    name "Test Process ISESCAN"
+    script "../main.nf"
+    process "ISESCAN"
+    tag "modules"
+    tag "modules_local"
+    tag "isescan"
+
+    test("Should detect insertion sequence elements with ISEScan - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fa = new File("${workDir}/mini.fna")
+                fa.text = ">NC_000964.3\\nACGTACGTACGTACGT\\n"
+                input[0] = [[id: 'mini'], fa.toPath()]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.results[0][1]).exists() },
+                { assert path(process.out.results[0][1]).text.contains("seqID") }
+            )
+        }
+    }
+}

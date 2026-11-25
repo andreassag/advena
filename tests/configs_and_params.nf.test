@@ -18,7 +18,7 @@ nextflow_pipeline {
             def out = (workflow.stdout + workflow.stderr).join("\n")
             assertAll(
                 { assert workflow.success },
-                { assert out.contains("andreassag/advena 1.0.0") }
+                { assert out.contains("andreassag/advena 2.0.0") }
             )
         }
     }
@@ -38,7 +38,10 @@ nextflow_pipeline {
                 { assert workflow.success },
                 { assert out.contains("--input") },
                 { assert out.contains("--db_url") },
-                { assert out.contains("--blastp_evalue") }
+                { assert out.contains("--blastp_evalue") },
+                { assert out.contains("--run_all") },
+                { assert out.contains("--run_amr") },
+                { assert out.contains("--run_eggnog") }
             )
         }
     }
@@ -52,6 +55,23 @@ nextflow_pipeline {
                 input = "${projectDir}/assets/samplesheet.csv"
                 outdir = "$outputDir"
                 phylum = "invalid_phylum"
+            }
+        }
+
+        then {
+            assert workflow.failed
+        }
+    }
+
+    test("Should reject invalid cargo_scope via nf-schema") {
+        tag "stub"
+        options "-stub-run"
+
+        when {
+            params {
+                input = "${projectDir}/assets/samplesheet.csv"
+                outdir = "$outputDir"
+                cargo_scope = "invalid_scope"
             }
         }
 
@@ -108,8 +128,9 @@ nextflow_pipeline {
                 { assert untarTasks.isEmpty() },
                 { assert out.contains("0.00001") },
                 { assert out.contains("blastp_max_target_seqs: 3") },
-                { assert path("${outputDir}/ICEscreen_results/mini/detected_mobile_elements/mini_detected_ME.tsv").text.contains("Complete ICE (I+C+R+V)") },
-                { assert path("${outputDir}/ICEscreen_results/mini/detected_signature_proteins/mini_detected_SP.tsv").exists() }
+                { assert path("${outputDir}/icescreen/mini/detected_mobile_elements/mini_detected_ME.tsv").text.contains("Complete ICE (I+C+R+V)") },
+                { assert path("${outputDir}/icescreen/mini/detected_signature_proteins/mini_detected_SP.tsv").exists() },
+                { assert path("${outputDir}/icescreen/mini/me_sequences/mini_ME_regions.bed").exists() }
             )
         }
     }

@@ -1,0 +1,12 @@
+node_id	parent_node_id	gene_symbol	hmm_id	hmm_tc1	hmm_tc2	blast_ident	blast_cov	scope	type	subtype	class	subclass	name
+ALL								core	AMR	AMR			Reference gene root
+AMR	ALL							core	AMR	AMR			Antimicrobial resistance
+STRESS	ALL							plus	STRESS	STRESS			Stress response
+TET	AMR							core	AMR	AMR	TETRACYCLINE	TETRACYCLINE	Tetracycline resistance
+ERM	AMR							core	AMR	AMR	MACROLIDE	MACROLIDE	Macrolide resistance
+METAL	STRESS							plus	STRESS	METAL	METAL	METAL	Heavy metal resistance
+BIOCIDE	STRESS							plus	STRESS	BIOCIDE	BIOCIDE	BIOCIDE	Biocide resistance
+tet(M)	TET	tet(M)	NF033146.1	27.1	27.1	90	90	core	AMR	AMR	TETRACYCLINE	TETRACYCLINE	tetracycline resistance ribosomal protection protein Tet(M)
+erm(B)	ERM	erm(B)				90	90	core	AMR	AMR	MACROLIDE	MACROLIDE	23S rRNA (adenine(2058)-N(6))-methyltransferase Erm(B)
+cadA	METAL	cadA	NF033201.1	27.1	27.1	90	90	plus	STRESS	METAL	CADMIUM	CADMIUM	cadmium-translocating P-type ATPase CadA
+qacA	BIOCIDE	qacA				90	90	plus	STRESS	BIOCIDE	QUATERNARY_AMMONIUM	QUATERNARY_AMMONIUM	multidrug efflux MFS transporter QacA

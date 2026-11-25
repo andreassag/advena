@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process EGGNOGMAPPER"
+    script "../main.nf"
+    process "EGGNOGMAPPER"
+    tag "modules"
+    tag "modules_local"
+    tag "eggnogmapper"
+
+    test("Should annotate proteins with eggNOG-mapper - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/dbs/mini_eggnog_db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.annotations[0][1]).exists() },
+                { assert path(process.out.annotations[0][1]).text.contains("eggNOG_OGs") },
+                { assert path(process.out.orthologs[0][1]).exists() }
+            )
+        }
+    }
+}

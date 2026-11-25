@@ -1,0 +1,41 @@
+nextflow_process {
+
+    name "Test Process AMRFINDERPLUS_RUN"
+    script "../main.nf"
+    process "AMRFINDERPLUS_RUN"
+    tag "modules"
+    tag "modules_local"
+    tag "amrfinderplus"
+    tag "amrfinderplus_run"
+
+    test("Should run AMRFinderPlus on ME proteins, nucleotides, and GFF3 - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                def fna = new File("${workDir}/mini.fna")
+                fna.text = ">mini__ID_1\\nACGTACGTACGT\\n"
+                def gff = new File("${workDir}/mini.gff3")
+                gff.text = "##gff-version 3\\n"
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true),
+                    fna.toPath(),
+                    gff.toPath()
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/dbs/mini_amrfinder_db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.report[0][1]).exists() },
+                { assert path(process.out.report[0][1]).text.contains("Element symbol") }
+            )
+        }
+    }
+}

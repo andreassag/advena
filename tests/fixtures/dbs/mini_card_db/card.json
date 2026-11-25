@@ -1,0 +1,155 @@
+{
+  "_version": "3.3.0-mini",
+  "_timestamp": "2026-01-01T00:00:00Z",
+  "_comment": "Miniature CARD v3.x fixture for offline advena testing",
+  "1": {
+    "model_id": "1",
+    "model_name": "tet(M)",
+    "model_type": "protein homolog model",
+    "model_type_id": "40292",
+    "ARO_accession": "3000186",
+    "ARO_id": "36236",
+    "ARO_name": "tet(M)",
+    "ARO_description": "Tet(M) is a ribosomal protection protein that confers tetracycline resistance.",
+    "cvterm_id": "36236",
+    "ARO_category": {
+      "3000050": {
+        "category_aro_accession": "3000050",
+        "category_aro_cvterm_id": "36100",
+        "category_aro_name": "tetracycline antibiotic",
+        "category_aro_class_name": "Drug Class",
+        "category_aro_description": "Tetracycline class of antibiotics."
+      },
+      "3000172": {
+        "category_aro_accession": "3000172",
+        "category_aro_cvterm_id": "36222",
+        "category_aro_name": "antibiotic target protection",
+        "category_aro_class_name": "Resistance Mechanism",
+        "category_aro_description": "Protection of the antibiotic target site."
+      }
+    },
+    "model_sequences": {
+      "sequence": {
+        "101": {
+          "protein_sequence": {
+            "sequence": "MKIINIGVLAHVDAGKTTLTESLLYNSGAITELGSVDKGTTRTDNTLLERQRGITIQTGITSFQWENTKVNIIDTPGHMDFLAEVYRSLSVLDGAILLISAKDGVQAQTRILFHALRKMGIPTIFFINKIDQNGIDLSTVYQDIKEKLSAEIVIKQKVELYPNMCVTNFTESEQWDTVIEGNDDLLEKYMSGKSLEALELEQEESIRFHNCSLFPVYHGSAKNNIGIDNLIEVITNKFYS"
+          },
+          "dna_sequence": {
+            "sequence": "ATGAAAATTATTAACATTGGTGTTCTGGCTCATGTTGATGCTGGTAAAACTACTCTGACTGAATCTCTGCTGTATAACTCTGGTGCTATTACTGAACTGGGTTCTGTTGATAAAGGTACTACTCGTACTGATAACACTCTGCTGGAACGTCAGCGTGGTATTACTATTCAGACTGGTATTACTTCTTTCCAGTGGGAAAACACTAAAGTTAACATTATTGATACTCCGGGTCATATGGATTTCCTGGCTGAAGTTTATCGTTCTCTGTCTGTTCTGGATGGTGCTATTCTGCTGATTTCTGCTAAAGATGGTGTTCAGGCTCAGACTCGTATTCTGTTCCATGCTCTGCGTAAAATGGGTATTCCGACTATTTTCTTCATTAACAAAATTGATCAGAACGGTATTGATCTGTCTACTGTTTATCAGGATATTAAAGAAAAACTGTCTGCTGAAATTGTTATTAAACAGAAAGTTGAACTGTATCCGAACATGTGCGTTACTAACTTCACTGAATCTGAACAGTGGGATACTGTTATTGAAGGTAACGATGATCTGCTGGAAAAATATATGTCTGGTAAATCTCTGGAAGCTCTGGAACTGGAACAGGAAGAATCTATTCGTTTCCATAACTGCTCTCTGTTCCCGGTTTATCATGGTTCTGCTAAAAACAACATTGGTATTGATAACCTGATTGAAGTTATTACTAACAAATTCTATTCTTAA"
+          },
+          "NCBI_taxonomy": {
+            "NCBI_taxonomy_id": "1423",
+            "NCBI_taxonomy_name": "Bacillus subtilis"
+          }
+        }
+      }
+    },
+    "model_param": {
+      "blastp_bit_score": {
+        "param_type": "BLASTP bit_score",
+        "param_type_id": "40310",
+        "param_value": "200"
+      }
+    }
+  },
+  "2": {
+    "model_id": "2",
+    "model_name": "ErmB",
+    "model_type": "protein homolog model",
+    "model_type_id": "40292",
+    "ARO_accession": "3000375",
+    "ARO_id": "36425",
+    "ARO_name": "ErmB",
+    "ARO_description": "ErmB is a 23S rRNA methyltransferase conferring macrolide resistance.",
+    "cvterm_id": "36425",
+    "ARO_category": {
+      "3000002": {
+        "category_aro_accession": "3000002",
+        "category_aro_cvterm_id": "36052",
+        "category_aro_name": "macrolide antibiotic",
+        "category_aro_class_name": "Drug Class",
+        "category_aro_description": "Macrolide class of antibiotics."
+      },
+      "3000175": {
+        "category_aro_accession": "3000175",
+        "category_aro_cvterm_id": "36225",
+        "category_aro_name": "antibiotic target alteration",
+        "category_aro_class_name": "Resistance Mechanism",
+        "category_aro_description": "Modification of the antibiotic target site."
+      }
+    },
+    "model_sequences": {
+      "sequence": {
+        "102": {
+          "protein_sequence": {
+            "sequence": "MNKNIKYSQNFLTSEKVLNQIIKQLNLKETDTVYEIGTGKGHLTTKLAKISKQVTSIELDSHLFNLSSEKLKLNTRVTLIHQDILQFQFPNKQRYKIVGNIPYHLSTQIIKKVVFESRASDIYLIVEEGFYKRTLDIHRTLGLLLHTQVSIQQLLKLPAE"
+          },
+          "dna_sequence": {
+            "sequence": "ATGAACAAAAACATTAAATATTCTCAGAACTTCCTGACTTCTGAAAAAGTTCTGAACCAGATTATTAAACAGCTGAACCTGAAAGAAACTGATACTGTTTATGAAATTGGTACTGGTAAAGGTCATCTGACTACTAAACTGGCTAAAATTTCTAAACAGGTTACTTCTATTGAACTGGATTCTCATCTGTTCAACCTGTCTTCTGAAAAACTGAAACTGAACACTCGTGTTACTCTGATTCATCAGGATATTCTGCAGTTCCAGTTCCCGAACAAACAGCGTTATAAAATTGTTGGTAACATTCCGTATCATCTGTCTACTCAGATTATTAAAAAAGTTGTTTTCGAATCTCGTGCTTCTGATATTTATCTGATTGTTGAAGAAGGTTTCTATAAACGTACTCTGGATATTCATCGTACTCTGGGTCTGCTGCTGCATACTCAGGTTTCTATTCAGCAGCTGCTGAAACTGCCGGCTGAATAA"
+          },
+          "NCBI_taxonomy": {
+            "NCBI_taxonomy_id": "1351",
+            "NCBI_taxonomy_name": "Enterococcus faecalis"
+          }
+        }
+      }
+    },
+    "model_param": {
+      "blastp_bit_score": {
+        "param_type": "BLASTP bit_score",
+        "param_type_id": "40310",
+        "param_value": "200"
+      }
+    }
+  },
+  "3": {
+    "model_id": "3",
+    "model_name": "vanA",
+    "model_type": "protein homolog model",
+    "model_type_id": "40292",
+    "ARO_accession": "3002639",
+    "ARO_id": "38689",
+    "ARO_name": "vanA",
+    "ARO_description": "VanA is a D-Ala-D-Lac ligase conferring glycopeptide resistance.",
+    "cvterm_id": "38689",
+    "ARO_category": {
+      "3000009": {
+        "category_aro_accession": "3000009",
+        "category_aro_cvterm_id": "36059",
+        "category_aro_name": "glycopeptide antibiotic",
+        "category_aro_class_name": "Drug Class",
+        "category_aro_description": "Glycopeptide class of antibiotics."
+      },
+      "3000175": {
+        "category_aro_accession": "3000175",
+        "category_aro_cvterm_id": "36225",
+        "category_aro_name": "antibiotic target alteration",
+        "category_aro_class_name": "Resistance Mechanism",
+        "category_aro_description": "Modification of the antibiotic target site."
+      }
+    },
+    "model_sequences": {
+      "sequence": {
+        "103": {
+          "protein_sequence": {
+            "sequence": "MNRIKVAILFGGCSEEHDVSVKSAIEIAANINKEKYEPLYIGITKSGVWKMCEKPCAEWENDNCYSAVLSPDKKMHGLLVKKNHEYEINHVDVAFSALHGKSGEDGSIQGLFELSGIPFVGCDIQSSAICMDKSLTYIVAKNAGIATPAFWVINKDDRPV"
+          },
+          "dna_sequence": {
+            "sequence": "ATGAACCGTATTAAAGTTGCTATTCTGTTCGGTGGTTGCTCTGAAGAACATGATGTTTCTGTTAAATCTGCTATTGAAATTGCTGCTAACATTAACAAAGAAAAATATGAACCGCTGTATATTGGTATTACTAAATCTGGTGTTTGGAAAATGTGCGAAAAACCGTGCGCTGAATGGGAAAACGATAACTGCTATTCTGCTGTTCTGTCTCCGGATAAAAAAATGCATGGTCTGCTGGTTAAAAAAAACCATGAATATGAAATTAACCATGTTGATGTTGCTTTCTCTGCTCTGCATGGTAAATCTGGTGAAGATGGTTCTATTCAGGGTCTGTTCGAACTGTCTGGTATTCCGTTCGTTGGTTGCGATATTCAGTCTTCTGCTATTTGCATGGATAAATCTCTGACTTATATTGTTGCTAAAAACGCTGGTATTGCTACTCCGGCTTTCTGGGTTATTAACAAAGATGATCGTCCGGTTTAA"
+          },
+          "NCBI_taxonomy": {
+            "NCBI_taxonomy_id": "1352",
+            "NCBI_taxonomy_name": "Enterococcus faecium"
+          }
+        }
+      }
+    },
+    "model_param": {
+      "blastp_bit_score": {
+        "param_type": "BLASTP bit_score",
+        "param_type_id": "40310",
+        "param_value": "200"
+      }
+    }
+  }
+}

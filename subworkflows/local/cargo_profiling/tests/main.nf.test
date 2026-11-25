@@ -1,0 +1,72 @@
+nextflow_workflow {
+
+    name "Test Workflow CARGO_PROFILING"
+    script "../main.nf"
+    workflow "CARGO_PROFILING"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "cargo_profiling"
+
+    test("Should run AMR, eggNOG, DefenseFinder, BGC, and cargo merge - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                cargo_scope = "elements"
+                rgi_include_loose = false
+                amr_derep_overlap = 0.5
+                eggnog_tax_scope = "1239"
+                outdir = "$outputDir"
+                publish_dir_mode = "copy"
+            }
+            workflow {
+                """
+                def fna = new File("${workDir}/mini_cargo_query.fna")
+                fna.text = ">mini__ID_1\\nACGTACGTACGTACGT\\n"
+                def bed = new File("${workDir}/mini_ME_regions.bed")
+                bed.text = "NC_000964.3\\t504\\t12229\\tmini__ID_1\\t0\\t+\\n"
+                def gff3 = new File("${workDir}/mini_ME_cds.gff3")
+                gff3.text = "##gff-version 3\\n"
+                def manifest = new File("${workDir}/mini_ME_cds_manifest.tsv")
+                manifest.text = "sample\\tme_id\\tme_category\\tcontig\\tlocus_tag\\tprotein_id\\torig_start\\torig_end\\tstrand\\tis_signature_protein\\tsp_type\\tproduct\\n"
+                def countFile = new File("${workDir}/mini_me_count.txt")
+                countFile.text = "1\\n"
+
+                input[0] = channel.of([[id: 'mini'], fna.toPath()])
+                input[1] = channel.of([[id: 'mini'], bed.toPath()])
+                input[2] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)])
+                input[3] = channel.of([[id: 'mini'], gff3.toPath()])
+                input[4] = channel.of([[id: 'mini'], manifest.toPath()])
+                input[5] = channel.of([[id: 'mini'], countFile.toPath()])
+                input[6] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/detected_ME.tsv", checkIfExists: true)])
+                input[7] = channel.of([[id: 'mini'], file("${projectDir}/tests/fixtures/mini_genome.gbff", checkIfExists: true)])
+                input[8] = channel.of([[id: 'mini'], gff3.toPath()])
+                input[9] = channel.value(file("${projectDir}/tests/fixtures/dbs/mini_amrfinder_db", checkIfExists: true))
+                input[10] = channel.value(file("${projectDir}/tests/fixtures/dbs/mini_card_db", checkIfExists: true))
+                input[11] = channel.value(file("${projectDir}/tests/fixtures/dbs/mini_eggnog_db", checkIfExists: true))
+                input[12] = channel.value(file("${projectDir}/tests/fixtures/dbs/mini_defensefinder_db", checkIfExists: true))
+                input[13] = channel.value([])
+                input[14] = true
+                input[15] = true
+                input[16] = true
+                input[17] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.cargo_profile[0][1]).exists() },
+                { assert path(workflow.out.enriched_gff[0][1]).exists() },
+                { assert path(workflow.out.amr_derep[0][1]).exists() },
+                { assert path(workflow.out.cargo_ogs[0][1]).exists() },
+                { assert path(workflow.out.defense_systems[0][1]).exists() },
+                { assert path(workflow.out.defense_genes[0][1]).exists() },
+                { assert path(workflow.out.bgc_overlaps[0][1]).exists() }
+            )
+        }
+    }
+}

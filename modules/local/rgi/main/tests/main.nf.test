@@ -1,0 +1,36 @@
+nextflow_process {
+
+    name "Test Process RGI_MAIN"
+    script "../main.nf"
+    process "RGI_MAIN"
+    tag "modules"
+    tag "modules_local"
+    tag "rgi"
+    tag "rgi_main"
+
+    test("Should run CARD RGI in protein mode - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'mini'],
+                    file("${projectDir}/tests/fixtures/mini.faa", checkIfExists: true)
+                ]
+                input[1] = file("${projectDir}/tests/fixtures/dbs/mini_card_db", checkIfExists: true)
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert process.success },
+                { assert path(process.out.tsv[0][1]).exists() },
+                { assert path(process.out.tsv[0][1]).text.contains("Best_Hit_ARO") },
+                { assert path(process.out.json[0][1]).exists() }
+            )
+        }
+    }
+}

@@ -28,9 +28,15 @@ process CREATE_ANNOTATIONS {
     def args = task.ext.args ?: ""
     prefix = task.ext.prefix ?: "${meta.id}"
     """
+    GB_IN="${genbank}"
+    if [[ "\${GB_IN}" == *.gz ]]; then
+        gzip -cdf "${genbank}" > "${prefix}_input.gbff"
+        GB_IN="${prefix}_input.gbff"
+    fi
+
     # Extract genome sequence from GenBank into FASTA and GFF3
     genbank_to_gff3_and_fasta \\
-        -i ${genbank} \\
+        -i "\${GB_IN}" \\
         --gff ${prefix}_source.gff \\
         --fasta ${prefix}_source.fa
 
@@ -39,7 +45,7 @@ process CREATE_ANNOTATIONS {
         ${args} \\
         -s ${final_sp} \\
         -m ${detected_me} \\
-        -g ${genbank} \\
+        -g "\${GB_IN}" \\
         -o ${prefix}_icescreen
 
     # Compress outputs

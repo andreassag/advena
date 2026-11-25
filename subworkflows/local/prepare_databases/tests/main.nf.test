@@ -1,0 +1,66 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_DATABASES"
+    script "../main.nf"
+    workflow "PREPARE_DATABASES"
+    config "../../../../conf/modules.config"
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "prepare_databases"
+
+    test("Should prepare core and all optional databases - stub") {
+        tag "stub"
+        options "-stub"
+
+        when {
+            params {
+                db_url = "${projectDir}/tests/fixtures/mini_db.tar.gz"
+                db_dir = null
+                db_cache_dir = null
+                phylum = "bacillota"
+                bakta_db = null
+                bakta_db_type = "light"
+                checkm2_db = null
+                gtdbtk_db = null
+                amrfinderplus_db = null
+                card_db = null
+                eggnog_db = null
+                defensefinder_db = null
+                antismash_db = null
+                mobsuite_db = null
+                genomad_db = null
+                auto_download_large_dbs = false
+                outdir = "$outputDir"
+                publish_dir_mode = "copy"
+            }
+            workflow {
+                """
+                input[0] = true
+                input[1] = true
+                input[2] = true
+                input[3] = true
+                input[4] = true
+                input[5] = true
+                input[6] = true
+                input[7] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.blast_dbs.size() == 7 },
+                { assert path(workflow.out.bakta_db[0]).exists() },
+                { assert path(workflow.out.checkm2_db[0]).exists() },
+                { assert path(workflow.out.gtdbtk_db[0]).exists() },
+                { assert path(workflow.out.amrfinder_db[0]).exists() },
+                { assert path(workflow.out.card_db[0]).exists() },
+                { assert path(workflow.out.eggnog_db[0]).exists() },
+                { assert path(workflow.out.defensefinder_db[0]).exists() },
+                { assert path(workflow.out.mobsuite_db[0]).exists() },
+                { assert path(workflow.out.genomad_db[0]).exists() }
+            )
+        }
+    }
+}
