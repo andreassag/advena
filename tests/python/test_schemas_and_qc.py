@@ -25,6 +25,61 @@ def test_schemas_valid_and_synced() -> None:
     assert res.returncode == 0, f"validate_schemas.py failed:\n{res.stdout}\n{res.stderr}"
 
 
+def test_editorconfig_compliance() -> None:
+    """Verify tracked files match .editorconfig rules (respecting .editorconfig-checker.json)."""
+    tracked = subprocess.check_output(["git", "ls-files"], cwd=REPO_ROOT, text=True).splitlines()
+    excludes = ("assets/", "modules/nf-core/", "tests/fixtures/")
+    errors: list[str] = []
+
+    for rel in tracked:
+        if any(rel.startswith(ex) for ex in excludes):
+            continue
+        p = REPO_ROOT / rel
+        if not p.is_file():
+            continue
+        raw = p.read_bytes()
+        if b"\r\n" in raw:
+            errors.append(f"{rel}: CRLF line endings")
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            errors.append(f"{rel}: non-UTF-8 file not excluded")
+            continue
+        if text and not text.endswith("\n"):
+            errors.append(f"{rel}: missing final newline")
+        lines = text.splitlines()
+        ext = p.suffix
+        if p.name != "Makefile" and ext not in {".md", ".diff"}:
+            for i, line in enumerate(lines, 1):
+                if line != line.rstrip(" \t"):
+                    errors.append(f"{rel}:{i}: trailing whitespace")
+        if p.name == "Makefile":
+            for i, line in enumerate(lines, 1):
+                if line.startswith(" "):
+                    errors.append(f"{rel}:{i}: space indent in Makefile")
+        else:
+            for i, line in enumerate(lines, 1):
+                ws = line[: len(line) - len(line.lstrip())]
+                if "\t" in ws:
+                    errors.append(f"{rel}:{i}: tab indent")
+        if ext == ".py":
+            for i, line in enumerate(lines, 1):
+                if len(line) > 120:
+                    errors.append(f"{rel}:{i}: line length {len(line)} > 120")
+                stripped = line.lstrip(" ")
+                indent = len(line) - len(stripped)
+                if stripped and indent % 4 != 0:
+                    errors.append(f"{rel}:{i}: Python indent {indent} not multiple of 4")
+        elif ext in {".json", ".yml", ".yaml", ".toml", ".md"}:
+            for i, line in enumerate(lines, 1):
+                stripped = line.lstrip(" ")
+                indent = len(line) - len(stripped)
+                if stripped and indent % 2 != 0:
+                    errors.append(f"{rel}:{i}: {ext} indent {indent} not multiple of 2")
+
+    assert not errors, "EditorConfig violations:\n" + "\n".join(errors[:25])
+
+
 def test_extract_genome_fasta_plain_and_gz(tmp_path: Path) -> None:
     mini_gb = REPO_ROOT / "tests" / "fixtures" / "mini_genome.gbff"
     out_fna = tmp_path / "mini.fna"

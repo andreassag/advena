@@ -33,32 +33,32 @@ make check-env
 
 Before committing or pushing, verify changes locally:
 
-1. **Tier 1 — Static analysis, schema parity & Python unit tests (<10s, runs on `git commit`)**:
+### Tier 1 — Static analysis, schema parity & Python unit tests (<10s, runs on `git commit`)
 
-   ```bash
-   make lint
-   make test-unit
-   ```
+```bash
+make lint
+make test-unit
+```
 
-2. **Tier 2 — Nextflow DAG & `nf-test` stub verification (no containers required)**:
+### Tier 2 — Nextflow DAG & `nf-test` stub verification (no containers required)
 
-   ```bash
-   make test-stub
-   ```
+```bash
+make test-stub
+```
 
-3. **Tier 3 — Containerized `nf-test` integration suite with miniature fixture DBs**:
+### Tier 3 — Containerized `nf-test` integration suite with miniature fixture DBs
 
-   ```bash
-   make test
-   ```
+```bash
+make test
+```
 
-4. **Tier 4 — Local GitHub Actions workflow execution via `gh act`**:
+### Tier 4 — Local GitHub Actions workflow execution via `gh act`
 
-   ```bash
-   make test-ci
-   # Or run the full pre-push gate:
-   make preflight
-   ```
+```bash
+make test-ci
+# Or run the full pre-push gate:
+make preflight
+```
 
 If working offline without Docker, set `SKIP_DOCKER_TESTS=1` when pushing with the pre-push hook enabled.
 
@@ -67,8 +67,8 @@ If working offline without Docker, set `SKIP_DOCKER_TESTS=1` when pushing with t
 ## Code style
 
 - **Nextflow (`.nf`, `.config`)**: Validated with `nextflow lint .` (Nextflow >= 26.04.0).
-- **Python (`bin/`, `tests/python/`, `tests/fixtures/`)**: Formatted and linted with `ruff` (line length 100, Python
-  > = 3.11) and tested with `pytest`.
+- **Python (`bin/`, `tests/python/`, `tests/fixtures/`)**: Formatted and linted with `ruff` (line length 100,
+  `Python >= 3.11`) and tested with `pytest`.
 - **JSON, YAML, Markdown, and JS**: Formatted with [Prettier](https://prettier.io/).
 
 ---
